@@ -137,7 +137,6 @@ let lessonsActive = false;
 let currentScreen = "home";
 let reviewSession = null;
 let lessonSession = null;
-let statsShowAllMistakes = false;
 let reminderSyncTimer = null;
 let verbBrowserReturnScreen = "lessons";
 let verbBrowserPage = 1;
@@ -1146,14 +1145,10 @@ function updateDrillControls() {
 }
 
 function updateReviewSummary() {
-  const summary = document.getElementById("reviews-summary");
   let due = Core.buildDailyReviewQueue(Object.values(filterCardStore(state.cards)), new Date());
   const max = getMaxDailyReviews();
   if (max) {
     due = due.slice(0, max);
-  }
-  if (summary) {
-    summary.textContent = `${due.length} card(s) due today.`;
   }
   const homeCount = document.getElementById("home-reviews-count");
   const homeSub = document.getElementById("home-reviews-sub");
@@ -1172,17 +1167,14 @@ function updateReviewSummary() {
   if (homeSub) {
     homeSub.textContent = due.length === 0 ? "You're caught up" : "reviews waiting";
   }
-  const empty = document.getElementById("reviews-empty");
   const start = document.getElementById("start-reviews");
   if (due.length === 0) {
-    if (empty) empty.style.display = "block";
     if (start) start.disabled = true;
     if (progress) progress.style.display = "none";
     if (emptyState) emptyState.style.display = "grid";
     if (sessionContainer) sessionContainer.innerHTML = "";
     reviewSession = null;
   } else {
-    if (empty) empty.style.display = "none";
     if (start) start.disabled = false;
     if (progress) progress.style.display = "grid";
     if (emptyState) emptyState.style.display = "none";
@@ -1593,25 +1585,62 @@ function getReviewsHeaderSubtitle(session) {
   return `Review ${current} of ${session.totalCount}`;
 }
 
+function startReviewsSession() {
+  setActiveScreen("reviews");
+  let due = Core.buildDailyReviewQueue(Object.values(filterCardStore(state.cards)), new Date());
+  const max = getMaxDailyReviews();
+  if (max) {
+    due = due.slice(0, max);
+  }
+  const queue = buildQueueFromCards(due);
+  const container = document.getElementById("reviews-session");
+  reviewSession = createSession(container, queue, { mode: "reviews" });
+  updateHeaderForScreen("reviews");
+}
+
 function updateHeaderForScreen(screen) {
   const target = screen || currentScreen;
   if (target === "home") {
-    setHeader("Daily Practice", "今日の練習");
+    const dueNow = getReviewsDueCount();
+    const lessonsAvailable = getLessonsAvailable();
+    const subtitle =
+      dueNow > 0
+        ? `${dueNow} reviews waiting`
+        : lessonsAvailable > 0
+          ? `${lessonsAvailable} new lessons available`
+          : "All caught up";
+    setHeader("Daily Practice", subtitle);
     return;
   }
 
   if (target === "lessons") {
-    setHeader("Today's Lessons", "今日のレッスン");
+    let subtitle = "";
+    if (lessonSession && lessonsActive) {
+      subtitle = getLessonsHeaderSubtitle(lessonSession);
+    } else {
+      const availability = getLessonsAvailableCount();
+      if (availability.availableToday > 0) {
+        subtitle = `${availability.availableToday} new lessons available`;
+      } else {
+        const nextUnlock = getNextUnlockTimeText(new Date());
+        subtitle = nextUnlock ? `Next unlock at ${nextUnlock}` : "";
+      }
+    }
+    setHeader("Today's Lessons", subtitle);
     return;
   }
 
   if (target === "reviews") {
-    setHeader("Your Reviews", "今日の復習");
+    const subtitle =
+      reviewSession && reviewSession.totalCount > 0
+        ? getReviewsHeaderSubtitle(reviewSession)
+        : `${getReviewsDueCount()} due now`;
+    setHeader("Your Reviews", subtitle);
     return;
   }
 
   if (target === "settings") {
-    setHeader("Settings", "設定");
+    setHeader("Settings", "");
     return;
   }
 
@@ -1626,12 +1655,12 @@ function updateHeaderForScreen(screen) {
   }
 
   if (target === "stats") {
-    setHeader("Stats", "統計");
+    setHeader("Stats", "");
     return;
   }
 
   if (target === "verb-browser") {
-    setHeader("Verb Browser", "動詞一覧");
+    setHeader("Verb Browser", "");
     return;
   }
 }
@@ -2600,36 +2629,20 @@ function setupNav() {
 
   buttons.forEach((btn) => {
     btn.addEventListener("click", () => {
-      setActiveScreen(btn.dataset.screen);
+      const target = btn.dataset.screen;
+      if (target === "reviews") {
+        startReviewsSession();
+        return;
+      }
+      setActiveScreen(target);
     });
   });
 }
 
 function setupActions() {
-  function startReviewsSession() {
-    setActiveScreen("reviews");
-    let due = Core.buildDailyReviewQueue(Object.values(filterCardStore(state.cards)), new Date());
-    const max = getMaxDailyReviews();
-    if (max) {
-      due = due.slice(0, max);
-    }
-    const queue = buildQueueFromCards(due);
-    const container = document.getElementById("reviews-session");
-    reviewSession = createSession(container, queue, { mode: "reviews" });
-    updateHeaderForScreen("reviews");
-  }
-
   document.getElementById("start-reviews").addEventListener("click", () => {
     startReviewsSession();
   });
-
-  const reviewsNav = document.querySelector('.nav-item[data-screen="reviews"]');
-  if (reviewsNav) {
-    reviewsNav.addEventListener("click", (event) => {
-      event.preventDefault();
-      startReviewsSession();
-    });
-  }
 
   document.getElementById("start-drill").addEventListener("click", () => {
     const count = Number(document.getElementById("drill-count").value) || 10;
@@ -3038,12 +3051,6 @@ function setupActions() {
       });
     }
 
-  if (statsToggle) {
-    statsToggle.addEventListener("click", () => {
-      statsShowAllMistakes = !statsShowAllMistakes;
-      renderStatsScreen();
-    });
-  }
 }
 
 async function init() {
@@ -3126,3 +3133,4 @@ async function init() {
 }
 
 init();
+
