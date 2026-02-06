@@ -1,0 +1,82 @@
+[
+  {
+    "id": "plain_dictionary",
+    "label": "Dictionary form (plain)",
+    "politeness": "plain",
+    "category": "dictionary",
+    "active": true,
+    "notes": "Base form (辞書形). Answer is the verb in dictionary form (hiragana-only grading)."
+  },
+  {
+    "id": "plain_negative",
+    "label": "Plain negative (ない-form)",
+    "politeness": "plain",
+    "category": "negative",
+    "active": true,
+    "notes": "Informal present negative. Usually ends in ない (e.g., たべない / のまない)."
+  },
+  {
+    "id": "plain_past",
+    "label": "Plain past (た-form)",
+    "politeness": "plain",
+    "category": "past",
+    "active": true,
+    "notes": "Informal past. Often called た-form (e.g., たべた / のんだ)."
+  },
+  {
+    "id": "plain_past_negative",
+    "label": "Plain past negative (なかった-form)",
+    "politeness": "plain",
+    "category": "past_negative",
+    "active": true,
+    "notes": "Informal past negative. Typically ends in なかった (e.g., たべなかった / のまなかった)."
+  },
+  {
+    "id": "plain_te_form",
+    "label": "Te-form (て-form)",
+    "politeness": "plain",
+    "category": "te_form",
+    "active": true,
+    "notes": "Te-form used for connections, requests, progressive, etc. Answer is the verb’s て/で form only."
+  },
+  {
+    "id": "polite_dictionary",
+    "label": "Polite present (ます-form)",
+    "politeness": "polite",
+    "category": "dictionary",
+    "active": true,
+    "notes": "Polite present affirmative. Often called ます-form (e.g., たべます / のみます)."
+  },
+  {
+    "id": "polite_negative",
+    "label": "Polite negative (ません-form)",
+    "politeness": "polite",
+    "category": "negative",
+    "active": true,
+    "notes": "Polite present negative. Typically ends in ません (e.g., たべません / のみません)."
+  },
+  {
+    "id": "polite_past",
+    "label": "Polite past (ました-form)",
+    "politeness": "polite",
+    "category": "past",
+    "active": true,
+    "notes": "Polite past affirmative. Typically ends in ました (e.g., たべました / のみました)."
+  },
+  {
+    "id": "polite_past_negative",
+    "label": "Polite past negative (ませんでした-form)",
+    "politeness": "polite",
+    "category": "past_negative",
+    "active": true,
+    "notes": "Polite past negative. Typically ends in ませんでした (e.g., たべませんでした / のみませんでした)."
+  },
+  {
+    "id": "polite_te_form",
+    "label": "Te-form (polite request: てください)",
+    "politeness": "polite",
+    "category": "te_form",
+    "active": true,
+    "notes": "Polite request pattern. Expected answer is: te-form + ください (e.g., たべてください)."
+  }
+]

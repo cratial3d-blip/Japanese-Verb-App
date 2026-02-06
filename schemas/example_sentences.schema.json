@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/example_sentences.schema.json",
+  "title": "ExampleSentences",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "scope", "characters", "templates", "display"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^v\\d+$"
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["templates_file", "verb_file", "exceptions_file", "grading", "placeholder"],
+      "properties": {
+        "templates_file": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "verb_file": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "exceptions_file": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "grading": { "type": "string", "minLength": 1, "maxLength": 50 },
+        "placeholder": { "type": "string", "const": "{V}" }
+      }
+    },
+    "characters": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name_ja", "bio_en"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1, "maxLength": 40, "pattern": "^[a-z0-9_]+$" },
+          "name_ja": { "type": "string", "minLength": 1, "maxLength": 40 },
+          "bio_en": { "type": "string", "minLength": 1, "maxLength": 160 }
+        }
+      }
+    },
+    "lexicon": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 50,
+        "items": { "type": "string", "minLength": 1, "maxLength": 40 }
+      }
+    },
+    "templates": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-z0-9_]+$": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["label", "by_verb_class"],
+          "properties": {
+            "label": { "type": "string", "minLength": 1, "maxLength": 120 },
+            "by_verb_class": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["godan", "ichidan", "irregular"],
+              "properties": {
+                "godan": { "$ref": "#/$defs/exampleList" },
+                "ichidan": { "$ref": "#/$defs/exampleList" },
+                "irregular": { "$ref": "#/$defs/exampleList" }
+              }
+            },
+            "overrides": {
+              "type": "array",
+              "minItems": 0,
+              "maxItems": 200,
+              "items": { "$ref": "#/$defs/exampleOverride" }
+            }
+          }
+        }
+      }
+    },
+    "display": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["detail_label_en", "usage"],
+      "properties": {
+        "detail_label_en": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "usage": { "type": "string", "minLength": 1, "maxLength": 200 }
+      }
+    }
+  },
+  "$defs": {
+    "exampleOverride": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verb_ids"],
+      "properties": {
+        "verb_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 50,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[A-Za-z0-9_\\-\\u3041-\\u309F\\u30A0-\\u30FF\\u4E00-\\u9FFF]+$"
+          }
+        },
+        "disabled": { "type": "boolean" },
+        "examples": { "$ref": "#/$defs/exampleList" }
+      },
+      "anyOf": [
+        { "required": ["disabled"], "properties": { "disabled": { "const": true } } },
+        { "required": ["examples"] }
+      ]
+    },
+    "exampleList": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["text", "character_ids"],
+        "properties": {
+          "text": { "type": "string", "minLength": 1, "maxLength": 120, "pattern": "\\{V\\}" },
+          "character_ids": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 5,
+            "items": { "type": "string", "minLength": 1, "maxLength": 40, "pattern": "^[a-z0-9_]+$" }
+          }
+        }
+      }
+    }
+  }
+}

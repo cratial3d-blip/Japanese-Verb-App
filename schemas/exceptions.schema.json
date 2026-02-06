@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/exceptions.schema.json",
+  "title": "VerbExceptions",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "irregular_verbs",
+    "godan_ru_exceptions",
+    "special_cases",
+    "ambiguous_kana"
+  ],
+  "properties": {
+    "irregular_verbs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 32,
+        "pattern": "^[ぁ-ゟ]+$"
+      },
+      "uniqueItems": true
+    },
+    "godan_ru_exceptions": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 500,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 32,
+        "pattern": "^[ぁ-ゟ]+$"
+      },
+      "uniqueItems": true
+    },
+    "special_cases": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "te_form": {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[ぁ-ゟ]+$": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 32,
+              "pattern": "^[ぁ-ゟ]+$"
+            }
+          }
+        },
+        "plain_past": {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[ぁ-ゟ]+$": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 32,
+              "pattern": "^[ぁ-ゟ]+$"
+            }
+          }
+        },
+        "plain_negative": {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[ぁ-ゟ]+$": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 32,
+              "pattern": "^[ぁ-ゟ]+$"
+            }
+          }
+        },
+        "plain_past_negative": {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[ぁ-ゟ]+$": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 32,
+              "pattern": "^[ぁ-ゟ]+$"
+            }
+          }
+        },
+        "polite_te_form": {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[ぁ-ゟ]+$": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 32,
+              "pattern": "^[ぁ-ゟ]+$"
+            }
+          }
+        }
+      },
+      "required": [],
+      "default": {}
+    },
+    "ambiguous_kana": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[ぁ-ゟ]+$": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[A-Za-z0-9_\\-ぁ-ゟ゠-ヿ一-龯]+$"
+          },
+          "uniqueItems": true
+        }
+      },
+      "default": {}
+    }
+  }
+}

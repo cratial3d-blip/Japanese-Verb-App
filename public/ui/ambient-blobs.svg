@@ -1,0 +1,17 @@
+<!-- public/ui/ambient-blobs.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" preserveAspectRatio="none">
+  <defs>
+  <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">
+    <feGaussianBlur stdDeviation="50" />
+  </filter>
+</defs>
+
+  <!-- Warm cream glow -->
+  <circle cx="220" cy="180" r="260" fill="#EFE6D8" opacity="0.48" filter="url(#blur)"/>
+
+  <!-- Yuzu glow -->
+  <circle cx="980" cy="640" r="300" fill="#D6A21A" opacity="0.18" filter="url(#blur)"/>
+
+  <!-- Ink tint -->
+  <circle cx="1020" cy="160" r="240" fill="#2F3A4A" opacity="0.13" filter="url(#blur)"/>
+</svg>

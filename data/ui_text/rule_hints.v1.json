@@ -1,0 +1,119 @@
+{
+  "version": "v1",
+  "scope": {
+    "templates_file": "data/conjugations/conjugation_templates.v1.json",
+    "verb_file": "data/verbs/verbs.v1.jsonl",
+    "exceptions_file": "data/exceptions/verb_exceptions.v1.json",
+    "grading": "hiragana-only"
+  },
+  "templates": {
+    "plain_dictionary": {
+      "label": "Dictionary form (plain)",
+      "ichidan": "No change (use the dictionary form).",
+      "godan": "No change (use the dictionary form).",
+      "irregular": "No change (use the dictionary form).",
+      "overrides": []
+    },
+    "plain_negative": {
+      "label": "Plain negative (ない-form)",
+      "ichidan": "Drop る + ない",
+      "godan": "Change the last う-sound to the あ-sound + ない (う→わない).",
+      "irregular": "する→しない, くる→こない",
+      "overrides": [
+        {
+          "lemma_kana": "ある",
+          "hint": "Special: ある→ない"
+        }
+      ]
+    },
+    "plain_past": {
+      "label": "Plain past (た-form)",
+      "ichidan": "Drop る + た",
+      "godan": "う/つ/る→った, む/ぶ/ぬ→んだ, く→いた, ぐ→いだ, す→した",
+      "irregular": "する→した, くる→きた",
+      "overrides": [
+        {
+          "lemma_kana": "いく",
+          "hint": "Special: いく→いった"
+        }
+      ]
+    },
+    "plain_past_negative": {
+      "label": "Plain past negative (なかった-form)",
+      "ichidan": "Drop る + なかった",
+      "godan": "Plain negative (ない-form) + なかった (う→わなかった).",
+      "irregular": "する→しなかった, くる→こなかった",
+      "overrides": [
+        {
+          "lemma_kana": "ある",
+          "hint": "Special: ある→なかった"
+        }
+      ]
+    },
+    "plain_te_form": {
+      "label": "Te-form (て-form)",
+      "ichidan": "Drop る + て",
+      "godan": "う/つ/る→って, む/ぶ/ぬ→んで, く→いて, ぐ→いで, す→して",
+      "irregular": "する→して, くる→きて",
+      "overrides": [
+        {
+          "lemma_kana": "いく",
+          "hint": "Special: いく→いって"
+        }
+      ]
+    },
+    "polite_dictionary": {
+      "label": "Polite present (ます-form)",
+      "ichidan": "Drop る + ます",
+      "godan": "Change the last う-sound to the い-sound + ます.",
+      "irregular": "する→します (stem し), くる→きます (stem き)",
+      "overrides": []
+    },
+    "polite_negative": {
+      "label": "Polite negative (ません-form)",
+      "ichidan": "Drop る + ません",
+      "godan": "Change the last う-sound to the い-sound + ません.",
+      "irregular": "する→しません, くる→きません",
+      "overrides": []
+    },
+    "polite_past": {
+      "label": "Polite past (ました-form)",
+      "ichidan": "Drop る + ました",
+      "godan": "Change the last う-sound to the い-sound + ました.",
+      "irregular": "する→しました, くる→きました",
+      "overrides": []
+    },
+    "polite_past_negative": {
+      "label": "Polite past negative (ませんでした-form)",
+      "ichidan": "Drop る + ませんでした",
+      "godan": "Change the last う-sound to the い-sound + ませんでした.",
+      "irregular": "する→しませんでした, くる→きませんでした",
+      "overrides": []
+    },
+    "polite_te_form": {
+      "label": "Te-form (polite request: てください)",
+      "ichidan": "Te-form + ください (drop る + て, then +ください).",
+      "godan": "Te-form + ください (make te-form, then +ください).",
+      "irregular": "する→してください, くる→きてください",
+      "overrides": [
+        {
+          "lemma_kana": "いく",
+          "hint": "Special: いく→いってください"
+        }
+      ]
+    }
+  },
+  "display": {
+    "recommended_fields_on_card": [
+      "template label",
+      "verb class label (godan / ichidan / irregular)",
+      "rule hint (one-liner from this file)",
+      "optional: breakdown line (dictionary → te/past → +ください)"
+    ],
+    "verb_class_labels": {
+      "godan": "Godan (Group 1)",
+      "ichidan": "Ichidan (Group 2)",
+      "irregular": "Irregular"
+    }
+  }
+}

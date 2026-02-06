@@ -1,0 +1,227 @@
+[
+  {
+    "id": "plain_dictionary",
+    "label": "Dictionary form (plain)",
+    "politeness": "plain",
+    "category": "dictionary",
+    "active": true,
+    "notes": "Base form (辞書形). Answer is the verb in dictionary form (hiragana-only grading).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "plain_negative",
+    "label": "Plain negative (ない-form)",
+    "politeness": "plain",
+    "category": "negative",
+    "active": true,
+    "notes": "Informal present negative. Usually ends in ない (e.g., たべない / のまない).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "plain_past",
+    "label": "Plain past (た-form)",
+    "politeness": "plain",
+    "category": "past",
+    "active": true,
+    "notes": "Informal past. Often called た-form (e.g., たべた / のんだ).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "plain_past_negative",
+    "label": "Plain past negative (なかった-form)",
+    "politeness": "plain",
+    "category": "past_negative",
+    "active": true,
+    "notes": "Informal past negative. Typically ends in なかった (e.g., たべなかった / のまなかった).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "plain_te_form",
+    "label": "Te-form (て-form)",
+    "politeness": "plain",
+    "category": "te_form",
+    "active": true,
+    "notes": "Te-form used for connections, requests, progressive, etc. Answer is the verb’s て/で form only.",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "polite_dictionary",
+    "label": "Polite present (ます-form)",
+    "politeness": "polite",
+    "category": "dictionary",
+    "active": true,
+    "notes": "Polite present affirmative. Often called ます-form (e.g., たべます / のみます).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "polite_negative",
+    "label": "Polite negative (ません-form)",
+    "politeness": "polite",
+    "category": "negative",
+    "active": true,
+    "notes": "Polite present negative. Typically ends in ません (e.g., たべません / のみません).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "polite_past",
+    "label": "Polite past (ました-form)",
+    "politeness": "polite",
+    "category": "past",
+    "active": true,
+    "notes": "Polite past affirmative. Typically ends in ました (e.g., たべました / のみました).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "polite_past_negative",
+    "label": "Polite past negative (ませんでした-form)",
+    "politeness": "polite",
+    "category": "past_negative",
+    "active": true,
+    "notes": "Polite past negative. Typically ends in ませんでした (e.g., たべませんでした / のみませんでした).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "polite_te_form",
+    "label": "Te-form (polite request: てください)",
+    "politeness": "polite",
+    "category": "te_form",
+    "active": true,
+    "notes": "Polite request pattern. Expected answer is: te-form + ください (e.g., たべてください).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "plain_te_iru",
+    "label": "Progressive/state (ている)",
+    "politeness": "plain",
+    "category": "te_form",
+    "active": true,
+    "notes": "Expected answer is: plain te-form + いる (e.g., たべている / のんでいる). Used for progressive actions and ongoing states.",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "polite_te_imasu",
+    "label": "Progressive/state polite (ています)",
+    "politeness": "polite",
+    "category": "te_form",
+    "active": true,
+    "notes": "Expected answer is: plain te-form + います (e.g., たべています / のんでいます).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "polite_te_imasen",
+    "label": "Progressive/state polite negative (ていません)",
+    "politeness": "polite",
+    "category": "te_form",
+    "active": true,
+    "notes": "Expected answer is: plain te-form + いません (e.g., たべていません / のんでいません).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "polite_te_imashita",
+    "label": "Progressive/state polite past (ていました)",
+    "politeness": "polite",
+    "category": "te_form",
+    "active": true,
+    "notes": "Expected answer is: plain te-form + いました (e.g., たべていました / のんでいました).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "polite_te_imasen_deshita",
+    "label": "Progressive/state polite past negative (ていませんでした)",
+    "politeness": "polite",
+    "category": "te_form",
+    "active": true,
+    "notes": "Expected answer is: plain te-form + いませんでした (e.g., たべていませんでした / のんでいませんでした).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "plain_tai",
+    "label": "Desire (たい)",
+    "politeness": "plain",
+    "category": "desire",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_tai).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "plain_tai_negative",
+    "label": "Desire negative (たくない)",
+    "politeness": "plain",
+    "category": "desire",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_tai_negative).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "plain_tai_past",
+    "label": "Desire past (たかった)",
+    "politeness": "plain",
+    "category": "desire",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_tai_past).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "plain_tai_past_negative",
+    "label": "Desire past negative (たくなかった)",
+    "politeness": "plain",
+    "category": "desire",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_tai_past_negative).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "plain_te_mo_ii",
+    "label": "Permission (てもいい)",
+    "politeness": "plain",
+    "category": "permission",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_te_mo_ii).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "plain_te_wa_ikenai",
+    "label": "Prohibition (てはいけない)",
+    "politeness": "plain",
+    "category": "prohibition",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_te_wa_ikenai).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "plain_nai_de_kudasai",
+    "label": "Negative request (ないでください)",
+    "politeness": "polite",
+    "category": "request",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_nai_de_kudasai).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "plain_volitional",
+    "label": "Volitional (plain: よう／おう)",
+    "politeness": "plain",
+    "category": "volitional",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_volitional).",
+    "conjugation_level": "N4"
+  },
+  {
+    "id": "polite_volitional",
+    "label": "Volitional polite (ましょう)",
+    "politeness": "polite",
+    "category": "volitional",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.polite_volitional).",
+    "conjugation_level": "N5"
+  },
+  {
+    "id": "potential_plain",
+    "label": "Potential (can do)",
+    "politeness": "plain",
+    "category": "potential",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.potential_plain).",
+    "conjugation_level": "N4"
+  }
+]

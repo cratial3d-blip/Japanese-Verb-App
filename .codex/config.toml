@@ -1,0 +1,36 @@
+# .codex/config.toml
+# Project-scoped Codex configuration for the "Japanese SRS App" repository.
+#
+# Best practices:
+# - Keep this file small (only keys you actually need).
+# - Prefer sandboxed execution + explicit verification commands (see AGENTS.md).
+# - Avoid live web search for language data (verbs/conjugations) to prevent drift/copyright risk.
+
+################################################################################
+# Core behavior
+################################################################################
+
+# Primary model used by Codex (default is typically gpt-5.2-codex).
+model = "gpt-5.2-codex"
+model_provider = "openai"
+
+# Ask before running commands when Codex decides it's appropriate.
+# Options: untrusted | on-failure | on-request | never
+approval_policy = "on-request"
+
+# Allow writing inside the repo workspace, but keep network access off.
+# Options: read-only | workspace-write | danger-full-access
+sandbox_mode = "workspace-write"
+sandbox_workspace_write.network_access = false
+
+# Web search mode: disabled | cached | live
+# For this project, cached is a good compromise. Switch to "disabled" if you
+# want Codex to rely only on repo docs and local tools.
+web_search = "cached"
+
+################################################################################
+# Project documentation loading
+################################################################################
+
+# AGENTS.md is kept short, but we leave the default cap in place.
+project_doc_max_bytes = 32768

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "plain_te_iru",
+    "label": "Progressive/state (ている)",
+    "politeness": "plain",
+    "category": "te_form",
+    "active": true,
+    "notes": "Expected answer is: plain te-form + いる (e.g., たべている / のんでいる). Used for progressive actions and ongoing states."
+  },
+  {
+    "id": "polite_te_imasu",
+    "label": "Progressive/state polite (ています)",
+    "politeness": "polite",
+    "category": "te_form",
+    "active": true,
+    "notes": "Expected answer is: plain te-form + います (e.g., たべています / のんでいます)."
+  },
+  {
+    "id": "polite_te_imasen",
+    "label": "Progressive/state polite negative (ていません)",
+    "politeness": "polite",
+    "category": "te_form",
+    "active": true,
+    "notes": "Expected answer is: plain te-form + いません (e.g., たべていません / のんでいません)."
+  },
+  {
+    "id": "polite_te_imashita",
+    "label": "Progressive/state polite past (ていました)",
+    "politeness": "polite",
+    "category": "te_form",
+    "active": true,
+    "notes": "Expected answer is: plain te-form + いました (e.g., たべていました / のんでいました)."
+  },
+  {
+    "id": "polite_te_imasen_deshita",
+    "label": "Progressive/state polite past negative (ていませんでした)",
+    "politeness": "polite",
+    "category": "te_form",
+    "active": true,
+    "notes": "Expected answer is: plain te-form + いませんでした (e.g., たべていませんでした / のんでいませんでした)."
+  }
+]

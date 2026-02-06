@@ -1,0 +1,2010 @@
+{
+  "verbs": [
+    {
+      "id": "あう_meet_01",
+      "kana": "あう",
+      "kanji": "会う",
+      "gloss_en": [
+        "to meet"
+      ]
+    },
+    {
+      "id": "あう_fit_match_02",
+      "kana": "あう",
+      "kanji": "合う",
+      "gloss_en": [
+        "to match",
+        "to fit",
+        "to suit"
+      ]
+    },
+    {
+      "id": "あがる_01",
+      "kana": "あがる",
+      "kanji": "上がる",
+      "gloss_en": [
+        "to go up",
+        "to rise"
+      ]
+    },
+    {
+      "id": "あく_be_free_empty_01",
+      "kana": "あく",
+      "kanji": "空く",
+      "gloss_en": [
+        "to become empty",
+        "to be free (time/seat)"
+      ]
+    },
+    {
+      "id": "あく_open_02",
+      "kana": "あく",
+      "kanji": "開く",
+      "gloss_en": [
+        "to open (intransitive)"
+      ]
+    },
+    {
+      "id": "あける_01",
+      "kana": "あける",
+      "kanji": "開ける",
+      "gloss_en": [
+        "to open (something)"
+      ]
+    },
+    {
+      "id": "あげる_give_01",
+      "kana": "あげる",
+      "kanji": null,
+      "gloss_en": [
+        "to give (to someone)"
+      ]
+    },
+    {
+      "id": "あげる_raise_lift_increase_02",
+      "kana": "あげる",
+      "kanji": "上げる",
+      "gloss_en": [
+        "to raise",
+        "to lift",
+        "to increase"
+      ]
+    },
+    {
+      "id": "あそぶ_01",
+      "kana": "あそぶ",
+      "kanji": "遊ぶ",
+      "gloss_en": [
+        "to play",
+        "to hang out"
+      ]
+    },
+    {
+      "id": "あびる_01",
+      "kana": "あびる",
+      "kanji": "浴びる",
+      "gloss_en": [
+        "to bathe (in)",
+        "to take (a shower)"
+      ]
+    },
+    {
+      "id": "あらう_01",
+      "kana": "あらう",
+      "kanji": "洗う",
+      "gloss_en": [
+        "to wash"
+      ]
+    },
+    {
+      "id": "ある_exist_have_01",
+      "kana": "ある",
+      "kanji": null,
+      "gloss_en": [
+        "to exist (inanimate)",
+        "to have (inanimate)"
+      ]
+    },
+    {
+      "id": "ある_exist_have_02",
+      "kana": "ある",
+      "kanji": "有る",
+      "gloss_en": [
+        "to exist",
+        "to have"
+      ]
+    },
+    {
+      "id": "あるく_01",
+      "kana": "あるく",
+      "kanji": "歩く",
+      "gloss_en": [
+        "to walk"
+      ]
+    },
+    {
+      "id": "いう_01",
+      "kana": "いう",
+      "kanji": "言う",
+      "gloss_en": [
+        "to say"
+      ]
+    },
+    {
+      "id": "いく_01",
+      "kana": "いく",
+      "kanji": "行く",
+      "gloss_en": [
+        "to go"
+      ]
+    },
+    {
+      "id": "いる_exist_01",
+      "kana": "いる",
+      "kanji": "居る",
+      "gloss_en": [
+        "to exist (animate)",
+        "to be (people/animals)"
+      ]
+    },
+    {
+      "id": "いる_need_require_02",
+      "kana": "いる",
+      "kanji": "要る",
+      "gloss_en": [
+        "to need",
+        "to require"
+      ]
+    },
+    {
+      "id": "いれる_01",
+      "kana": "いれる",
+      "kanji": "入れる",
+      "gloss_en": [
+        "to put in",
+        "to insert",
+        "to add"
+      ]
+    },
+    {
+      "id": "うたう_01",
+      "kana": "うたう",
+      "kanji": "歌う",
+      "gloss_en": [
+        "to sing"
+      ]
+    },
+    {
+      "id": "うまれる_01",
+      "kana": "うまれる",
+      "kanji": "生まれる",
+      "gloss_en": [
+        "to be born"
+      ]
+    },
+    {
+      "id": "うる_01",
+      "kana": "うる",
+      "kanji": "売る",
+      "gloss_en": [
+        "to sell"
+      ]
+    },
+    {
+      "id": "おきる_01",
+      "kana": "おきる",
+      "kanji": "起きる",
+      "gloss_en": [
+        "to wake up",
+        "to get up"
+      ]
+    },
+    {
+      "id": "おく_01",
+      "kana": "おく",
+      "kanji": "置く",
+      "gloss_en": [
+        "to put",
+        "to place"
+      ]
+    },
+    {
+      "id": "おくる_01",
+      "kana": "おくる",
+      "kanji": "送る",
+      "gloss_en": [
+        "to send",
+        "to see someone off"
+      ]
+    },
+    {
+      "id": "おす_01",
+      "kana": "おす",
+      "kanji": "押す",
+      "gloss_en": [
+        "to push",
+        "to press"
+      ]
+    },
+    {
+      "id": "おぼえる_01",
+      "kana": "おぼえる",
+      "kanji": "覚える",
+      "gloss_en": [
+        "to remember",
+        "to memorize"
+      ]
+    },
+    {
+      "id": "およぐ_01",
+      "kana": "およぐ",
+      "kanji": "泳ぐ",
+      "gloss_en": [
+        "to swim"
+      ]
+    },
+    {
+      "id": "おりる_01",
+      "kana": "おりる",
+      "kanji": "降りる",
+      "gloss_en": [
+        "to get off",
+        "to go down"
+      ]
+    },
+    {
+      "id": "おわる_01",
+      "kana": "おわる",
+      "kanji": "終わる",
+      "gloss_en": [
+        "to end",
+        "to finish (intransitive)"
+      ]
+    },
+    {
+      "id": "かう_01",
+      "kana": "かう",
+      "kanji": "買う",
+      "gloss_en": [
+        "to buy"
+      ]
+    },
+    {
+      "id": "かえす_01",
+      "kana": "かえす",
+      "kanji": "返す",
+      "gloss_en": [
+        "to return (something)",
+        "to give back"
+      ]
+    },
+    {
+      "id": "かえる_01",
+      "kana": "かえる",
+      "kanji": "帰る",
+      "gloss_en": [
+        "to return (home)",
+        "to go back"
+      ]
+    },
+    {
+      "id": "かかる_01",
+      "kana": "かかる",
+      "kanji": "掛かる",
+      "gloss_en": [
+        "to take (time/money)",
+        "to hang (intransitive)",
+        "to be caught"
+      ]
+    },
+    {
+      "id": "かく_01",
+      "kana": "かく",
+      "kanji": "書く",
+      "gloss_en": [
+        "to write"
+      ]
+    },
+    {
+      "id": "かける_01",
+      "kana": "かける",
+      "kanji": null,
+      "gloss_en": [
+        "to hang (something)",
+        "to wear/put on",
+        "to call (phone)",
+        "to spend (time/money)"
+      ]
+    },
+    {
+      "id": "かす_01",
+      "kana": "かす",
+      "kanji": "貸す",
+      "gloss_en": [
+        "to lend"
+      ]
+    },
+    {
+      "id": "かぶる_01",
+      "kana": "かぶる",
+      "kanji": "冠る",
+      "gloss_en": [
+        "to wear (a hat)",
+        "to put on/cover"
+      ]
+    },
+    {
+      "id": "かりる_01",
+      "kana": "かりる",
+      "kanji": "借りる",
+      "gloss_en": [
+        "to borrow",
+        "to rent"
+      ]
+    },
+    {
+      "id": "きえる_01",
+      "kana": "きえる",
+      "kanji": "消える",
+      "gloss_en": [
+        "to disappear",
+        "to go out (a light)"
+      ]
+    },
+    {
+      "id": "きく_01",
+      "kana": "きく",
+      "kanji": "聞く",
+      "gloss_en": [
+        "to listen",
+        "to hear",
+        "to ask"
+      ]
+    },
+    {
+      "id": "きこえる_01",
+      "kana": "きこえる",
+      "kanji": "聞こえる",
+      "gloss_en": [
+        "to be heard",
+        "to be audible"
+      ]
+    },
+    {
+      "id": "きまる_01",
+      "kana": "きまる",
+      "kanji": "決まる",
+      "gloss_en": [
+        "to be decided"
+      ]
+    },
+    {
+      "id": "きめる_01",
+      "kana": "きめる",
+      "kanji": "決める",
+      "gloss_en": [
+        "to decide (something)"
+      ]
+    },
+    {
+      "id": "きる_cut_01",
+      "kana": "きる",
+      "kanji": "切る",
+      "gloss_en": [
+        "to cut"
+      ]
+    },
+    {
+      "id": "きる_wear_02",
+      "kana": "きる",
+      "kanji": "着る",
+      "gloss_en": [
+        "to wear (on the upper body)"
+      ]
+    },
+    {
+      "id": "くださる_01",
+      "kana": "くださる",
+      "kanji": null,
+      "gloss_en": [
+        "to give (honorific)"
+      ]
+    },
+    {
+      "id": "くらべる_01",
+      "kana": "くらべる",
+      "kanji": "比べる",
+      "gloss_en": [
+        "to compare"
+      ]
+    },
+    {
+      "id": "くる_01",
+      "kana": "くる",
+      "kanji": "来る",
+      "gloss_en": [
+        "to come"
+      ]
+    },
+    {
+      "id": "くれる_give_01",
+      "kana": "くれる",
+      "kanji": null,
+      "gloss_en": [
+        "to give (to me/us)"
+      ]
+    },
+    {
+      "id": "くれる_get_dark_end_02",
+      "kana": "くれる",
+      "kanji": "暮れる",
+      "gloss_en": [
+        "to get dark",
+        "to end (the day/year)"
+      ]
+    },
+    {
+      "id": "けす_01",
+      "kana": "けす",
+      "kanji": "消す",
+      "gloss_en": [
+        "to erase",
+        "to turn off"
+      ]
+    },
+    {
+      "id": "こたえる_01",
+      "kana": "こたえる",
+      "kanji": "答える",
+      "gloss_en": [
+        "to answer"
+      ]
+    },
+    {
+      "id": "こまる_01",
+      "kana": "こまる",
+      "kanji": "困る",
+      "gloss_en": [
+        "to be troubled",
+        "to be in a bind"
+      ]
+    },
+    {
+      "id": "こむ_01",
+      "kana": "こむ",
+      "kanji": "込む",
+      "gloss_en": [
+        "to be crowded",
+        "to be packed"
+      ]
+    },
+    {
+      "id": "こわす_01",
+      "kana": "こわす",
+      "kanji": "壊す",
+      "gloss_en": [
+        "to break (something)"
+      ]
+    },
+    {
+      "id": "こわれる_01",
+      "kana": "こわれる",
+      "kanji": "壊れる",
+      "gloss_en": [
+        "to break (intransitive)"
+      ]
+    },
+    {
+      "id": "さがす_01",
+      "kana": "さがす",
+      "kanji": "探す",
+      "gloss_en": [
+        "to search for",
+        "to look for"
+      ]
+    },
+    {
+      "id": "さがる_01",
+      "kana": "さがる",
+      "kanji": "下がる",
+      "gloss_en": [
+        "to go down",
+        "to drop"
+      ]
+    },
+    {
+      "id": "さく_01",
+      "kana": "さく",
+      "kanji": "咲く",
+      "gloss_en": [
+        "to bloom"
+      ]
+    },
+    {
+      "id": "さげる_01",
+      "kana": "さげる",
+      "kanji": "下げる",
+      "gloss_en": [
+        "to lower",
+        "to hang (something down)"
+      ]
+    },
+    {
+      "id": "さしあげる_01",
+      "kana": "さしあげる",
+      "kanji": "差し上げる",
+      "gloss_en": [
+        "to give (humble)"
+      ]
+    },
+    {
+      "id": "さす_01",
+      "kana": "さす",
+      "kanji": null,
+      "gloss_en": [
+        "to point",
+        "to hold up/open (an umbrella)"
+      ]
+    },
+    {
+      "id": "さわぐ_01",
+      "kana": "さわぐ",
+      "kanji": "騒ぐ",
+      "gloss_en": [
+        "to make noise",
+        "to make a fuss"
+      ]
+    },
+    {
+      "id": "さわる_01",
+      "kana": "さわる",
+      "kanji": "触る",
+      "gloss_en": [
+        "to touch"
+      ]
+    },
+    {
+      "id": "しかる_01",
+      "kana": "しかる",
+      "kanji": "叱る",
+      "gloss_en": [
+        "to scold"
+      ]
+    },
+    {
+      "id": "しぬ_01",
+      "kana": "しぬ",
+      "kanji": "死ぬ",
+      "gloss_en": [
+        "to die"
+      ]
+    },
+    {
+      "id": "しまる_01",
+      "kana": "しまる",
+      "kanji": "閉まる",
+      "gloss_en": [
+        "to close (intransitive)"
+      ]
+    },
+    {
+      "id": "しめる_tighten_fasten_01",
+      "kana": "しめる",
+      "kanji": "締める",
+      "gloss_en": [
+        "to tighten",
+        "to fasten"
+      ]
+    },
+    {
+      "id": "しめる_close_02",
+      "kana": "しめる",
+      "kanji": "閉める",
+      "gloss_en": [
+        "to close (something)"
+      ]
+    },
+    {
+      "id": "しらせる_01",
+      "kana": "しらせる",
+      "kanji": "知らせる",
+      "gloss_en": [
+        "to inform",
+        "to let know"
+      ]
+    },
+    {
+      "id": "しらべる_01",
+      "kana": "しらべる",
+      "kanji": "調べる",
+      "gloss_en": [
+        "to investigate",
+        "to check"
+      ]
+    },
+    {
+      "id": "しる_01",
+      "kana": "しる",
+      "kanji": "知る",
+      "gloss_en": [
+        "to know",
+        "to learn (a fact)"
+      ]
+    },
+    {
+      "id": "すう_01",
+      "kana": "すう",
+      "kanji": "吸う",
+      "gloss_en": [
+        "to smoke",
+        "to inhale"
+      ]
+    },
+    {
+      "id": "すぎる_01",
+      "kana": "すぎる",
+      "kanji": "過ぎる",
+      "gloss_en": [
+        "to pass",
+        "to exceed",
+        "to be too much"
+      ]
+    },
+    {
+      "id": "すてる_01",
+      "kana": "すてる",
+      "kanji": "捨てる",
+      "gloss_en": [
+        "to throw away"
+      ]
+    },
+    {
+      "id": "すべる_01",
+      "kana": "すべる",
+      "kanji": "滑る",
+      "gloss_en": [
+        "to slip",
+        "to slide"
+      ]
+    },
+    {
+      "id": "すすむ_01",
+      "kana": "すすむ",
+      "kanji": "進む",
+      "gloss_en": [
+        "to advance",
+        "to go forward"
+      ]
+    },
+    {
+      "id": "すむ_be_finished_settled_01",
+      "kana": "すむ",
+      "kanji": "済む",
+      "gloss_en": [
+        "to be finished",
+        "to be settled"
+      ]
+    },
+    {
+      "id": "すむ_live_reside_02",
+      "kana": "すむ",
+      "kanji": "住む",
+      "gloss_en": [
+        "to live",
+        "to reside"
+      ]
+    },
+    {
+      "id": "する_01",
+      "kana": "する",
+      "kanji": null,
+      "gloss_en": [
+        "to do"
+      ]
+    },
+    {
+      "id": "すわる_01",
+      "kana": "すわる",
+      "kanji": "座る",
+      "gloss_en": [
+        "to sit"
+      ]
+    },
+    {
+      "id": "そだてる_01",
+      "kana": "そだてる",
+      "kanji": "育てる",
+      "gloss_en": [
+        "to raise",
+        "to bring up",
+        "to grow (something)"
+      ]
+    },
+    {
+      "id": "たおれる_01",
+      "kana": "たおれる",
+      "kanji": "倒れる",
+      "gloss_en": [
+        "to fall down",
+        "to collapse"
+      ]
+    },
+    {
+      "id": "たす_01",
+      "kana": "たす",
+      "kanji": "足す",
+      "gloss_en": [
+        "to add",
+        "to top up"
+      ]
+    },
+    {
+      "id": "たつ_01",
+      "kana": "たつ",
+      "kanji": "立つ",
+      "gloss_en": [
+        "to stand"
+      ]
+    },
+    {
+      "id": "たずねる_ask_inquire_01",
+      "kana": "たずねる",
+      "kanji": "尋ねる",
+      "gloss_en": [
+        "to ask",
+        "to inquire"
+      ]
+    },
+    {
+      "id": "たずねる_visit_02",
+      "kana": "たずねる",
+      "kanji": "訪ねる",
+      "gloss_en": [
+        "to visit"
+      ]
+    },
+    {
+      "id": "たてる_build_01",
+      "kana": "たてる",
+      "kanji": "建てる",
+      "gloss_en": [
+        "to build"
+      ]
+    },
+    {
+      "id": "たてる_set_up_stand_up_02",
+      "kana": "たてる",
+      "kanji": "立てる",
+      "gloss_en": [
+        "to stand (something up)",
+        "to set up"
+      ]
+    },
+    {
+      "id": "たのしむ_01",
+      "kana": "たのしむ",
+      "kanji": "楽しむ",
+      "gloss_en": [
+        "to enjoy"
+      ]
+    },
+    {
+      "id": "たのむ_01",
+      "kana": "たのむ",
+      "kanji": "頼む",
+      "gloss_en": [
+        "to request",
+        "to ask a favor"
+      ]
+    },
+    {
+      "id": "たりる_01",
+      "kana": "たりる",
+      "kanji": "足りる",
+      "gloss_en": [
+        "to be enough",
+        "to suffice"
+      ]
+    },
+    {
+      "id": "たべる_01",
+      "kana": "たべる",
+      "kanji": "食べる",
+      "gloss_en": [
+        "to eat"
+      ]
+    },
+    {
+      "id": "ちがう_01",
+      "kana": "ちがう",
+      "kanji": "違う",
+      "gloss_en": [
+        "to be different",
+        "to be wrong"
+      ]
+    },
+    {
+      "id": "つかう_01",
+      "kana": "つかう",
+      "kanji": "使う",
+      "gloss_en": [
+        "to use"
+      ]
+    },
+    {
+      "id": "つかまえる_01",
+      "kana": "つかまえる",
+      "kanji": "捕まえる",
+      "gloss_en": [
+        "to catch",
+        "to capture",
+        "to arrest"
+      ]
+    },
+    {
+      "id": "つかれる_01",
+      "kana": "つかれる",
+      "kanji": "疲れる",
+      "gloss_en": [
+        "to get tired"
+      ]
+    },
+    {
+      "id": "つく_be_attached_come_on_01",
+      "kana": "つく",
+      "kanji": "付く",
+      "gloss_en": [
+        "to be attached",
+        "to stick",
+        "to come on (a light)"
+      ]
+    },
+    {
+      "id": "つく_arrive_02",
+      "kana": "つく",
+      "kanji": "着く",
+      "gloss_en": [
+        "to arrive"
+      ]
+    },
+    {
+      "id": "つくる_01",
+      "kana": "つくる",
+      "kanji": "作る",
+      "gloss_en": [
+        "to make",
+        "to create"
+      ]
+    },
+    {
+      "id": "つける_turn_on_light_01",
+      "kana": "つける",
+      "kanji": "点ける",
+      "gloss_en": [
+        "to turn on (a light)",
+        "to light"
+      ]
+    },
+    {
+      "id": "つける_pickle_soak_02",
+      "kana": "つける",
+      "kanji": "漬ける",
+      "gloss_en": [
+        "to pickle",
+        "to soak (in)"
+      ]
+    },
+    {
+      "id": "つたえる_01",
+      "kana": "つたえる",
+      "kanji": "伝える",
+      "gloss_en": [
+        "to convey",
+        "to tell",
+        "to pass on"
+      ]
+    },
+    {
+      "id": "つづく_01",
+      "kana": "つづく",
+      "kanji": "続く",
+      "gloss_en": [
+        "to continue (intransitive)"
+      ]
+    },
+    {
+      "id": "つづける_01",
+      "kana": "つづける",
+      "kanji": "続ける",
+      "gloss_en": [
+        "to continue (something)"
+      ]
+    },
+    {
+      "id": "つつむ_01",
+      "kana": "つつむ",
+      "kanji": "包む",
+      "gloss_en": [
+        "to wrap"
+      ]
+    },
+    {
+      "id": "つとめる_01",
+      "kana": "つとめる",
+      "kanji": "勤める",
+      "gloss_en": [
+        "to work (for)",
+        "to be employed"
+      ]
+    },
+    {
+      "id": "つる_01",
+      "kana": "つる",
+      "kanji": "釣る",
+      "gloss_en": [
+        "to fish",
+        "to catch (fish)"
+      ]
+    },
+    {
+      "id": "でかける_01",
+      "kana": "でかける",
+      "kanji": "出かける",
+      "gloss_en": [
+        "to go out"
+      ]
+    },
+    {
+      "id": "できる_01",
+      "kana": "できる",
+      "kanji": "出来る",
+      "gloss_en": [
+        "can do",
+        "to be able to",
+        "to be made"
+      ]
+    },
+    {
+      "id": "でる_01",
+      "kana": "でる",
+      "kanji": "出る",
+      "gloss_en": [
+        "to go out",
+        "to leave",
+        "to appear"
+      ]
+    },
+    {
+      "id": "てつだう_01",
+      "kana": "てつだう",
+      "kanji": "手伝う",
+      "gloss_en": [
+        "to help"
+      ]
+    },
+    {
+      "id": "とおる_01",
+      "kana": "とおる",
+      "kanji": "通る",
+      "gloss_en": [
+        "to pass through",
+        "to go along"
+      ]
+    },
+    {
+      "id": "とぶ_01",
+      "kana": "とぶ",
+      "kanji": "飛ぶ",
+      "gloss_en": [
+        "to fly",
+        "to jump"
+      ]
+    },
+    {
+      "id": "とどける_01",
+      "kana": "とどける",
+      "kanji": "届ける",
+      "gloss_en": [
+        "to deliver"
+      ]
+    },
+    {
+      "id": "とまる_stay_overnight_01",
+      "kana": "とまる",
+      "kanji": "泊まる",
+      "gloss_en": [
+        "to stay overnight"
+      ]
+    },
+    {
+      "id": "とまる_stop_02",
+      "kana": "とまる",
+      "kanji": "止まる",
+      "gloss_en": [
+        "to stop (intransitive)"
+      ]
+    },
+    {
+      "id": "とめる_01",
+      "kana": "とめる",
+      "kanji": "止める",
+      "gloss_en": [
+        "to stop (something)"
+      ]
+    },
+    {
+      "id": "とりかえる_01",
+      "kana": "とりかえる",
+      "kanji": "取り替える",
+      "gloss_en": [
+        "to exchange",
+        "to replace"
+      ]
+    },
+    {
+      "id": "とる_take_get_01",
+      "kana": "とる",
+      "kanji": "取る",
+      "gloss_en": [
+        "to take",
+        "to get"
+      ]
+    },
+    {
+      "id": "とる_take_photo_video_02",
+      "kana": "とる",
+      "kanji": "撮る",
+      "gloss_en": [
+        "to take (a photo/video)"
+      ]
+    },
+    {
+      "id": "なおす_01",
+      "kana": "なおす",
+      "kanji": "直す",
+      "gloss_en": [
+        "to fix",
+        "to repair",
+        "to correct"
+      ]
+    },
+    {
+      "id": "なおる_heal_get_better_01",
+      "kana": "なおる",
+      "kanji": "治る",
+      "gloss_en": [
+        "to get better",
+        "to heal"
+      ]
+    },
+    {
+      "id": "なおる_be_fixed_repaired_02",
+      "kana": "なおる",
+      "kanji": "直る",
+      "gloss_en": [
+        "to be fixed",
+        "to be repaired"
+      ]
+    },
+    {
+      "id": "なげる_01",
+      "kana": "なげる",
+      "kanji": "投げる",
+      "gloss_en": [
+        "to throw"
+      ]
+    },
+    {
+      "id": "なく_01",
+      "kana": "なく",
+      "kanji": "泣く",
+      "gloss_en": [
+        "to cry"
+      ]
+    },
+    {
+      "id": "なくなる_die_01",
+      "kana": "なくなる",
+      "kanji": "亡くなる",
+      "gloss_en": [
+        "to die (polite)"
+      ]
+    },
+    {
+      "id": "なくなる_disappear_run_out_02",
+      "kana": "なくなる",
+      "kanji": "無くなる",
+      "gloss_en": [
+        "to disappear",
+        "to be lost",
+        "to run out"
+      ]
+    },
+    {
+      "id": "なさる_01",
+      "kana": "なさる",
+      "kanji": null,
+      "gloss_en": [
+        "to do (honorific)"
+      ]
+    },
+    {
+      "id": "なれる_01",
+      "kana": "なれる",
+      "kanji": "慣れる",
+      "gloss_en": [
+        "to get used to"
+      ]
+    },
+    {
+      "id": "ならぶ_01",
+      "kana": "ならぶ",
+      "kanji": "並ぶ",
+      "gloss_en": [
+        "to line up",
+        "to stand in a row"
+      ]
+    },
+    {
+      "id": "ならべる_01",
+      "kana": "ならべる",
+      "kanji": "並べる",
+      "gloss_en": [
+        "to line up (something)",
+        "to arrange"
+      ]
+    },
+    {
+      "id": "なる_01",
+      "kana": "なる",
+      "kanji": null,
+      "gloss_en": [
+        "to become"
+      ]
+    },
+    {
+      "id": "にげる_01",
+      "kana": "にげる",
+      "kanji": "逃げる",
+      "gloss_en": [
+        "to run away",
+        "to escape"
+      ]
+    },
+    {
+      "id": "にる_01",
+      "kana": "にる",
+      "kanji": "似る",
+      "gloss_en": [
+        "to resemble",
+        "to be similar"
+      ]
+    },
+    {
+      "id": "ぬぐ_01",
+      "kana": "ぬぐ",
+      "kanji": "脱ぐ",
+      "gloss_en": [
+        "to take off (clothes/shoes)"
+      ]
+    },
+    {
+      "id": "ぬすむ_01",
+      "kana": "ぬすむ",
+      "kanji": "盗む",
+      "gloss_en": [
+        "to steal"
+      ]
+    },
+    {
+      "id": "ぬる_01",
+      "kana": "ぬる",
+      "kanji": "塗る",
+      "gloss_en": [
+        "to paint",
+        "to apply (spread)"
+      ]
+    },
+    {
+      "id": "ぬれる_01",
+      "kana": "ぬれる",
+      "kanji": "濡れる",
+      "gloss_en": [
+        "to get wet"
+      ]
+    },
+    {
+      "id": "ねる_01",
+      "kana": "ねる",
+      "kanji": "寝る",
+      "gloss_en": [
+        "to sleep",
+        "to go to bed"
+      ]
+    },
+    {
+      "id": "ねむる_01",
+      "kana": "ねむる",
+      "kanji": "眠る",
+      "gloss_en": [
+        "to sleep"
+      ]
+    },
+    {
+      "id": "のこる_01",
+      "kana": "のこる",
+      "kanji": "残る",
+      "gloss_en": [
+        "to remain",
+        "to be left"
+      ]
+    },
+    {
+      "id": "のぼる_01",
+      "kana": "のぼる",
+      "kanji": "登る",
+      "gloss_en": [
+        "to climb"
+      ]
+    },
+    {
+      "id": "のむ_01",
+      "kana": "のむ",
+      "kanji": "飲む",
+      "gloss_en": [
+        "to drink"
+      ]
+    },
+    {
+      "id": "のる_01",
+      "kana": "のる",
+      "kanji": "乗る",
+      "gloss_en": [
+        "to ride",
+        "to get on"
+      ]
+    },
+    {
+      "id": "のりかえる_01",
+      "kana": "のりかえる",
+      "kanji": "乗り換える",
+      "gloss_en": [
+        "to transfer (trains/buses)",
+        "to change vehicles"
+      ]
+    },
+    {
+      "id": "はいる_01",
+      "kana": "はいる",
+      "kanji": "入る",
+      "gloss_en": [
+        "to enter",
+        "to go in"
+      ]
+    },
+    {
+      "id": "はこぶ_01",
+      "kana": "はこぶ",
+      "kanji": "運ぶ",
+      "gloss_en": [
+        "to carry",
+        "to transport"
+      ]
+    },
+    {
+      "id": "はく_01",
+      "kana": "はく",
+      "kanji": "履く",
+      "gloss_en": [
+        "to wear (pants/shoes)",
+        "to put on (lower body)"
+      ]
+    },
+    {
+      "id": "はしる_01",
+      "kana": "はしる",
+      "kanji": "走る",
+      "gloss_en": [
+        "to run"
+      ]
+    },
+    {
+      "id": "はじまる_01",
+      "kana": "はじまる",
+      "kanji": "始まる",
+      "gloss_en": [
+        "to begin (intransitive)"
+      ]
+    },
+    {
+      "id": "はじめる_01",
+      "kana": "はじめる",
+      "kanji": "始める",
+      "gloss_en": [
+        "to begin (something)"
+      ]
+    },
+    {
+      "id": "はたらく_01",
+      "kana": "はたらく",
+      "kanji": "働く",
+      "gloss_en": [
+        "to work"
+      ]
+    },
+    {
+      "id": "はなす_01",
+      "kana": "はなす",
+      "kanji": "話す",
+      "gloss_en": [
+        "to speak",
+        "to talk"
+      ]
+    },
+    {
+      "id": "はらう_01",
+      "kana": "はらう",
+      "kanji": "払う",
+      "gloss_en": [
+        "to pay"
+      ]
+    },
+    {
+      "id": "はる_01",
+      "kana": "はる",
+      "kanji": "張る",
+      "gloss_en": [
+        "to stretch",
+        "to put up",
+        "to stick"
+      ]
+    },
+    {
+      "id": "はれる_01",
+      "kana": "はれる",
+      "kanji": "晴れる",
+      "gloss_en": [
+        "to clear up",
+        "to become sunny"
+      ]
+    },
+    {
+      "id": "ひかる_01",
+      "kana": "ひかる",
+      "kanji": "光る",
+      "gloss_en": [
+        "to shine"
+      ]
+    },
+    {
+      "id": "ひきだす_01",
+      "kana": "ひきだす",
+      "kanji": "引き出す",
+      "gloss_en": [
+        "to pull out",
+        "to withdraw (money)"
+      ]
+    },
+    {
+      "id": "ひく_pull_draw_01",
+      "kana": "ひく",
+      "kanji": "引く",
+      "gloss_en": [
+        "to pull",
+        "to draw"
+      ]
+    },
+    {
+      "id": "ひく_play_string_instrument_02",
+      "kana": "ひく",
+      "kanji": "弾く",
+      "gloss_en": [
+        "to play (a string instrument)"
+      ]
+    },
+    {
+      "id": "ひえる_01",
+      "kana": "ひえる",
+      "kanji": "冷える",
+      "gloss_en": [
+        "to get cold",
+        "to cool down"
+      ]
+    },
+    {
+      "id": "ひっこす_01",
+      "kana": "ひっこす",
+      "kanji": "引っ越す",
+      "gloss_en": [
+        "to move (house)"
+      ]
+    },
+    {
+      "id": "ひらく_01",
+      "kana": "ひらく",
+      "kanji": "開く",
+      "gloss_en": [
+        "to open (something)",
+        "to hold (an event)"
+      ]
+    },
+    {
+      "id": "ひろう_01",
+      "kana": "ひろう",
+      "kanji": "拾う",
+      "gloss_en": [
+        "to pick up"
+      ]
+    },
+    {
+      "id": "ふえる_01",
+      "kana": "ふえる",
+      "kanji": "増える",
+      "gloss_en": [
+        "to increase (intransitive)"
+      ]
+    },
+    {
+      "id": "ふく_01",
+      "kana": "ふく",
+      "kanji": "吹く",
+      "gloss_en": [
+        "to blow (wind)",
+        "to play (a wind instrument)"
+      ]
+    },
+    {
+      "id": "ふく_wipe_02",
+      "kana": "ふく",
+      "kanji": "拭く",
+      "gloss_en": [
+        "to wipe"
+      ]
+    },
+    {
+      "id": "ふとる_01",
+      "kana": "ふとる",
+      "kanji": "太る",
+      "gloss_en": [
+        "to gain weight"
+      ]
+    },
+    {
+      "id": "ふむ_01",
+      "kana": "ふむ",
+      "kanji": "踏む",
+      "gloss_en": [
+        "to step on",
+        "to tread"
+      ]
+    },
+    {
+      "id": "ふりだす_01",
+      "kana": "ふりだす",
+      "kanji": "降り出す",
+      "gloss_en": [
+        "to start falling (rain/snow)"
+      ]
+    },
+    {
+      "id": "ふる_01",
+      "kana": "ふる",
+      "kanji": "降る",
+      "gloss_en": [
+        "to fall (rain/snow)"
+      ]
+    },
+    {
+      "id": "ほめる_01",
+      "kana": "ほめる",
+      "kanji": "褒める",
+      "gloss_en": [
+        "to praise"
+      ]
+    },
+    {
+      "id": "まいる_01",
+      "kana": "まいる",
+      "kanji": "参る",
+      "gloss_en": [
+        "to go/come (humble)",
+        "to be in trouble"
+      ]
+    },
+    {
+      "id": "まがる_01",
+      "kana": "まがる",
+      "kanji": "曲がる",
+      "gloss_en": [
+        "to turn",
+        "to bend"
+      ]
+    },
+    {
+      "id": "まける_01",
+      "kana": "まける",
+      "kanji": "負ける",
+      "gloss_en": [
+        "to lose"
+      ]
+    },
+    {
+      "id": "まちがえる_01",
+      "kana": "まちがえる",
+      "kanji": "間違える",
+      "gloss_en": [
+        "to make a mistake"
+      ]
+    },
+    {
+      "id": "まつ_01",
+      "kana": "まつ",
+      "kanji": "待つ",
+      "gloss_en": [
+        "to wait"
+      ]
+    },
+    {
+      "id": "まにあう_01",
+      "kana": "まにあう",
+      "kanji": "間に合う",
+      "gloss_en": [
+        "to be in time",
+        "to make it"
+      ]
+    },
+    {
+      "id": "まわる_01",
+      "kana": "まわる",
+      "kanji": "回る",
+      "gloss_en": [
+        "to go around",
+        "to turn"
+      ]
+    },
+    {
+      "id": "みえる_01",
+      "kana": "みえる",
+      "kanji": "見える",
+      "gloss_en": [
+        "to be visible",
+        "to be able to see"
+      ]
+    },
+    {
+      "id": "みがく_01",
+      "kana": "みがく",
+      "kanji": "磨く",
+      "gloss_en": [
+        "to brush/polish"
+      ]
+    },
+    {
+      "id": "みせる_01",
+      "kana": "みせる",
+      "kanji": "見せる",
+      "gloss_en": [
+        "to show"
+      ]
+    },
+    {
+      "id": "みつかる_01",
+      "kana": "みつかる",
+      "kanji": "見つかる",
+      "gloss_en": [
+        "to be found"
+      ]
+    },
+    {
+      "id": "みつける_01",
+      "kana": "みつける",
+      "kanji": "見つける",
+      "gloss_en": [
+        "to find"
+      ]
+    },
+    {
+      "id": "みる_01",
+      "kana": "みる",
+      "kanji": "見る",
+      "gloss_en": [
+        "to see",
+        "to watch",
+        "to look"
+      ]
+    },
+    {
+      "id": "むかう_01",
+      "kana": "むかう",
+      "kanji": "向かう",
+      "gloss_en": [
+        "to head toward",
+        "to face"
+      ]
+    },
+    {
+      "id": "むかえる_01",
+      "kana": "むかえる",
+      "kanji": "迎える",
+      "gloss_en": [
+        "to pick up",
+        "to welcome"
+      ]
+    },
+    {
+      "id": "めしあがる_01",
+      "kana": "めしあがる",
+      "kanji": "召し上がる",
+      "gloss_en": [
+        "to eat",
+        "to drink (honorific)"
+      ]
+    },
+    {
+      "id": "もらう_01",
+      "kana": "もらう",
+      "kanji": "貰う",
+      "gloss_en": [
+        "to receive"
+      ]
+    },
+    {
+      "id": "もつ_01",
+      "kana": "もつ",
+      "kanji": "持つ",
+      "gloss_en": [
+        "to hold",
+        "to carry",
+        "to have"
+      ]
+    },
+    {
+      "id": "もどる_01",
+      "kana": "もどる",
+      "kanji": "戻る",
+      "gloss_en": [
+        "to return",
+        "to go back"
+      ]
+    },
+    {
+      "id": "もうしあげる_01",
+      "kana": "もうしあげる",
+      "kanji": "申し上げる",
+      "gloss_en": [
+        "to say (humble, very polite)"
+      ]
+    },
+    {
+      "id": "もうす_01",
+      "kana": "もうす",
+      "kanji": "申す",
+      "gloss_en": [
+        "to say (humble)"
+      ]
+    },
+    {
+      "id": "やく_01",
+      "kana": "やく",
+      "kanji": "焼く",
+      "gloss_en": [
+        "to bake",
+        "to grill",
+        "to burn"
+      ]
+    },
+    {
+      "id": "やくにたつ_01",
+      "kana": "やくにたつ",
+      "kanji": null,
+      "gloss_en": [
+        "to be useful",
+        "to be helpful"
+      ]
+    },
+    {
+      "id": "やすむ_01",
+      "kana": "やすむ",
+      "kanji": "休む",
+      "gloss_en": [
+        "to rest",
+        "to take a break"
+      ]
+    },
+    {
+      "id": "やせる_01",
+      "kana": "やせる",
+      "kanji": "痩せる",
+      "gloss_en": [
+        "to lose weight",
+        "to get thin"
+      ]
+    },
+    {
+      "id": "やむ_01",
+      "kana": "やむ",
+      "kanji": "止む",
+      "gloss_en": [
+        "to stop (rain)",
+        "to cease"
+      ]
+    },
+    {
+      "id": "やめる_01",
+      "kana": "やめる",
+      "kanji": "止める",
+      "gloss_en": [
+        "to stop (doing)",
+        "to quit"
+      ]
+    },
+    {
+      "id": "やる_01",
+      "kana": "やる",
+      "kanji": null,
+      "gloss_en": [
+        "to do",
+        "to give (casual)",
+        "to send (someone)"
+      ]
+    },
+    {
+      "id": "ゆれる_01",
+      "kana": "ゆれる",
+      "kanji": null,
+      "gloss_en": [
+        "to shake",
+        "to sway"
+      ]
+    },
+    {
+      "id": "よごれる_01",
+      "kana": "よごれる",
+      "kanji": "汚れる",
+      "gloss_en": [
+        "to get dirty"
+      ]
+    },
+    {
+      "id": "よぶ_01",
+      "kana": "よぶ",
+      "kanji": "呼ぶ",
+      "gloss_en": [
+        "to call",
+        "to invite"
+      ]
+    },
+    {
+      "id": "よむ_01",
+      "kana": "よむ",
+      "kanji": "読む",
+      "gloss_en": [
+        "to read"
+      ]
+    },
+    {
+      "id": "よる_01",
+      "kana": "よる",
+      "kanji": "寄る",
+      "gloss_en": [
+        "to stop by",
+        "to drop in"
+      ]
+    },
+    {
+      "id": "よろこぶ_01",
+      "kana": "よろこぶ",
+      "kanji": "喜ぶ",
+      "gloss_en": [
+        "to be glad",
+        "to rejoice"
+      ]
+    },
+    {
+      "id": "わかす_01",
+      "kana": "わかす",
+      "kanji": "沸かす",
+      "gloss_en": [
+        "to boil (something)",
+        "to heat (water)"
+      ]
+    },
+    {
+      "id": "わかる_01",
+      "kana": "わかる",
+      "kanji": "分かる",
+      "gloss_en": [
+        "to understand"
+      ]
+    },
+    {
+      "id": "わかれる_01",
+      "kana": "わかれる",
+      "kanji": "別れる",
+      "gloss_en": [
+        "to separate",
+        "to break up"
+      ]
+    },
+    {
+      "id": "わく_01",
+      "kana": "わく",
+      "kanji": "沸く",
+      "gloss_en": [
+        "to boil (intransitive)",
+        "to bubble"
+      ]
+    },
+    {
+      "id": "わたす_01",
+      "kana": "わたす",
+      "kanji": "渡す",
+      "gloss_en": [
+        "to hand over",
+        "to give"
+      ]
+    },
+    {
+      "id": "わたる_01",
+      "kana": "わたる",
+      "kanji": "渡る",
+      "gloss_en": [
+        "to cross",
+        "to go across"
+      ]
+    },
+    {
+      "id": "わらう_01",
+      "kana": "わらう",
+      "kanji": "笑う",
+      "gloss_en": [
+        "to laugh"
+      ]
+    },
+    {
+      "id": "われる_01",
+      "kana": "われる",
+      "kanji": "割れる",
+      "gloss_en": [
+        "to break",
+        "to crack",
+        "to split"
+      ]
+    },
+    {
+      "id": "わすれる_01",
+      "kana": "わすれる",
+      "kanji": "忘れる",
+      "gloss_en": [
+        "to forget"
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "plain_dictionary",
+      "label": "Dictionary form (plain)",
+      "notes": "Base form (辞書形). Answer is the verb in dictionary form (hiragana-only grading)."
+    },
+    {
+      "id": "plain_negative",
+      "label": "Plain negative (ない-form)",
+      "notes": "Informal present negative. Usually ends in ない (e.g., たべない / のまない)."
+    },
+    {
+      "id": "plain_past",
+      "label": "Plain past (た-form)",
+      "notes": "Informal past. Often called た-form (e.g., たべた / のんだ)."
+    },
+    {
+      "id": "plain_past_negative",
+      "label": "Plain past negative (なかった-form)",
+      "notes": "Informal past negative. Typically ends in なかった (e.g., たべなかった / のまなかった)."
+    },
+    {
+      "id": "plain_te_form",
+      "label": "Te-form (て-form)",
+      "notes": "Te-form used for connections, requests, progressive, etc. Answer is the verb’s て/で form only."
+    },
+    {
+      "id": "polite_dictionary",
+      "label": "Polite present (ます-form)",
+      "notes": "Polite present affirmative. Often called ます-form (e.g., たべます / のみます)."
+    },
+    {
+      "id": "polite_negative",
+      "label": "Polite negative (ません-form)",
+      "notes": "Polite present negative. Typically ends in ません (e.g., たべません / のみません)."
+    },
+    {
+      "id": "polite_past",
+      "label": "Polite past (ました-form)",
+      "notes": "Polite past affirmative. Typically ends in ました (e.g., たべました / のみました)."
+    },
+    {
+      "id": "polite_past_negative",
+      "label": "Polite past negative (ませんでした-form)",
+      "notes": "Polite past negative. Typically ends in ませんでした (e.g., たべませんでした / のみませんでした)."
+    },
+    {
+      "id": "polite_te_form",
+      "label": "Te-form (polite request: てください)",
+      "notes": "Polite request pattern. Expected answer is: te-form + ください (e.g., たべてください)."
+    },
+    {
+      "id": "plain_te_iru",
+      "label": "Progressive/state (ている)",
+      "notes": "Expected answer is: plain te-form + いる (e.g., たべている / のんでいる). Used for progressive actions and ongoing states."
+    },
+    {
+      "id": "polite_te_imasu",
+      "label": "Progressive/state polite (ています)",
+      "notes": "Expected answer is: plain te-form + います (e.g., たべています / のんでいます)."
+    },
+    {
+      "id": "polite_te_imasen",
+      "label": "Progressive/state polite negative (ていません)",
+      "notes": "Expected answer is: plain te-form + いません (e.g., たべていません / のんでいません)."
+    },
+    {
+      "id": "polite_te_imashita",
+      "label": "Progressive/state polite past (ていました)",
+      "notes": "Expected answer is: plain te-form + いました (e.g., たべていました / のんでいました)."
+    },
+    {
+      "id": "polite_te_imasen_deshita",
+      "label": "Progressive/state polite past negative (ていませんでした)",
+      "notes": "Expected answer is: plain te-form + いませんでした (e.g., たべていませんでした / のんでいませんでした)."
+    },
+    {
+      "id": "plain_tai",
+      "label": "Desire (たい)",
+      "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_tai)."
+    },
+    {
+      "id": "plain_tai_negative",
+      "label": "Desire negative (たくない)",
+      "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_tai_negative)."
+    },
+    {
+      "id": "plain_tai_past",
+      "label": "Desire past (たかった)",
+      "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_tai_past)."
+    },
+    {
+      "id": "plain_tai_past_negative",
+      "label": "Desire past negative (たくなかった)",
+      "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_tai_past_negative)."
+    },
+    {
+      "id": "plain_te_mo_ii",
+      "label": "Permission (てもいい)",
+      "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_te_mo_ii)."
+    },
+    {
+      "id": "plain_te_wa_ikenai",
+      "label": "Prohibition (てはいけない)",
+      "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_te_wa_ikenai)."
+    },
+    {
+      "id": "plain_nai_de_kudasai",
+      "label": "Negative request (ないでください)",
+      "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_nai_de_kudasai)."
+    },
+    {
+      "id": "plain_volitional",
+      "label": "Volitional (plain: よう／おう)",
+      "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_volitional)."
+    },
+    {
+      "id": "polite_volitional",
+      "label": "Volitional polite (ましょう)",
+      "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.polite_volitional)."
+    },
+    {
+      "id": "potential_plain",
+      "label": "Potential (can do)",
+      "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.potential_plain)."
+    }
+  ]
+}

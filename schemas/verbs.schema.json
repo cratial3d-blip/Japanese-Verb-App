@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/verbs.schema.json",
+  "title": "VerbRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "kana",
+    "gloss_en",
+    "kanji",
+    "level",
+    "verb_class",
+    "disambiguation",
+    "notes"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "pattern": "^[A-Za-z0-9_\\-ぁ-ゟ゠-ヿ一-龯]+$"
+    },
+    "kana": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 32,
+      "pattern": "^[ぁ-ゟ]+$"
+    },
+    "kanji": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 32
+    },
+    "gloss_en": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 12,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      }
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "N5",
+        "N4",
+        "N5_N4_POOL"
+      ]
+    },
+    "verb_class": {
+      "type": "string",
+      "enum": [
+        "godan",
+        "ichidan",
+        "irregular",
+        "unknown"
+      ]
+    },
+    "disambiguation": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 80
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 200
+    },
+    "new_conjugations": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64,
+        "pattern": "^[ぁ-ゟ]+$"
+      }
+    }
+  }
+}

@@ -1,0 +1,433 @@
+{
+  "version": "v1",
+  "scope": {
+    "templates_file": "data/conjugations/conjugation_templates.v2.json",
+    "verb_file": "data/verbs/verbs.v2.jsonl",
+    "exceptions_file": "data/exceptions/verb_exceptions.v1.json",
+    "grading": "hiragana-only",
+    "placeholder": "{V}"
+  },
+  "characters": [
+    {
+      "id": "sakura_01",
+      "name_ja": "さくら",
+      "bio_en": "A barista in Tokyo who loves cat cafes and collecting cute mugs."
+    },
+    {
+      "id": "ken_01",
+      "name_ja": "けん",
+      "bio_en": "An office worker who runs on weekends and is always searching for the best curry."
+    },
+    {
+      "id": "mio_01",
+      "name_ja": "みお",
+      "bio_en": "A university student who plays guitar and works part-time at a small bookstore."
+    },
+    {
+      "id": "takumi_01",
+      "name_ja": "たくみ",
+      "bio_en": "A train conductor who carries a camera everywhere and loves taking photos."
+    },
+    {
+      "id": "yui_01",
+      "name_ja": "ゆい",
+      "bio_en": "A nurse who relaxes by baking cookies and watching comedy shows."
+    },
+    {
+      "id": "bob_01",
+      "name_ja": "ボブ",
+      "bio_en": "A Canadian student in Japan who likes mountain biking, ramen, and his pet husky."
+    },
+    {
+      "id": "emma_01",
+      "name_ja": "エマ",
+      "bio_en": "An Australian designer who enjoys pottery, hot springs, and trying new cafes."
+    },
+    {
+      "id": "rina_01",
+      "name_ja": "りな",
+      "bio_en": "A Chinese exchange student who loves anime and is learning to cook Japanese food."
+    },
+    {
+      "id": "maria_01",
+      "name_ja": "マリア",
+      "bio_en": "A Spanish chef apprentice who practices Japanese while making paella for friends."
+    },
+    {
+      "id": "amir_01",
+      "name_ja": "アミール",
+      "bio_en": "A software developer from Egypt who likes board games and strong coffee."
+    },
+    {
+      "id": "daniel_01",
+      "name_ja": "ダニエル",
+      "bio_en": "An American pilot who listens to jazz and goes hiking on long breaks."
+    },
+    {
+      "id": "sophie_01",
+      "name_ja": "ソフィー",
+      "bio_en": "A French florist who loves cute stationery and taking walks to find new flower shops."
+    },
+    {
+      "id": "hana_01",
+      "name_ja": "はな",
+      "bio_en": "A high school student who loves basketball and has a tiny pet hamster."
+    }
+  ],
+  "templates": {
+    "plain_dictionary": {
+      "label": "Dictionary form (plain)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "まいにち{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "ボブはよく{V}。", "character_ids": ["bob_01"] }
+        ],
+        "irregular": [
+          { "text": "たまに{V}。", "character_ids": [] }
+        ]
+      }
+    },
+    "plain_negative": {
+      "label": "Plain negative (ない-form)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "さくらはきょう{V}。", "character_ids": ["sakura_01"] }
+        ],
+        "godan": [
+          { "text": "きょうは{V}。", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "きょうは{V}。", "character_ids": [] }
+        ]
+      }
+    },
+    "plain_past": {
+      "label": "Plain past (た-form)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "さっき{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "けんはさっき{V}。", "character_ids": ["ken_01"] }
+        ],
+        "irregular": [
+          { "text": "さっき{V}。", "character_ids": [] }
+        ]
+      }
+    },
+    "plain_past_negative": {
+      "label": "Plain past negative (なかった-form)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "みおはきのう{V}。", "character_ids": ["mio_01"] }
+        ],
+        "godan": [
+          { "text": "きのうは{V}。", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "きのうは{V}。", "character_ids": [] }
+        ]
+      }
+    },
+    "plain_te_form": {
+      "label": "Te-form (て／で-form)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "{V}、よかった。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "{V}、よかった。", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "{V}、よかった。", "character_ids": [] }
+        ]
+      }
+    },
+    "polite_dictionary": {
+      "label": "Polite present (ます-form)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "まいあさ{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "まいあさ{V}。", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "ダニエルはまいあさ{V}。", "character_ids": ["daniel_01"] }
+        ]
+      }
+    },
+    "polite_negative": {
+      "label": "Polite negative (ません-form)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "きょうは{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "はなはきょう{V}。", "character_ids": ["hana_01"] }
+        ],
+        "irregular": [
+          { "text": "きょうは{V}。", "character_ids": [] }
+        ]
+      }
+    },
+    "polite_past": {
+      "label": "Polite past (ました-form)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "さっき{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "さっき{V}。", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "マリアはさっき{V}。", "character_ids": ["maria_01"] }
+        ]
+      }
+    },
+    "polite_past_negative": {
+      "label": "Polite past negative (ませんでした-form)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "きのうは{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "きのうは{V}。", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "きのうは{V}。", "character_ids": [] }
+        ]
+      }
+    },
+    "polite_te_form": {
+      "label": "Request (てください)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "すみません、{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "すみません、{V}。", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "ソフィーさん、{V}。", "character_ids": ["sophie_01"] }
+        ]
+      }
+    },
+    "plain_te_iru": {
+      "label": "Progressive/state (ている)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "いま{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "アミールはいま{V}。", "character_ids": ["amir_01"] }
+        ],
+        "irregular": [
+          { "text": "いま{V}。", "character_ids": [] }
+        ]
+      }
+    },
+    "polite_te_imasu": {
+      "label": "Progressive/state polite (ています)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "いま{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "いま{V}。", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "いま{V}。", "character_ids": [] }
+        ]
+      }
+    },
+    "polite_te_imasen": {
+      "label": "Progressive/state polite negative (ていません)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "いま{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "いま{V}。", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "いま{V}。", "character_ids": [] }
+        ]
+      }
+    },
+    "polite_te_imashita": {
+      "label": "Progressive/state polite past (ていました)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "さっきまで{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "たくみはさっきまで{V}。", "character_ids": ["takumi_01"] }
+        ],
+        "irregular": [
+          { "text": "さっきまで{V}。", "character_ids": [] }
+        ]
+      }
+    },
+    "polite_te_imasen_deshita": {
+      "label": "Progressive/state polite past negative (ていませんでした)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "きのうは{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "きのうは{V}。", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "きのうは{V}。", "character_ids": [] }
+        ]
+      }
+    },
+    "plain_tai": {
+      "label": "Desire (たい)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "きょうは{V}な。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "エマはきょう{V}な。", "character_ids": ["emma_01"] }
+        ],
+        "irregular": [
+          { "text": "きょうは{V}な。", "character_ids": [] }
+        ]
+      }
+    },
+    "plain_tai_negative": {
+      "label": "Desire negative (たくない)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "きょうは{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "きょうは{V}。", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "きょうは{V}。", "character_ids": [] }
+        ]
+      }
+    },
+    "plain_tai_past": {
+      "label": "Desire past (たかった)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "きのうは{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "きのうは{V}。", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "きのうは{V}。", "character_ids": [] }
+        ]
+      }
+    },
+    "plain_tai_past_negative": {
+      "label": "Desire past negative (たくなかった)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "きのうは{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "きのうは{V}。", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "きのうは{V}。", "character_ids": [] }
+        ]
+      }
+    },
+    "plain_te_mo_ii": {
+      "label": "Permission (てもいい)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "ここで{V}？", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "りな、ここで{V}？", "character_ids": ["rina_01"] }
+        ],
+        "irregular": [
+          { "text": "ここで{V}？", "character_ids": [] }
+        ]
+      }
+    },
+    "plain_te_wa_ikenai": {
+      "label": "Prohibition (てはいけない)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "ここで{V}よ。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "ここで{V}よ。", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "ここで{V}よ。", "character_ids": [] }
+        ]
+      }
+    },
+    "plain_nai_de_kudasai": {
+      "label": "Negative request (ないでください)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "すみません、ここで{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "すみません、ここで{V}。", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "ボブさん、ここで{V}。", "character_ids": ["bob_01"] }
+        ]
+      }
+    },
+    "plain_volitional": {
+      "label": "Volitional (plain)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "じゃ、{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "じゃ、{V}。", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "じゃ、{V}。", "character_ids": [] }
+        ]
+      }
+    },
+    "polite_volitional": {
+      "label": "Volitional polite (ましょう)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "いっしょに{V}。", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "さくらといっしょに{V}。", "character_ids": ["sakura_01"] }
+        ],
+        "irregular": [
+          { "text": "いっしょに{V}。", "character_ids": [] }
+        ]
+      }
+    },
+    "potential_plain": {
+      "label": "Potential (can do)",
+      "by_verb_class": {
+        "ichidan": [
+          { "text": "きょう、{V}？", "character_ids": [] }
+        ],
+        "godan": [
+          { "text": "きょう、{V}？", "character_ids": [] }
+        ],
+        "irregular": [
+          { "text": "ゆいはきょう、{V}？", "character_ids": ["yui_01"] }
+        ]
+      }
+    }
+  },
+  "display": {
+    "detail_label_en": "Example",
+    "usage": "Insert the expected conjugated answer (hiragana) into {V}."
+  }
+}

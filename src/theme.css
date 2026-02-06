@@ -1,0 +1,43 @@
+:root {
+  --bg-paper: #f7f3ec;
+  --bg-frame: #eee6d8;
+  --bg-frame-strong: #e2d6c5;
+  --card: #fffcf7;
+  --border: #dbcfbf;
+
+  --ink: #1f2a37;
+  --ink-muted: rgba(31, 42, 55, 0.62);
+
+  --accent: #2f6b5b;
+  --accent-2: #d19a1e;
+  --yuzu: #d19a1e;
+
+  --ink-on: #f8f4ed;
+  --ink-hover: #2a3748;
+  --ink-pressed: #19222d;
+  --ink-highlight: rgba(255, 255, 255, 0.12);
+
+  --accent-soft: rgba(47, 107, 91, 0.16);
+  --focus-ring: rgba(47, 107, 91, 0.35);
+  --focus-ring-soft: rgba(47, 107, 91, 0.2);
+
+  --shadow: 0 12px 26px rgba(31, 42, 55, 0.09);
+  --shadow-soft: 0 6px 14px rgba(31, 42, 55, 0.07);
+  --button-shadow: 0 4px 8px rgba(31, 42, 55, 0.2);
+  --button-shadow-pressed: 0 2px 4px rgba(31, 42, 55, 0.18);
+  --overlay: rgba(31, 42, 55, 0.45);
+
+  --danger: #b14b4b;
+  --danger-hover: #9e4343;
+  --success: #2e7d64;
+
+  --toast-bg: #1f2a37;
+  --feedback-bg: #fbf7f0;
+  --feedback-border: rgba(47, 107, 91, 0.28);
+  --progress-track: #e7ddd0;
+  --input-underline: #d7c9b7;
+  --home-count: #1f2a37;
+
+  --font-ui: "Sora", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-jp: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+}

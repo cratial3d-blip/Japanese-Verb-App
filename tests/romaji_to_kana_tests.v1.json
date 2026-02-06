@@ -1,0 +1,90 @@
+{
+  "version": "v1",
+  "generated_on": "2026-01-30",
+  "cases": [
+    {
+      "case_id": "R001",
+      "input": "kitte",
+      "expected_kana": "きって",
+      "why": "Small っ via double consonant"
+    },
+    {
+      "case_id": "R002",
+      "input": "kittta",
+      "expected_kana": "きった",
+      "why": "Triple consonant accepted as single small っ"
+    },
+    {
+      "case_id": "R003",
+      "input": "nn",
+      "expected_kana": "ん",
+      "why": "nn produces ん"
+    },
+    {
+      "case_id": "R004",
+      "input": "kanpai",
+      "expected_kana": "かんぱい",
+      "why": "n before consonant produces ん"
+    },
+    {
+      "case_id": "R005",
+      "input": "kin en",
+      "expected_kana": "きんえん",
+      "why": "n + space commits ん"
+    },
+    {
+      "case_id": "R006",
+      "input": "kin'en",
+      "expected_kana": "きんえん",
+      "why": "n + apostrophe commits ん"
+    },
+    {
+      "case_id": "R007",
+      "input": "shi",
+      "expected_kana": "し",
+      "why": "shi mapping"
+    },
+    {
+      "case_id": "R008",
+      "input": "chi",
+      "expected_kana": "ち",
+      "why": "chi mapping"
+    },
+    {
+      "case_id": "R009",
+      "input": "tsu",
+      "expected_kana": "つ",
+      "why": "tsu mapping"
+    },
+    {
+      "case_id": "R010",
+      "input": "fu",
+      "expected_kana": "ふ",
+      "why": "fu mapping"
+    },
+    {
+      "case_id": "R011",
+      "input": "kya",
+      "expected_kana": "きゃ",
+      "why": "kya mapping"
+    },
+    {
+      "case_id": "R012",
+      "input": "sha",
+      "expected_kana": "しゃ",
+      "why": "sha mapping"
+    },
+    {
+      "case_id": "R013",
+      "input": "cha",
+      "expected_kana": "ちゃ",
+      "why": "cha mapping"
+    },
+    {
+      "case_id": "R014",
+      "input": "カタカナ",
+      "expected_kana": "かたかな",
+      "why": "katakana to hiragana normalization"
+    }
+  ]
+}

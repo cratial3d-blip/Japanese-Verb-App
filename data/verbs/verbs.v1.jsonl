@@ -1,0 +1,217 @@
+{"id": "あう_meet_01", "kana": "あう", "kanji": "会う", "gloss_en": ["to meet"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "meet (会う)", "notes": null}
+{"id": "あう_fit_match_02", "kana": "あう", "kanji": "合う", "gloss_en": ["to match", "to fit", "to suit"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "fit/match (合う)", "notes": null}
+{"id": "あがる_01", "kana": "あがる", "kanji": "上がる", "gloss_en": ["to go up", "to rise"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "あく_be_free_empty_01", "kana": "あく", "kanji": "空く", "gloss_en": ["to become empty", "to be free (time/seat)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "be free/empty (空く)", "notes": null}
+{"id": "あく_open_02", "kana": "あく", "kanji": "開く", "gloss_en": ["to open (intransitive)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "open (intransitive) (開く)", "notes": null}
+{"id": "あける_01", "kana": "あける", "kanji": "開ける", "gloss_en": ["to open (something)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "あげる_give_01", "kana": "あげる", "kanji": null, "gloss_en": ["to give (to someone)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": "give", "notes": null}
+{"id": "あげる_raise_lift_increase_02", "kana": "あげる", "kanji": "上げる", "gloss_en": ["to raise", "to lift", "to increase"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": "raise/lift/increase (上げる)", "notes": null}
+{"id": "あそぶ_01", "kana": "あそぶ", "kanji": "遊ぶ", "gloss_en": ["to play", "to hang out"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "あびる_01", "kana": "あびる", "kanji": "浴びる", "gloss_en": ["to bathe (in)", "to take (a shower)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "あらう_01", "kana": "あらう", "kanji": "洗う", "gloss_en": ["to wash"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "ある_exist_have_01", "kana": "ある", "kanji": null, "gloss_en": ["to exist (inanimate)", "to have (inanimate)"], "level": "N5_N4_POOL", "verb_class": "irregular", "disambiguation": "exist/have (kana spelling)", "notes": null}
+{"id": "ある_exist_have_02", "kana": "ある", "kanji": "有る", "gloss_en": ["to exist", "to have"], "level": "N5_N4_POOL", "verb_class": "irregular", "disambiguation": "exist/have (有る)", "notes": null}
+{"id": "あるく_01", "kana": "あるく", "kanji": "歩く", "gloss_en": ["to walk"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "いう_01", "kana": "いう", "kanji": "言う", "gloss_en": ["to say"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "いく_01", "kana": "いく", "kanji": "行く", "gloss_en": ["to go"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "いる_exist_01", "kana": "いる", "kanji": "居る", "gloss_en": ["to exist (animate)", "to be (people/animals)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": "exist (animate) (居る)", "notes": null}
+{"id": "いる_need_require_02", "kana": "いる", "kanji": "要る", "gloss_en": ["to need", "to require"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "need/require (要る)", "notes": null}
+{"id": "いれる_01", "kana": "いれる", "kanji": "入れる", "gloss_en": ["to put in", "to insert", "to add"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "うたう_01", "kana": "うたう", "kanji": "歌う", "gloss_en": ["to sing"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "うまれる_01", "kana": "うまれる", "kanji": "生まれる", "gloss_en": ["to be born"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "うる_01", "kana": "うる", "kanji": "売る", "gloss_en": ["to sell"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "おきる_01", "kana": "おきる", "kanji": "起きる", "gloss_en": ["to wake up", "to get up"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "おく_01", "kana": "おく", "kanji": "置く", "gloss_en": ["to put", "to place"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "おくる_01", "kana": "おくる", "kanji": "送る", "gloss_en": ["to send", "to see someone off"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "おす_01", "kana": "おす", "kanji": "押す", "gloss_en": ["to push", "to press"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "おぼえる_01", "kana": "おぼえる", "kanji": "覚える", "gloss_en": ["to remember", "to memorize"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "およぐ_01", "kana": "およぐ", "kanji": "泳ぐ", "gloss_en": ["to swim"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "おりる_01", "kana": "おりる", "kanji": "降りる", "gloss_en": ["to get off", "to go down"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "おわる_01", "kana": "おわる", "kanji": "終わる", "gloss_en": ["to end", "to finish (intransitive)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "かう_01", "kana": "かう", "kanji": "買う", "gloss_en": ["to buy"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "かえす_01", "kana": "かえす", "kanji": "返す", "gloss_en": ["to return (something)", "to give back"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "かえる_01", "kana": "かえる", "kanji": "帰る", "gloss_en": ["to return (home)", "to go back"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "かかる_01", "kana": "かかる", "kanji": "掛かる", "gloss_en": ["to take (time/money)", "to hang (intransitive)", "to be caught"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "かく_01", "kana": "かく", "kanji": "書く", "gloss_en": ["to write"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "かける_01", "kana": "かける", "kanji": null, "gloss_en": ["to hang (something)", "to wear/put on", "to call (phone)", "to spend (time/money)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "かす_01", "kana": "かす", "kanji": "貸す", "gloss_en": ["to lend"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "かぶる_01", "kana": "かぶる", "kanji": "冠る", "gloss_en": ["to wear (a hat)", "to put on/cover"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "かりる_01", "kana": "かりる", "kanji": "借りる", "gloss_en": ["to borrow", "to rent"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "きえる_01", "kana": "きえる", "kanji": "消える", "gloss_en": ["to disappear", "to go out (a light)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "きく_01", "kana": "きく", "kanji": "聞く", "gloss_en": ["to listen", "to hear", "to ask"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "きこえる_01", "kana": "きこえる", "kanji": "聞こえる", "gloss_en": ["to be heard", "to be audible"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "きまる_01", "kana": "きまる", "kanji": "決まる", "gloss_en": ["to be decided"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "きめる_01", "kana": "きめる", "kanji": "決める", "gloss_en": ["to decide (something)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "きる_cut_01", "kana": "きる", "kanji": "切る", "gloss_en": ["to cut"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "cut (切る)", "notes": null}
+{"id": "きる_wear_02", "kana": "きる", "kanji": "着る", "gloss_en": ["to wear (on the upper body)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": "wear (upper body) (着る)", "notes": null}
+{"id": "くださる_01", "kana": "くださる", "kanji": null, "gloss_en": ["to give (honorific)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "くらべる_01", "kana": "くらべる", "kanji": "比べる", "gloss_en": ["to compare"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "くる_01", "kana": "くる", "kanji": "来る", "gloss_en": ["to come"], "level": "N5_N4_POOL", "verb_class": "irregular", "disambiguation": null, "notes": null}
+{"id": "くれる_give_01", "kana": "くれる", "kanji": null, "gloss_en": ["to give (to me/us)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": "give (to me/us)", "notes": null}
+{"id": "くれる_get_dark_end_02", "kana": "くれる", "kanji": "暮れる", "gloss_en": ["to get dark", "to end (the day/year)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": "get dark/end (暮れる)", "notes": null}
+{"id": "けす_01", "kana": "けす", "kanji": "消す", "gloss_en": ["to erase", "to turn off"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "こたえる_01", "kana": "こたえる", "kanji": "答える", "gloss_en": ["to answer"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "こまる_01", "kana": "こまる", "kanji": "困る", "gloss_en": ["to be troubled", "to be in a bind"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "こむ_01", "kana": "こむ", "kanji": "込む", "gloss_en": ["to be crowded", "to be packed"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "こわす_01", "kana": "こわす", "kanji": "壊す", "gloss_en": ["to break (something)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "こわれる_01", "kana": "こわれる", "kanji": "壊れる", "gloss_en": ["to break (intransitive)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "さがす_01", "kana": "さがす", "kanji": "探す", "gloss_en": ["to search for", "to look for"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "さがる_01", "kana": "さがる", "kanji": "下がる", "gloss_en": ["to go down", "to drop"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "さく_01", "kana": "さく", "kanji": "咲く", "gloss_en": ["to bloom"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "さげる_01", "kana": "さげる", "kanji": "下げる", "gloss_en": ["to lower", "to hang (something down)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "さしあげる_01", "kana": "さしあげる", "kanji": "差し上げる", "gloss_en": ["to give (humble)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "さす_01", "kana": "さす", "kanji": null, "gloss_en": ["to point", "to hold up/open (an umbrella)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "さわぐ_01", "kana": "さわぐ", "kanji": "騒ぐ", "gloss_en": ["to make noise", "to make a fuss"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "さわる_01", "kana": "さわる", "kanji": "触る", "gloss_en": ["to touch"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "しかる_01", "kana": "しかる", "kanji": "叱る", "gloss_en": ["to scold"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "しぬ_01", "kana": "しぬ", "kanji": "死ぬ", "gloss_en": ["to die"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "しまる_01", "kana": "しまる", "kanji": "閉まる", "gloss_en": ["to close (intransitive)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "しめる_tighten_fasten_01", "kana": "しめる", "kanji": "締める", "gloss_en": ["to tighten", "to fasten"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": "tighten/fasten (締める)", "notes": null}
+{"id": "しめる_close_02", "kana": "しめる", "kanji": "閉める", "gloss_en": ["to close (something)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": "close (something) (閉める)", "notes": null}
+{"id": "しらせる_01", "kana": "しらせる", "kanji": "知らせる", "gloss_en": ["to inform", "to let know"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "しらべる_01", "kana": "しらべる", "kanji": "調べる", "gloss_en": ["to investigate", "to check"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "しる_01", "kana": "しる", "kanji": "知る", "gloss_en": ["to know", "to learn (a fact)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "すう_01", "kana": "すう", "kanji": "吸う", "gloss_en": ["to smoke", "to inhale"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "すぎる_01", "kana": "すぎる", "kanji": "過ぎる", "gloss_en": ["to pass", "to exceed", "to be too much"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "すてる_01", "kana": "すてる", "kanji": "捨てる", "gloss_en": ["to throw away"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "すべる_01", "kana": "すべる", "kanji": "滑る", "gloss_en": ["to slip", "to slide"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "すすむ_01", "kana": "すすむ", "kanji": "進む", "gloss_en": ["to advance", "to go forward"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "すむ_be_finished_settled_01", "kana": "すむ", "kanji": "済む", "gloss_en": ["to be finished", "to be settled"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "be finished/settled (済む)", "notes": null}
+{"id": "すむ_live_reside_02", "kana": "すむ", "kanji": "住む", "gloss_en": ["to live", "to reside"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "live/reside (住む)", "notes": null}
+{"id": "する_01", "kana": "する", "kanji": null, "gloss_en": ["to do"], "level": "N5_N4_POOL", "verb_class": "irregular", "disambiguation": null, "notes": null}
+{"id": "すわる_01", "kana": "すわる", "kanji": "座る", "gloss_en": ["to sit"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "そだてる_01", "kana": "そだてる", "kanji": "育てる", "gloss_en": ["to raise", "to bring up", "to grow (something)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "たおれる_01", "kana": "たおれる", "kanji": "倒れる", "gloss_en": ["to fall down", "to collapse"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "たす_01", "kana": "たす", "kanji": "足す", "gloss_en": ["to add", "to top up"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "たつ_01", "kana": "たつ", "kanji": "立つ", "gloss_en": ["to stand"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "たずねる_ask_inquire_01", "kana": "たずねる", "kanji": "尋ねる", "gloss_en": ["to ask", "to inquire"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": "ask/inquire (尋ねる)", "notes": null}
+{"id": "たずねる_visit_02", "kana": "たずねる", "kanji": "訪ねる", "gloss_en": ["to visit"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": "visit (訪ねる)", "notes": null}
+{"id": "たてる_build_01", "kana": "たてる", "kanji": "建てる", "gloss_en": ["to build"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": "build (建てる)", "notes": null}
+{"id": "たてる_set_up_stand_up_02", "kana": "たてる", "kanji": "立てる", "gloss_en": ["to stand (something up)", "to set up"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": "set up/stand up (立てる)", "notes": null}
+{"id": "たのしむ_01", "kana": "たのしむ", "kanji": "楽しむ", "gloss_en": ["to enjoy"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "たのむ_01", "kana": "たのむ", "kanji": "頼む", "gloss_en": ["to request", "to ask a favor"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "たりる_01", "kana": "たりる", "kanji": "足りる", "gloss_en": ["to be enough", "to suffice"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "たべる_01", "kana": "たべる", "kanji": "食べる", "gloss_en": ["to eat"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "ちがう_01", "kana": "ちがう", "kanji": "違う", "gloss_en": ["to be different", "to be wrong"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "つかう_01", "kana": "つかう", "kanji": "使う", "gloss_en": ["to use"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "つかまえる_01", "kana": "つかまえる", "kanji": "捕まえる", "gloss_en": ["to catch", "to capture", "to arrest"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "つかれる_01", "kana": "つかれる", "kanji": "疲れる", "gloss_en": ["to get tired"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "つく_be_attached_come_on_01", "kana": "つく", "kanji": "付く", "gloss_en": ["to be attached", "to stick", "to come on (a light)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "be attached/come on (付く)", "notes": null}
+{"id": "つく_arrive_02", "kana": "つく", "kanji": "着く", "gloss_en": ["to arrive"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "arrive (着く)", "notes": null}
+{"id": "つくる_01", "kana": "つくる", "kanji": "作る", "gloss_en": ["to make", "to create"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "つける_turn_on_light_01", "kana": "つける", "kanji": "点ける", "gloss_en": ["to turn on (a light)", "to light"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": "turn on/light (点ける)", "notes": null}
+{"id": "つける_pickle_soak_02", "kana": "つける", "kanji": "漬ける", "gloss_en": ["to pickle", "to soak (in)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": "pickle/soak (漬ける)", "notes": null}
+{"id": "つたえる_01", "kana": "つたえる", "kanji": "伝える", "gloss_en": ["to convey", "to tell", "to pass on"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "つづく_01", "kana": "つづく", "kanji": "続く", "gloss_en": ["to continue (intransitive)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "つづける_01", "kana": "つづける", "kanji": "続ける", "gloss_en": ["to continue (something)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "つつむ_01", "kana": "つつむ", "kanji": "包む", "gloss_en": ["to wrap"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "つとめる_01", "kana": "つとめる", "kanji": "勤める", "gloss_en": ["to work (for)", "to be employed"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "つる_01", "kana": "つる", "kanji": "釣る", "gloss_en": ["to fish", "to catch (fish)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "でかける_01", "kana": "でかける", "kanji": "出かける", "gloss_en": ["to go out"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "できる_01", "kana": "できる", "kanji": "出来る", "gloss_en": ["can do", "to be able to", "to be made"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "でる_01", "kana": "でる", "kanji": "出る", "gloss_en": ["to go out", "to leave", "to appear"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "てつだう_01", "kana": "てつだう", "kanji": "手伝う", "gloss_en": ["to help"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "とおる_01", "kana": "とおる", "kanji": "通る", "gloss_en": ["to pass through", "to go along"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "とぶ_01", "kana": "とぶ", "kanji": "飛ぶ", "gloss_en": ["to fly", "to jump"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "とどける_01", "kana": "とどける", "kanji": "届ける", "gloss_en": ["to deliver"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "とまる_stay_overnight_01", "kana": "とまる", "kanji": "泊まる", "gloss_en": ["to stay overnight"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "stay overnight (泊まる)", "notes": null}
+{"id": "とまる_stop_02", "kana": "とまる", "kanji": "止まる", "gloss_en": ["to stop (intransitive)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "stop (intransitive) (止まる)", "notes": null}
+{"id": "とめる_01", "kana": "とめる", "kanji": "止める", "gloss_en": ["to stop (something)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "とりかえる_01", "kana": "とりかえる", "kanji": "取り替える", "gloss_en": ["to exchange", "to replace"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "とる_take_get_01", "kana": "とる", "kanji": "取る", "gloss_en": ["to take", "to get"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "take/get (取る)", "notes": null}
+{"id": "とる_take_photo_video_02", "kana": "とる", "kanji": "撮る", "gloss_en": ["to take (a photo/video)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "take photo/video (撮る)", "notes": null}
+{"id": "なおす_01", "kana": "なおす", "kanji": "直す", "gloss_en": ["to fix", "to repair", "to correct"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "なおる_heal_get_better_01", "kana": "なおる", "kanji": "治る", "gloss_en": ["to get better", "to heal"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "heal/get better (治る)", "notes": null}
+{"id": "なおる_be_fixed_repaired_02", "kana": "なおる", "kanji": "直る", "gloss_en": ["to be fixed", "to be repaired"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "be fixed/repaired (直る)", "notes": null}
+{"id": "なげる_01", "kana": "なげる", "kanji": "投げる", "gloss_en": ["to throw"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "なく_01", "kana": "なく", "kanji": "泣く", "gloss_en": ["to cry"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "なくなる_die_01", "kana": "なくなる", "kanji": "亡くなる", "gloss_en": ["to die (polite)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "die (polite) (亡くなる)", "notes": null}
+{"id": "なくなる_disappear_run_out_02", "kana": "なくなる", "kanji": "無くなる", "gloss_en": ["to disappear", "to be lost", "to run out"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "disappear/run out (無くなる)", "notes": null}
+{"id": "なさる_01", "kana": "なさる", "kanji": null, "gloss_en": ["to do (honorific)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "なれる_01", "kana": "なれる", "kanji": "慣れる", "gloss_en": ["to get used to"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "ならぶ_01", "kana": "ならぶ", "kanji": "並ぶ", "gloss_en": ["to line up", "to stand in a row"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "ならべる_01", "kana": "ならべる", "kanji": "並べる", "gloss_en": ["to line up (something)", "to arrange"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "なる_01", "kana": "なる", "kanji": null, "gloss_en": ["to become"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "にげる_01", "kana": "にげる", "kanji": "逃げる", "gloss_en": ["to run away", "to escape"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "にる_01", "kana": "にる", "kanji": "似る", "gloss_en": ["to resemble", "to be similar"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "ぬぐ_01", "kana": "ぬぐ", "kanji": "脱ぐ", "gloss_en": ["to take off (clothes/shoes)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "ぬすむ_01", "kana": "ぬすむ", "kanji": "盗む", "gloss_en": ["to steal"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "ぬる_01", "kana": "ぬる", "kanji": "塗る", "gloss_en": ["to paint", "to apply (spread)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "ぬれる_01", "kana": "ぬれる", "kanji": "濡れる", "gloss_en": ["to get wet"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "ねる_01", "kana": "ねる", "kanji": "寝る", "gloss_en": ["to sleep", "to go to bed"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "ねむる_01", "kana": "ねむる", "kanji": "眠る", "gloss_en": ["to sleep"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "のこる_01", "kana": "のこる", "kanji": "残る", "gloss_en": ["to remain", "to be left"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "のぼる_01", "kana": "のぼる", "kanji": "登る", "gloss_en": ["to climb"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "のむ_01", "kana": "のむ", "kanji": "飲む", "gloss_en": ["to drink"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "のる_01", "kana": "のる", "kanji": "乗る", "gloss_en": ["to ride", "to get on"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "のりかえる_01", "kana": "のりかえる", "kanji": "乗り換える", "gloss_en": ["to transfer (trains/buses)", "to change vehicles"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "はいる_01", "kana": "はいる", "kanji": "入る", "gloss_en": ["to enter", "to go in"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "はこぶ_01", "kana": "はこぶ", "kanji": "運ぶ", "gloss_en": ["to carry", "to transport"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "はく_01", "kana": "はく", "kanji": "履く", "gloss_en": ["to wear (pants/shoes)", "to put on (lower body)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "はしる_01", "kana": "はしる", "kanji": "走る", "gloss_en": ["to run"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "はじまる_01", "kana": "はじまる", "kanji": "始まる", "gloss_en": ["to begin (intransitive)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "はじめる_01", "kana": "はじめる", "kanji": "始める", "gloss_en": ["to begin (something)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "はたらく_01", "kana": "はたらく", "kanji": "働く", "gloss_en": ["to work"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "はなす_01", "kana": "はなす", "kanji": "話す", "gloss_en": ["to speak", "to talk"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "はらう_01", "kana": "はらう", "kanji": "払う", "gloss_en": ["to pay"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "はる_01", "kana": "はる", "kanji": "張る", "gloss_en": ["to stretch", "to put up", "to stick"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "はれる_01", "kana": "はれる", "kanji": "晴れる", "gloss_en": ["to clear up", "to become sunny"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "ひかる_01", "kana": "ひかる", "kanji": "光る", "gloss_en": ["to shine"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "ひきだす_01", "kana": "ひきだす", "kanji": "引き出す", "gloss_en": ["to pull out", "to withdraw (money)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "ひく_pull_draw_01", "kana": "ひく", "kanji": "引く", "gloss_en": ["to pull", "to draw"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "pull/draw (引く)", "notes": null}
+{"id": "ひく_play_string_instrument_02", "kana": "ひく", "kanji": "弾く", "gloss_en": ["to play (a string instrument)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "play string instrument (弾く)", "notes": null}
+{"id": "ひえる_01", "kana": "ひえる", "kanji": "冷える", "gloss_en": ["to get cold", "to cool down"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "ひっこす_01", "kana": "ひっこす", "kanji": "引っ越す", "gloss_en": ["to move (house)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "ひらく_01", "kana": "ひらく", "kanji": "開く", "gloss_en": ["to open (something)", "to hold (an event)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "ひろう_01", "kana": "ひろう", "kanji": "拾う", "gloss_en": ["to pick up"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "ふえる_01", "kana": "ふえる", "kanji": "増える", "gloss_en": ["to increase (intransitive)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "ふく_01", "kana": "ふく", "kanji": "吹く", "gloss_en": ["to blow (wind)", "to play (a wind instrument)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "blow (吹く)", "notes": null}
+{"id": "ふく_wipe_02", "kana": "ふく", "kanji": "拭く", "gloss_en": ["to wipe"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": "wipe (拭く)", "notes": null}
+{"id": "ふとる_01", "kana": "ふとる", "kanji": "太る", "gloss_en": ["to gain weight"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "ふむ_01", "kana": "ふむ", "kanji": "踏む", "gloss_en": ["to step on", "to tread"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "ふりだす_01", "kana": "ふりだす", "kanji": "降り出す", "gloss_en": ["to start falling (rain/snow)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "ふる_01", "kana": "ふる", "kanji": "降る", "gloss_en": ["to fall (rain/snow)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "ほめる_01", "kana": "ほめる", "kanji": "褒める", "gloss_en": ["to praise"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "まいる_01", "kana": "まいる", "kanji": "参る", "gloss_en": ["to go/come (humble)", "to be in trouble"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "まがる_01", "kana": "まがる", "kanji": "曲がる", "gloss_en": ["to turn", "to bend"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "まける_01", "kana": "まける", "kanji": "負ける", "gloss_en": ["to lose"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "まちがえる_01", "kana": "まちがえる", "kanji": "間違える", "gloss_en": ["to make a mistake"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "まつ_01", "kana": "まつ", "kanji": "待つ", "gloss_en": ["to wait"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "まにあう_01", "kana": "まにあう", "kanji": "間に合う", "gloss_en": ["to be in time", "to make it"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "まわる_01", "kana": "まわる", "kanji": "回る", "gloss_en": ["to go around", "to turn"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "みえる_01", "kana": "みえる", "kanji": "見える", "gloss_en": ["to be visible", "to be able to see"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "みがく_01", "kana": "みがく", "kanji": "磨く", "gloss_en": ["to brush/polish"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "みせる_01", "kana": "みせる", "kanji": "見せる", "gloss_en": ["to show"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "みつかる_01", "kana": "みつかる", "kanji": "見つかる", "gloss_en": ["to be found"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "みつける_01", "kana": "みつける", "kanji": "見つける", "gloss_en": ["to find"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "みる_01", "kana": "みる", "kanji": "見る", "gloss_en": ["to see", "to watch", "to look"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "むかう_01", "kana": "むかう", "kanji": "向かう", "gloss_en": ["to head toward", "to face"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "むかえる_01", "kana": "むかえる", "kanji": "迎える", "gloss_en": ["to pick up", "to welcome"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "めしあがる_01", "kana": "めしあがる", "kanji": "召し上がる", "gloss_en": ["to eat", "to drink (honorific)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "もらう_01", "kana": "もらう", "kanji": "貰う", "gloss_en": ["to receive"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "もつ_01", "kana": "もつ", "kanji": "持つ", "gloss_en": ["to hold", "to carry", "to have"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "もどる_01", "kana": "もどる", "kanji": "戻る", "gloss_en": ["to return", "to go back"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "もうしあげる_01", "kana": "もうしあげる", "kanji": "申し上げる", "gloss_en": ["to say (humble, very polite)"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "もうす_01", "kana": "もうす", "kanji": "申す", "gloss_en": ["to say (humble)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "やく_01", "kana": "やく", "kanji": "焼く", "gloss_en": ["to bake", "to grill", "to burn"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "やくにたつ_01", "kana": "やくにたつ", "kanji": null, "gloss_en": ["to be useful", "to be helpful"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "やすむ_01", "kana": "やすむ", "kanji": "休む", "gloss_en": ["to rest", "to take a break"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "やせる_01", "kana": "やせる", "kanji": "痩せる", "gloss_en": ["to lose weight", "to get thin"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "やむ_01", "kana": "やむ", "kanji": "止む", "gloss_en": ["to stop (rain)", "to cease"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "やめる_01", "kana": "やめる", "kanji": "止める", "gloss_en": ["to stop (doing)", "to quit"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "やる_01", "kana": "やる", "kanji": null, "gloss_en": ["to do", "to give (casual)", "to send (someone)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "ゆれる_01", "kana": "ゆれる", "kanji": null, "gloss_en": ["to shake", "to sway"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "よごれる_01", "kana": "よごれる", "kanji": "汚れる", "gloss_en": ["to get dirty"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "よぶ_01", "kana": "よぶ", "kanji": "呼ぶ", "gloss_en": ["to call", "to invite"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "よむ_01", "kana": "よむ", "kanji": "読む", "gloss_en": ["to read"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "よる_01", "kana": "よる", "kanji": "寄る", "gloss_en": ["to stop by", "to drop in"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "よろこぶ_01", "kana": "よろこぶ", "kanji": "喜ぶ", "gloss_en": ["to be glad", "to rejoice"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "わかす_01", "kana": "わかす", "kanji": "沸かす", "gloss_en": ["to boil (something)", "to heat (water)"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "わかる_01", "kana": "わかる", "kanji": "分かる", "gloss_en": ["to understand"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "わかれる_01", "kana": "わかれる", "kanji": "別れる", "gloss_en": ["to separate", "to break up"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "わく_01", "kana": "わく", "kanji": "沸く", "gloss_en": ["to boil (intransitive)", "to bubble"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "わたす_01", "kana": "わたす", "kanji": "渡す", "gloss_en": ["to hand over", "to give"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "わたる_01", "kana": "わたる", "kanji": "渡る", "gloss_en": ["to cross", "to go across"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "わらう_01", "kana": "わらう", "kanji": "笑う", "gloss_en": ["to laugh"], "level": "N5_N4_POOL", "verb_class": "godan", "disambiguation": null, "notes": null}
+{"id": "われる_01", "kana": "われる", "kanji": "割れる", "gloss_en": ["to break", "to crack", "to split"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}
+{"id": "わすれる_01", "kana": "わすれる", "kanji": "忘れる", "gloss_en": ["to forget"], "level": "N5_N4_POOL", "verb_class": "ichidan", "disambiguation": null, "notes": null}

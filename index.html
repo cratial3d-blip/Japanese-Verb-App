@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Japanese Verb Conjugation SRS</title>
+    <link rel="stylesheet" href="src/styles.css?v=20260206_9" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="app-header">
+        <div class="header-inner">
+          <div class="header-text">
+            <h1 id="page-title">Daily Practice</h1>
+            <div class="header-subtitle" id="page-subtitle"></div>
+          </div>
+          <div class="header-actions"></div>
+        </div>
+      </header>
+
+      <main>
+        <section class="screen active" id="screen-home">
+          <div class="home-stack">
+            <div class="home-card review-card">
+              <div class="home-card-count" id="home-reviews-count">0</div>
+              <div class="home-card-sub" id="home-reviews-sub">reviews waiting</div>
+              <button class="primary full-width" id="start-reviews">Start Reviews</button>
+            </div>
+
+            <div class="home-card lesson-card">
+              <div class="home-card-title">New Lessons</div>
+              <div class="home-card-sub"><span id="home-lessons-count">0</span> available</div>
+              <button class="primary full-width" id="home-start-lessons">Begin Lessons</button>
+            </div>
+
+            <div class="home-grid">
+              <button class="home-action" id="home-open-drill">Drill</button>
+              <button class="home-action" id="home-open-weakness">Weakness</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen" id="screen-reviews">
+          <div class="review-progress" id="reviews-progress">
+            <div class="review-progress-header">
+              <span id="review-progress-count">0 / 0</span>
+              <span id="review-progress-percent">0%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="review-progress-fill"></div>
+            </div>
+          </div>
+          <div class="card reviews-empty" id="reviews-empty-state">
+            <div class="reviews-empty-main">
+              <h3>All reviews complete</h3>
+              <p class="muted">You’re caught up for now.</p>
+            </div>
+            <div class="reviews-empty-actions">
+              <p class="muted">Want to keep practicing?</p>
+              <div class="home-grid">
+                <button class="home-action" id="reviews-empty-drill">Drill</button>
+                <button class="home-action" id="reviews-empty-weakness">Weakness</button>
+              </div>
+            </div>
+          </div>
+          <div class="session" id="reviews-session"></div>
+        </section>
+
+        <section class="screen" id="screen-drill">
+          <div class="panel wide-panel" id="drill-setup">
+            <div class="forms-picker" id="drill-forms-picker">
+              <div class="muted">Choose conjugation forms for this drill.</div>
+              <div class="forms-actions">
+                <button class="ghost" type="button" id="drill-select-all">Select all</button>
+                <button class="ghost" type="button" id="drill-select-none">Select none</button>
+              </div>
+              <div class="forms-list" id="drill-forms-list"></div>
+              <div class="muted forms-warning" id="drill-forms-warning"></div>
+            </div>
+            <label>
+              Number of questions
+              <input id="drill-count" type="number" min="1" max="50" value="10" />
+            </label>
+            <button class="primary" id="start-drill">Start Drill</button>
+          </div>
+          <div id="drill-session" class="session"></div>
+        </section>
+
+        <section class="screen" id="screen-lessons">
+          <div class="lessons-tools" id="lessons-focus-tools">
+            <div class="lessons-tools-actions">
+              <button class="ghost small" type="button" id="open-verb-browser">Verb Browser</button>
+            </div>
+          </div>
+          <div id="lessons-session" class="session"></div>
+        </section>
+
+        <section class="screen" id="screen-weakness">
+          <p class="muted">Prioritizes items with more misses or low accuracy.</p>
+          <div class="panel wide-panel">
+            <label>
+              Number of questions
+              <input id="weakness-count" type="number" min="1" max="50" value="10" />
+            </label>
+            <button class="primary" id="start-weakness">Start Weakness Mode</button>
+          </div>
+          <div id="weakness-session" class="session"></div>
+        </section>
+
+          <section class="screen" id="screen-stats">
+            <div class="stats-stack" id="stats-content">
+              <div class="card stats-card">
+                <div class="stats-card-title">Review Schedule</div>
+                <div class="stats-queue" id="stats-queue-list"></div>
+              </div>
+
+              <div class="card stats-card">
+                <div class="stats-card-title">Common mistakes</div>
+                <div class="stats-duo">
+                  <div class="stats-subcard">
+                    <div class="stats-subtitle">Top missed items</div>
+                    <div class="stats-list" id="stats-top-misses"></div>
+                  </div>
+                  <div class="stats-subcard">
+                    <div class="stats-subtitle">Top struggling patterns</div>
+                    <div class="stats-list" id="stats-top-patterns"></div>
+                  </div>
+                </div>
+                <button class="primary full-width" id="stats-practice-weakness">
+                  Practice weaknesses
+                </button>
+              </div>
+
+              <div class="card stats-card">
+                <div class="stats-card-title">Recent mistakes (last 24h)</div>
+                <div class="stats-list" id="stats-recent-mistakes"></div>
+                <button class="primary full-width" id="stats-practice-recent">
+                  Practice last 24h mistakes
+                </button>
+              </div>
+
+              <div class="card stats-card">
+                <div class="stats-card-title">Streaks & Consistency</div>
+                <div class="stats-streaks">
+                  <div class="stats-streak-main">
+                    <div class="stats-label">Current streak</div>
+                    <div class="stats-value" id="stats-current-streak">0</div>
+                    <div class="stats-unit">days</div>
+                  </div>
+                  <div class="stats-streak-secondary">
+                    <div class="stats-label">Longest streak</div>
+                    <div class="stats-value" id="stats-longest-streak">0</div>
+                    <div class="stats-unit">days</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card stats-card">
+                <div class="stats-card-title">Progress by study level</div>
+                <div class="stats-stage-bar" id="stats-stage-bar"></div>
+              <div class="stats-stage-list" id="stats-stage-list"></div>
+            </div>
+          </div>
+          <div id="stats-session" class="session is-hidden"></div>
+        </section>
+
+        <section class="screen" id="screen-verb-browser">
+          <div class="panel wide-panel verb-browser-panel">
+            <div class="verb-browser-header">
+              <button class="ghost" id="verb-browser-back" type="button">Back</button>
+              <div class="muted" id="verb-browser-level"></div>
+            </div>
+            <label>
+              Search verbs
+              <input id="verb-search" type="text" placeholder="Kana, kanji, English" />
+            </label>
+            <div class="verb-list" id="verb-browser-list"></div>
+            <div class="verb-browser-pagination">
+              <button class="ghost small" id="verb-browser-prev" type="button">Previous</button>
+              <div class="muted" id="verb-browser-page-info"></div>
+              <button class="ghost small" id="verb-browser-next" type="button">Next</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen" id="screen-settings">
+          <div class="panel settings-panel">
+            <label>
+              Daily new lessons (1-20)
+              <input id="settings-daily-lessons" type="number" min="1" max="20" value="10" />
+            </label>
+            <label>
+              Lessons unlock time (optional)
+              <input id="settings-unlock-time" type="time" step="900" />
+              <span class="muted">Leave blank for a rolling 24-hour unlock.</span>
+            </label>
+            <label>
+              Maximum daily reviews (optional)
+              <input id="settings-max-reviews" type="number" min="1" max="500" placeholder="Unlimited" />
+              <span class="muted">Leave blank for unlimited daily reviews.</span>
+            </label>
+            <label id="settings-study-level-wrap">
+              Study level
+              <select id="settings-study-level">
+                <option value="N5">N5 only</option>
+                <option value="N5_N4">N5 + N4</option>
+              </select>
+              <span class="muted">Guided mode uses this level for both verbs and conjugations.</span>
+            </label>
+            <label class="checkbox-row">
+              <input id="settings-advanced-content" type="checkbox" />
+              <span>Use custom conjugation forms</span>
+            </label>
+            <span class="muted">
+              Enable to choose exact lesson forms below. Study level remains visible, but is disabled while custom mode is on.
+            </span>
+            <div class="settings-forms" id="settings-forms-section">
+              <h3>Study Content</h3>
+              <p class="muted">Choose which conjugation forms appear in lessons.</p>
+              <div class="forms-actions">
+                <button class="ghost" type="button" id="forms-select-all">Select all</button>
+                <button class="ghost" type="button" id="forms-select-none">Select none</button>
+              </div>
+              <div class="forms-list" id="settings-forms-list"></div>
+              <div class="muted forms-warning" id="settings-forms-warning"></div>
+            </div>
+            <label class="checkbox-row settings-toggle-row">
+              <span class="settings-toggle-copy">
+                <strong>Haptic feedback (vibration)</strong>
+                <span class="muted">Applies to correct/incorrect answer feedback.</span>
+              </span>
+              <input id="settings-vibration" type="checkbox" />
+            </label>
+            <button class="primary" id="save-settings">Save Settings</button>
+            <div id="settings-feedback" class="muted"></div>
+            <div class="settings-divider"></div>
+            <div class="settings-reminders">
+              <h3>Reminders</h3>
+              <label class="checkbox-row settings-toggle-row">
+                <span class="settings-toggle-copy">
+                  <strong>Enable reminders</strong>
+                  <span class="muted">Receive local notifications for reviews and lessons.</span>
+                </span>
+                <input id="settings-reminders-enabled" type="checkbox" />
+              </label>
+              <label>
+                Daily reviews reminder time
+                <input id="settings-reminder-time" type="time" step="60" />
+              </label>
+              <label class="checkbox-row settings-toggle-row">
+                <span class="settings-toggle-copy">
+                  <strong>Lessons unlock reminder</strong>
+                  <span class="muted">Notify at your lesson unlock time when lessons are available.</span>
+                </span>
+                <input id="settings-reminder-lessons" type="checkbox" />
+              </label>
+              <div class="muted" id="settings-reminder-status"></div>
+            </div>
+            <div class="settings-divider"></div>
+            <div class="settings-backup">
+              <h3>Backup &amp; Restore</h3>
+              <p class="muted">
+                Export your progress to a JSON file or restore from a previous backup.
+              </p>
+              <div class="settings-backup-actions">
+                <button class="ghost" id="backup-export" type="button">Download backup</button>
+                <button class="primary" id="backup-import" type="button">Import backup</button>
+                <input id="backup-file" type="file" accept=".json" class="is-hidden" />
+              </div>
+              <div class="muted" id="backup-status"></div>
+            </div>
+            <div class="settings-divider"></div>
+            <div class="settings-reset">
+              <h3>Reset App Data</h3>
+              <p class="muted">
+                Deletes all learning progress (reviews, lessons, streaks) but keeps your settings.
+              </p>
+              <button class="danger" id="reset-open">Reset all progress</button>
+            </div>
+            <div class="settings-divider"></div>
+            <div class="settings-demo">
+              <h3>Demo Data (Testing)</h3>
+              <p class="muted">
+                Development tool. Load a realistic sample profile to preview long-term usage.
+              </p>
+              <div class="settings-demo-actions">
+                <button class="ghost" id="demo-restore" type="button" disabled>
+                  Restore real data
+                </button>
+                <button class="primary" id="demo-load" type="button">
+                  Load demo data
+                </button>
+              </div>
+              <div class="muted" id="demo-status"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <nav class="bottom-nav">
+      <div class="bottom-nav-inner">
+        <button class="nav-item active" data-screen="home">
+          <span class="nav-label">Home</span>
+        </button>
+        <button class="nav-item" data-screen="lessons">
+          <span class="nav-label">Lessons</span>
+        </button>
+        <button class="nav-item" data-screen="reviews">
+          <span class="nav-label">Reviews</span>
+        </button>
+        <button class="nav-item" data-screen="stats">
+          <span class="nav-label">Stats</span>
+        </button>
+        <button class="nav-item" data-screen="settings">
+          <span class="nav-label">Settings</span>
+        </button>
+      </div>
+    </nav>
+    <div id="reset-modal" class="modal is-hidden" role="dialog" aria-modal="true">
+      <div class="modal-backdrop"></div>
+      <div class="modal-card">
+        <h3>Reset App Data</h3>
+        <div id="reset-step-1" class="reset-step">
+          <p>
+            This will delete all learning progress, including:
+          </p>
+          <ul>
+            <li>SRS queues and due dates</li>
+            <li>Lesson progress and review history</li>
+            <li>Weakness stats and streaks</li>
+          </ul>
+          <p class="muted">Your settings will be kept.</p>
+          <div class="modal-actions">
+            <button class="ghost" id="reset-cancel-1">Cancel</button>
+            <button class="primary" id="reset-next-1">Continue</button>
+          </div>
+        </div>
+
+        <div id="reset-step-2" class="reset-step is-hidden">
+          <label>
+            Type <strong>RESET</strong> to confirm
+            <input id="reset-confirm-input" type="text" placeholder="RESET" />
+          </label>
+          <div class="modal-actions">
+            <button class="ghost" id="reset-cancel-2">Cancel</button>
+            <button class="primary" id="reset-next-2" disabled>Confirm</button>
+          </div>
+        </div>
+
+        <div id="reset-step-3" class="reset-step is-hidden">
+          <p>Are you absolutely sure you want to reset all progress?</p>
+          <div class="modal-actions">
+            <button class="ghost" id="reset-cancel-3">Cancel</button>
+            <button class="danger" id="reset-confirm-final">Yes, reset everything</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="toast" class="toast is-hidden"></div>
+    <script src="src/core/index.js?v=20260204_1"></script>
+    <script src="src/notifications.js?v=20260206_1"></script>
+    <script src="src/app.js?v=20260206_9"></script>
+  </body>
+</html>

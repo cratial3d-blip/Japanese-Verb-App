@@ -1,0 +1,103 @@
+{
+  "irregular_verbs": [
+    "ある",
+    "くる",
+    "する"
+  ],
+  "godan_ru_exceptions": [
+    "いる",
+    "かえる",
+    "きる",
+    "しる",
+    "すべる",
+    "はいる",
+    "はしる",
+    "まいる"
+  ],
+  "special_cases": {
+    "te_form": {
+      "いく": "いって"
+    },
+    "plain_past": {
+      "いく": "いった"
+    }
+  },
+  "ambiguous_kana": {
+    "あう": [
+      "あう_meet_01",
+      "あう_fit_match_02"
+    ],
+    "あく": [
+      "あく_be_free_empty_01",
+      "あく_open_02"
+    ],
+    "あげる": [
+      "あげる_give_01",
+      "あげる_raise_lift_increase_02"
+    ],
+    "ある": [
+      "ある_exist_have_01",
+      "ある_exist_have_02"
+    ],
+    "いる": [
+      "いる_exist_01",
+      "いる_need_require_02"
+    ],
+    "きる": [
+      "きる_cut_01",
+      "きる_wear_02"
+    ],
+    "くれる": [
+      "くれる_give_01",
+      "くれる_get_dark_end_02"
+    ],
+    "しめる": [
+      "しめる_tighten_fasten_01",
+      "しめる_close_02"
+    ],
+    "すむ": [
+      "すむ_be_finished_settled_01",
+      "すむ_live_reside_02"
+    ],
+    "たずねる": [
+      "たずねる_ask_inquire_01",
+      "たずねる_visit_02"
+    ],
+    "たてる": [
+      "たてる_build_01",
+      "たてる_set_up_stand_up_02"
+    ],
+    "つく": [
+      "つく_be_attached_come_on_01",
+      "つく_arrive_02"
+    ],
+    "つける": [
+      "つける_turn_on_light_01",
+      "つける_pickle_soak_02"
+    ],
+    "とまる": [
+      "とまる_stay_overnight_01",
+      "とまる_stop_02"
+    ],
+    "とる": [
+      "とる_take_get_01",
+      "とる_take_photo_video_02"
+    ],
+    "なおる": [
+      "なおる_heal_get_better_01",
+      "なおる_be_fixed_repaired_02"
+    ],
+    "なくなる": [
+      "なくなる_die_01",
+      "なくなる_disappear_run_out_02"
+    ],
+    "ひく": [
+      "ひく_pull_draw_01",
+      "ひく_play_string_instrument_02"
+    ],
+    "ふく": [
+      "ふく_01",
+      "ふく_wipe_02"
+    ]
+  }
+}

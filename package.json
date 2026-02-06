@@ -1,0 +1,8 @@
+{
+  "name": "japanese-srs-app",
+  "private": true,
+  "scripts": {
+    "test": "node scripts/run_tests.js",
+    "dev": "python -m http.server 8000"
+  }
+}
