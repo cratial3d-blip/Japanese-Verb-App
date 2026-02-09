@@ -1,4 +1,4 @@
-const Core = window.JapaneseSrsCore;
+﻿const Core = window.JapaneseSrsCore;
 const Notifications =
   window.JapaneseSrsNotifications ||
   {
@@ -137,9 +137,16 @@ let lessonsActive = false;
 let currentScreen = "home";
 let reviewSession = null;
 let lessonSession = null;
+let drillSession = null;
+let weaknessSession = null;
+let mistakeSession = null;
+let activeHeaderTool = null;
 let reminderSyncTimer = null;
 let verbBrowserReturnScreen = "lessons";
 let verbBrowserPage = 1;
+let onboardingStep = "basic";
+let onboardingCustomFormIds = [];
+let onboardingPendingConfig = null;
 const VERB_BROWSER_PAGE_SIZE = 12;
 const TAB_UI_MEMORY_SCREENS = new Set(["stats", "verb-browser"]);
 const tabUiMemory = {
@@ -225,6 +232,45 @@ const FORM_GROUPS = [
   },
 ];
 
+const KANA_CHART_GROUPS = [
+  {
+    title: "Basics",
+    entries: [
+      ["a", "あ"], ["i", "い"], ["u", "う"], ["e", "え"], ["o", "お"],
+      ["ka", "か"], ["ki", "き"], ["ku", "く"], ["ke", "け"], ["ko", "こ"],
+      ["sa", "さ"], ["shi", "し"], ["su", "す"], ["se", "せ"], ["so", "そ"],
+      ["ta", "た"], ["chi", "ち"], ["tsu", "つ"], ["te", "て"], ["to", "と"],
+      ["na", "な"], ["ni", "に"], ["nu", "ぬ"], ["ne", "ね"], ["no", "の"],
+    ],
+  },
+  {
+    title: "Voiced",
+    entries: [
+      ["ga", "が"], ["gi", "ぎ"], ["gu", "ぐ"], ["ge", "げ"], ["go", "ご"],
+      ["za", "ざ"], ["ji", "じ"], ["zu", "ず"], ["ze", "ぜ"], ["zo", "ぞ"],
+      ["da", "だ"], ["de", "で"], ["do", "ど"],
+      ["ba", "ば"], ["bi", "び"], ["bu", "ぶ"], ["be", "べ"], ["bo", "ぼ"],
+      ["pa", "ぱ"], ["pi", "ぴ"], ["pu", "ぷ"], ["pe", "ぺ"], ["po", "ぽ"],
+    ],
+  },
+  {
+    title: "Combinations",
+    entries: [
+      ["kya", "きゃ"], ["kyu", "きゅ"], ["kyo", "きょ"],
+      ["sha", "しゃ"], ["shu", "しゅ"], ["sho", "しょ"],
+      ["cha", "ちゃ"], ["chu", "ちゅ"], ["cho", "ちょ"],
+      ["nya", "にゃ"], ["nyu", "にゅ"], ["nyo", "にょ"],
+      ["hya", "ひゃ"], ["hyu", "ひゅ"], ["hyo", "ひょ"],
+      ["mya", "みゃ"], ["myu", "みゅ"], ["myo", "みょ"],
+      ["rya", "りゃ"], ["ryu", "りゅ"], ["ryo", "りょ"],
+      ["gya", "ぎゃ"], ["gyu", "ぎゅ"], ["gyo", "ぎょ"],
+      ["ja", "じゃ"], ["ju", "じゅ"], ["jo", "じょ"],
+      ["bya", "びゃ"], ["byu", "びゅ"], ["byo", "びょ"],
+      ["pya", "ぴゃ"], ["pyu", "ぴゅ"], ["pyo", "ぴょ"],
+    ],
+  },
+];
+
 function selectableTemplates() {
   return state.templates.filter((tpl) => tpl.active && !isDictionaryTemplateId(tpl.id));
 }
@@ -287,13 +333,362 @@ function setStatus(text) {
   }
 }
 
-function setHeader(title, subtitle) {
+function handleHeaderToolAction(action) {
+  if (action === "verb-browser") {
+    verbBrowserReturnScreen = "lessons";
+    verbBrowserPage = 1;
+    setActiveScreen("verb-browser");
+    return;
+  }
+  const toolScreens = new Set(["reviews", "drill", "weakness"]);
+  if (!toolScreens.has(currentScreen)) return;
+  activeHeaderTool = activeHeaderTool === action ? null : action;
+  renderHeaderToolPanel();
+  updateHeaderForScreen(currentScreen);
+}
+
+function getHeaderToolSession() {
+  if (currentScreen === "reviews") return reviewSession;
+  if (currentScreen === "drill") return drillSession;
+  if (currentScreen === "weakness") return weaknessSession;
+  return null;
+}
+
+function renderHeaderToolPanel() {
+  const panelEl = document.getElementById("header-tool-panel");
+  if (!panelEl) return;
+
+  const toolScreens = new Set(["reviews", "drill", "weakness"]);
+  if (!toolScreens.has(currentScreen) || !activeHeaderTool) {
+    panelEl.classList.add("is-hidden");
+    panelEl.innerHTML = "";
+    return;
+  }
+
+  if (activeHeaderTool === "last5") {
+    const session = getHeaderToolSession();
+    const entries = session && Array.isArray(session.lastFive) ? session.lastFive : [];
+    const listHtml = entries.length
+      ? entries
+          .map(
+            (entry) => `
+          <li class="header-last5-item">
+            <span class="header-last5-verb">${escapeHtml(entry.base || "-")}</span>
+            <span class="header-last5-template">${escapeHtml(entry.template || "-")}</span>
+            <span class="header-last5-answer">${escapeHtml(entry.answer || "-")}</span>
+          </li>
+        `,
+          )
+          .join("")
+      : `<li class="header-last5-empty">No correct answers yet in this session.</li>`;
+
+    panelEl.innerHTML = `
+      <div class="header-tool-card">
+        <div class="header-tool-head">
+          <h3>Last 5 Correct</h3>
+          <button type="button" class="header-tool-close" id="header-tool-close">Close</button>
+        </div>
+        <div class="header-tool-caption">Base verb | Conjugation | Your answer</div>
+        <ul class="header-last5-list">${listHtml}</ul>
+      </div>
+    `;
+  } else if (activeHeaderTool === "kana-chart") {
+    const groupsHtml = KANA_CHART_GROUPS.map((group) => {
+      const entriesHtml = group.entries
+        .map(
+          ([romaji, kana]) => `
+            <div class="kana-chart-item">
+              <span class="kana-chart-romaji">${romaji}</span>
+              <span class="kana-chart-kana">${kana}</span>
+            </div>
+          `,
+        )
+        .join("");
+      return `
+        <section class="kana-chart-group">
+          <h4>${group.title}</h4>
+          <div class="kana-chart-grid">${entriesHtml}</div>
+        </section>
+      `;
+    }).join("");
+
+    panelEl.innerHTML = `
+      <div class="header-tool-card">
+        <div class="header-tool-head">
+          <h3>Kana Typing Chart</h3>
+          <button type="button" class="header-tool-close" id="header-tool-close">Close</button>
+        </div>
+        <div class="kana-chart-wrap">${groupsHtml}</div>
+        <section class="kana-advanced">
+          <h4>Advanced</h4>
+          <ul>
+            <li><strong>nn</strong> -> ん</li>
+            <li>Double consonant (e.g. <strong>kk</strong>) -> っ</li>
+          </ul>
+        </section>
+      </div>
+    `;
+  } else {
+    panelEl.classList.add("is-hidden");
+    panelEl.innerHTML = "";
+    return;
+  }
+
+  panelEl.classList.remove("is-hidden");
+  const closeBtn = panelEl.querySelector("#header-tool-close");
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      activeHeaderTool = null;
+      renderHeaderToolPanel();
+      if (toolScreens.has(currentScreen)) {
+        updateHeaderForScreen(currentScreen);
+      }
+    });
+  }
+}
+
+function setHeaderMeta(items) {
+  const metaEl = document.getElementById("page-meta");
+  if (!metaEl) return;
+  const entries = Array.isArray(items) ? items.filter(Boolean).slice(0, 4) : [];
+  metaEl.innerHTML = "";
+  entries.forEach((item) => {
+    const isActionChip = Boolean(item.action);
+    const chip = document.createElement(isActionChip ? "button" : "span");
+    chip.className = "header-chip";
+    if (item.tone) chip.classList.add(`is-tone-${item.tone}`);
+    if (item.tone === "accent") chip.classList.add("is-accent");
+    if (item.tone === "warm") chip.classList.add("is-warm");
+    if (isActionChip) {
+      chip.classList.add("header-chip-button");
+      if (item.action === activeHeaderTool) chip.classList.add("is-active");
+      chip.type = "button";
+      chip.setAttribute("aria-pressed", item.action === activeHeaderTool ? "true" : "false");
+      chip.addEventListener("click", () => {
+        handleHeaderToolAction(item.action);
+      });
+    }
+
+    if (item.label) {
+      const label = document.createElement("span");
+      label.className = "chip-label";
+      label.textContent = item.label;
+      chip.appendChild(label);
+    }
+
+    if (item.value) {
+      const value = document.createElement("span");
+      value.className = "chip-value";
+      value.textContent = item.value;
+      chip.appendChild(value);
+    }
+    metaEl.appendChild(chip);
+  });
+  metaEl.classList.toggle("is-empty", entries.length === 0);
+}
+
+function setHeader(title, subtitle, options = {}) {
   const titleEl = document.getElementById("page-title");
   const subtitleEl = document.getElementById("page-subtitle");
+  const eyebrowEl = document.getElementById("page-eyebrow");
+  const headerEl = document.querySelector(".app-header");
   if (titleEl) titleEl.textContent = title || "";
   if (subtitleEl) {
     subtitleEl.textContent = subtitle || "";
   }
+  if (eyebrowEl) {
+    eyebrowEl.textContent = options.eyebrow || "";
+  }
+  if (headerEl) {
+    headerEl.setAttribute("data-screen", options.screen || currentScreen || "");
+  }
+  setHeaderMeta(options.meta || []);
+}
+
+function getGreetingTitle(now = new Date()) {
+  const hour = now.getHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 18) return "Good afternoon";
+  return "Good evening";
+}
+
+function getPersonalizedGreeting(now = new Date()) {
+  const greeting = getGreetingTitle(now);
+  const displayName = normalizeDisplayName(state.settings && state.settings.display_name);
+  return displayName ? `${greeting}, ${displayName}` : greeting;
+}
+
+function startOfWeek(date) {
+  const d = new Date(date.getTime());
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() - d.getDay());
+  return d;
+}
+
+function countEntriesForCurrentWeek(dayCounts, now = new Date()) {
+  if (!dayCounts || typeof dayCounts !== "object") return 0;
+  const weekStart = startOfWeek(now);
+  const weekEnd = new Date(weekStart.getTime());
+  weekEnd.setDate(weekEnd.getDate() + 7);
+  let total = 0;
+  Object.entries(dayCounts).forEach(([dayKey, value]) => {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dayKey)) return;
+    const [yearStr, monthStr, dayStr] = dayKey.split("-");
+    const date = new Date(Number(yearStr), Number(monthStr) - 1, Number(dayStr));
+    if (date >= weekStart && date < weekEnd) {
+      total += Number(value) || 0;
+    }
+  });
+  return total;
+}
+
+function formatCountNoun(count, singular, plural) {
+  return `${count} ${count === 1 ? singular : plural}`;
+}
+
+function getHomeWeekProgress(now = new Date()) {
+  const stats = state.stats || {};
+  const reviewMap = stats.completed_reviews_by_day;
+  const reviewsByDay =
+    reviewMap && Object.keys(reviewMap).length > 0 ? reviewMap : stats.dailyActivity || {};
+  const lessonsByDay = stats.completed_lessons_by_day || {};
+  return {
+    reviews: countEntriesForCurrentWeek(reviewsByDay, now),
+    lessons: countEntriesForCurrentWeek(lessonsByDay, now),
+  };
+}
+
+function recordCompletedReview() {
+  if (!state.stats) return;
+  if (!state.stats.completed_reviews_by_day || typeof state.stats.completed_reviews_by_day !== "object") {
+    state.stats.completed_reviews_by_day = {};
+  }
+  const dayKey = toDateKey(new Date());
+  state.stats.completed_reviews_by_day[dayKey] = (state.stats.completed_reviews_by_day[dayKey] || 0) + 1;
+  saveStats();
+}
+
+function recordCompletedLesson() {
+  if (!state.stats) return;
+  if (!state.stats.completed_lessons_by_day || typeof state.stats.completed_lessons_by_day !== "object") {
+    state.stats.completed_lessons_by_day = {};
+  }
+  const dayKey = toDateKey(new Date());
+  state.stats.completed_lessons_by_day[dayKey] = (state.stats.completed_lessons_by_day[dayKey] || 0) + 1;
+  saveStats();
+}
+
+function getDailyReviewsTitle(now = new Date()) {
+  const weekday = new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(now);
+  return `${weekday}'s Daily Reviews`;
+}
+
+function getDailyLessonsTitle(now = new Date()) {
+  const dateLabel = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric" }).format(now);
+  return `Daily Lessons for ${dateLabel}`;
+}
+
+function getStudyLevelLabel() {
+  return state.settings && state.settings.study_level === "N5" ? "JLPT N5" : "JLPT N5-N4";
+}
+
+function getLessonsModePillValue(templatesEnabled, customMode) {
+  if (customMode) {
+    const count = Math.max(0, Number(templatesEnabled) || 0);
+    return `Custom: ${count} ${count === 1 ? "Form" : "Forms"}`;
+  }
+  return state.settings && state.settings.study_level === "N5" ? "N5" : "N5/N4";
+}
+
+function getOnboardingPathValue() {
+  if (state.settings && state.settings.lesson_content_mode === "custom") return "custom";
+  return state.settings && state.settings.study_level === "N5" ? "N5" : "N5_N4";
+}
+
+function isOnboardingRequired() {
+  return !state.settings || state.settings.onboarding_complete !== true;
+}
+
+function syncOnboardingStartState() {
+  const nameInput = document.getElementById("onboarding-display-name");
+  const startButton = document.getElementById("onboarding-start");
+  if (!nameInput || !startButton) return;
+  startButton.disabled = normalizeDisplayName(nameInput.value).length === 0;
+}
+
+function setOnboardingStep(step) {
+  onboardingStep = step === "custom" ? "custom" : "basic";
+  const basicStep = document.getElementById("onboarding-step-basic");
+  const customStep = document.getElementById("onboarding-step-custom");
+  if (basicStep) {
+    basicStep.classList.toggle("is-hidden", onboardingStep !== "basic");
+  }
+  if (customStep) {
+    customStep.classList.toggle("is-hidden", onboardingStep !== "custom");
+  }
+  if (onboardingStep === "custom") {
+    renderOnboardingCustomFormsUI();
+  }
+}
+
+function updateOnboardingCustomFormsState() {
+  const warning = document.getElementById("onboarding-forms-warning");
+  const completeButton = document.getElementById("onboarding-complete-custom");
+  const selectedCount = onboardingCustomFormIds.length;
+  if (warning) {
+    warning.textContent = selectedCount === 0 ? "Enable at least one form to continue." : "";
+    warning.style.display = selectedCount === 0 ? "block" : "none";
+  }
+  if (completeButton) {
+    completeButton.disabled = selectedCount === 0;
+  }
+}
+
+function renderOnboardingCustomFormsUI() {
+  const list = document.getElementById("onboarding-forms-list");
+  if (!list) return;
+  renderFormsList(list, onboardingCustomFormIds, (next) => {
+    onboardingCustomFormIds = next;
+    renderOnboardingCustomFormsUI();
+  });
+  updateOnboardingCustomFormsState();
+}
+
+function openOnboardingModal() {
+  const modal = document.getElementById("onboarding-modal");
+  const nameInput = document.getElementById("onboarding-display-name");
+  const dailyInput = document.getElementById("onboarding-daily-lessons");
+  const pathInputs = document.querySelectorAll('input[name="onboarding-learning-path"]');
+  if (!modal || !nameInput || !dailyInput || !pathInputs.length) return;
+  const pathValue = getOnboardingPathValue();
+  const lessonCount = clampDailyLessons(state.settings ? state.settings.dailyLessons : 10);
+  const displayName = state.settings ? normalizeDisplayName(state.settings.display_name) : "";
+  pathInputs.forEach((input) => {
+    input.checked = input.value === pathValue;
+  });
+  onboardingCustomFormIds = [];
+  onboardingPendingConfig = null;
+  dailyInput.value = lessonCount;
+  nameInput.value = displayName;
+  setOnboardingStep("basic");
+  modal.classList.remove("is-hidden");
+  syncOnboardingStartState();
+  requestAnimationFrame(() => nameInput.focus());
+}
+
+function closeOnboardingModal() {
+  const modal = document.getElementById("onboarding-modal");
+  if (!modal) return;
+  onboardingCustomFormIds = [];
+  onboardingPendingConfig = null;
+  setOnboardingStep("basic");
+  modal.classList.add("is-hidden");
+}
+
+function formatSessionProgress(completed, total) {
+  if (!total || total <= 0) return "Not started";
+  if (completed >= total) return "Complete";
+  return `${completed}/${total}`;
 }
 
 function escapeHtml(value) {
@@ -385,7 +780,7 @@ function showAnswerFlash(flashEl, correct) {
   if (!flashEl) return;
   flashEl.classList.remove("show", "success", "error");
   flashEl.classList.add(correct ? "success" : "error");
-  flashEl.textContent = correct ? "Nice — correct" : "Not quite";
+  flashEl.textContent = correct ? "Nice - correct" : "Not quite";
   flashEl.classList.add("show");
   if (flashEl._timerId) {
     clearTimeout(flashEl._timerId);
@@ -518,6 +913,8 @@ function saveCards() {
 function defaultStats() {
   return {
     dailyActivity: {},
+    completed_reviews_by_day: {},
+    completed_lessons_by_day: {},
     mistakeLog: [],
     mistakeCounts: {
       cards: {},
@@ -543,6 +940,8 @@ function saveStats() {
 
 function defaultSettings() {
   return {
+    display_name: "",
+    onboarding_complete: false,
     dailyLessons: 10,
     unlockTime: "",
     maxDailyReviews: null,
@@ -566,7 +965,14 @@ function loadSettings() {
   if (!raw) return base;
   try {
     const parsed = JSON.parse(raw);
-    return { ...base, ...parsed };
+    const merged = { ...base, ...parsed };
+    if (!Object.prototype.hasOwnProperty.call(parsed, "onboarding_complete")) {
+      merged.onboarding_complete = true;
+    } else {
+      merged.onboarding_complete = Boolean(parsed.onboarding_complete);
+    }
+    merged.display_name = normalizeDisplayName(merged.display_name);
+    return merged;
   } catch (err) {
     console.warn("Failed to parse settings", err);
     return base;
@@ -575,6 +981,13 @@ function loadSettings() {
 
 function saveSettings() {
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(state.settings));
+}
+
+function normalizeDisplayName(value) {
+  const trimmed = String(value || "")
+    .replace(/\s+/g, " ")
+    .trim();
+  return trimmed.slice(0, 32);
 }
 
 function clampDailyLessons(value) {
@@ -821,7 +1234,15 @@ function buildBackupPayload() {
 }
 
 function normalizeImportedSettings(settings) {
-  return { ...defaultSettings(), ...(settings || {}) };
+  const imported = settings || {};
+  const normalized = { ...defaultSettings(), ...imported };
+  if (!Object.prototype.hasOwnProperty.call(imported, "onboarding_complete")) {
+    normalized.onboarding_complete = true;
+  } else {
+    normalized.onboarding_complete = Boolean(imported.onboarding_complete);
+  }
+  normalized.display_name = normalizeDisplayName(normalized.display_name);
+  return normalized;
 }
 
 function normalizeImportedStats(stats) {
@@ -831,6 +1252,8 @@ function normalizeImportedStats(stats) {
     ...base,
     ...stats,
     dailyActivity: stats.dailyActivity || {},
+    completed_reviews_by_day: stats.completed_reviews_by_day || {},
+    completed_lessons_by_day: stats.completed_lessons_by_day || {},
     mistakeLog: stats.mistakeLog || [],
     mistakeCounts: stats.mistakeCounts || base.mistakeCounts,
   };
@@ -1010,11 +1433,20 @@ function applyDemoData() {
 function refreshAfterDemoChange() {
   reviewSession = null;
   lessonSession = null;
+  drillSession = null;
+  weaknessSession = null;
+  mistakeSession = null;
   lessonsActive = false;
   const reviewsSession = document.getElementById("reviews-session");
   const lessonsSession = document.getElementById("lessons-session");
+  const drillSessionEl = document.getElementById("drill-session");
+  const weaknessSessionEl = document.getElementById("weakness-session");
+  const statsSessionEl = document.getElementById("stats-session");
   if (reviewsSession) reviewsSession.innerHTML = "";
   if (lessonsSession) lessonsSession.innerHTML = "";
+  if (drillSessionEl) drillSessionEl.innerHTML = "";
+  if (weaknessSessionEl) weaknessSessionEl.innerHTML = "";
+  if (statsSessionEl) statsSessionEl.innerHTML = "";
   setActiveScreen("home");
 }
 
@@ -1112,6 +1544,9 @@ function setDrillFormIds(ids) {
   saveSettings();
   renderDrillFormsUI();
   updateDrillControls();
+  if (currentScreen === "drill") {
+    updateHeaderForScreen("drill");
+  }
 }
 
 function renderEnabledFormsUI() {
@@ -1141,6 +1576,9 @@ function updateDrillControls() {
   }
   if (startButton) {
     startButton.disabled = forms.length === 0;
+  }
+  if (currentScreen === "drill") {
+    updateHeaderForScreen("drill");
   }
 }
 
@@ -1373,8 +1811,8 @@ function renderVerbBrowser() {
 }
 
 function lessonHintForClass(verbClass) {
-  if (verbClass === "ichidan") return "Drop る + …";
-  if (verbClass === "godan") return "Change ending + …";
+  if (verbClass === "ichidan") return "Drop る + ...";
+  if (verbClass === "godan") return "Change ending + ...";
   if (verbClass === "irregular") return "Special form";
   return "";
 }
@@ -1473,11 +1911,11 @@ function getLessonBreakdown(verb, templateId, expected) {
   if (templateId === "polite_te_form") {
     const teForm = Core.conjugate(verb, "plain_te_form", state.exceptions);
     if (teForm && teForm !== expected) {
-      return `${base} → ${teForm} → ${expected}`;
+      return `${base} -> ${teForm} -> ${expected}`;
     }
   }
   if (base && expected && base !== expected) {
-    return `${base} → ${expected}`;
+    return `${base} -> ${expected}`;
   }
   return "";
 }
@@ -1524,6 +1962,7 @@ function createSession(container, queueItems, options) {
     completed: 0,
     progressById: {},
     lastResult: null,
+    lastFive: [],
   };
   renderSessionCard(session);
   return session;
@@ -1578,13 +2017,6 @@ function getLessonsHeaderSubtitle(session) {
   return "";
 }
 
-function getReviewsHeaderSubtitle(session) {
-  if (!session || session.totalCount === 0) return "0 due now";
-  if (session.queue.length === 0) return `${session.totalCount} of ${session.totalCount}`;
-  const current = Math.min(session.completed + 1, session.totalCount);
-  return `Review ${current} of ${session.totalCount}`;
-}
-
 function startReviewsSession() {
   setActiveScreen("reviews");
   let due = Core.buildDailyReviewQueue(Object.values(filterCardStore(state.cards)), new Date());
@@ -1595,74 +2027,245 @@ function startReviewsSession() {
   const queue = buildQueueFromCards(due);
   const container = document.getElementById("reviews-session");
   reviewSession = createSession(container, queue, { mode: "reviews" });
+  drillSession = null;
+  weaknessSession = null;
+  mistakeSession = null;
   updateHeaderForScreen("reviews");
 }
 
 function updateHeaderForScreen(screen) {
   const target = screen || currentScreen;
+  if (target !== "reviews" && target !== "drill" && target !== "weakness") {
+    if (activeHeaderTool) activeHeaderTool = null;
+    renderHeaderToolPanel();
+  }
+  if (!state.settings) {
+    setHeader("Japanese SRS", "Loading your study data...", { screen: target });
+    return;
+  }
+
+  const maxDailyReviews = getMaxDailyReviews();
+
   if (target === "home") {
-    const dueNow = getReviewsDueCount();
-    const lessonsAvailable = getLessonsAvailable();
+    const now = new Date();
+    const week = getHomeWeekProgress(now);
     const subtitle =
-      dueNow > 0
-        ? `${dueNow} reviews waiting`
-        : lessonsAvailable > 0
-          ? `${lessonsAvailable} new lessons available`
-          : "All caught up";
-    setHeader("Daily Practice", subtitle);
+      week.reviews === 0 && week.lessons === 0
+        ? "It's a new week. Let's kick things off with today's reviews."
+        : `You've completed ${formatCountNoun(week.reviews, "review", "reviews")} and learned ${formatCountNoun(week.lessons, "new lesson", "new lessons")} this week.`;
+    setHeader(getPersonalizedGreeting(now), subtitle, {
+      eyebrow: "毎日の学習",
+      meta: [],
+      screen: target,
+    });
     return;
   }
 
   if (target === "lessons") {
-    let subtitle = "";
+    const availability = getLessonsAvailableCount();
+    const templatesEnabled = getLessonTemplates().length;
+    const customMode = isCustomContentMode();
+    const lessonsTitle = getDailyLessonsTitle(new Date());
+    const modePill = getLessonsModePillValue(templatesEnabled, customMode);
     if (lessonSession && lessonsActive) {
-      subtitle = getLessonsHeaderSubtitle(lessonSession);
-    } else {
-      const availability = getLessonsAvailableCount();
-      if (availability.availableToday > 0) {
-        subtitle = `${availability.availableToday} new lessons available`;
-      } else {
-        const nextUnlock = getNextUnlockTimeText(new Date());
-        subtitle = nextUnlock ? `Next unlock at ${nextUnlock}` : "";
+      let title = lessonsTitle;
+      let subtitle = "Build memory through examples first, then quiz from recall.";
+      if (lessonSession.phase === "lesson") {
+        title = lessonsTitle;
+        subtitle = "Learn new conjugation patterns and add them to your reviews.";
+      } else if (lessonSession.phase === "confirm") {
+        title = "Lesson Checkpoint";
+        subtitle = "Quick recap before switching into quiz mode.";
+      } else if (lessonSession.phase === "practice") {
+        title = "Lesson Quiz";
+        subtitle = "Type the answer from memory and stay consistent.";
       }
+      setHeader(title, subtitle, {
+        eyebrow: "レッスン",
+        meta: [
+          { value: getLessonsHeaderSubtitle(lessonSession), tone: "sage-1" },
+          { label: "Mode", value: modePill, tone: "sage-2" },
+          { label: "Verb Browser", value: "", action: "verb-browser", tone: "sage-3" },
+        ],
+        screen: target,
+      });
+      return;
     }
-    setHeader("Today's Lessons", subtitle);
+
+    const nextUnlock = getNextUnlockTimeText(new Date());
+    const title = lessonsTitle;
+    const subtitle =
+      availability.availableToday > 0
+        ? "Start a fresh lesson batch and immediately reinforce with quiz cards."
+        : nextUnlock
+          ? `No lessons available right now. Next unlock at ${nextUnlock}.`
+          : "No lessons available right now. Check your daily lesson limit.";
+    setHeader(title, subtitle, {
+      eyebrow: "レッスン",
+      meta: [
+        { label: "Daily New", value: String(clampDailyLessons(state.settings.dailyLessons)), tone: "sage-1" },
+        { label: "Mode", value: modePill, tone: "sage-2" },
+        { label: "Verb Browser", value: "", action: "verb-browser", tone: "sage-3" },
+      ],
+      screen: target,
+    });
     return;
   }
 
   if (target === "reviews") {
-    const subtitle =
-      reviewSession && reviewSession.totalCount > 0
-        ? getReviewsHeaderSubtitle(reviewSession)
-        : `${getReviewsDueCount()} due now`;
-    setHeader("Your Reviews", subtitle);
-    return;
-  }
-
-  if (target === "settings") {
-    setHeader("Settings", "");
+    const lastFiveCount =
+      reviewSession && Array.isArray(reviewSession.lastFive) ? reviewSession.lastFive.length : 0;
+    setHeader(getDailyReviewsTitle(new Date()), "Complete reviews to level up each verb conjugation.", {
+      eyebrow: "復習",
+      meta: [
+        {
+          label: "Last 5",
+          value: lastFiveCount > 0 ? `${lastFiveCount}/5` : "",
+          action: "last5",
+          tone: "sage-1",
+        },
+        {
+          label: "Kana Chart",
+          value: "",
+          action: "kana-chart",
+          tone: "sage-2",
+        },
+        { label: "Daily Cap", value: maxDailyReviews ? String(maxDailyReviews) : "Unlimited", tone: "sage-3" },
+      ],
+      screen: target,
+    });
+    renderHeaderToolPanel();
     return;
   }
 
   if (target === "drill") {
-    setHeader("Drill", "");
+    const selectedForms = getDrillFormIds().length;
+    const activeDrill = Boolean(drillSession && drillSession.totalCount > 0 && drillSession.queue.length > 0);
+    const lastFiveCount = drillSession && Array.isArray(drillSession.lastFive) ? drillSession.lastFive.length : 0;
+    const subtitle = activeDrill
+      ? "Repeat selected forms until response speed and accuracy feel automatic."
+      : "Choose specific verb conjugations and create a focused practice quiz.";
+    setHeader(activeDrill ? "Focused Drill Session" : "Focused Drill", subtitle, {
+      eyebrow: "集中ドリル",
+      meta: [
+        {
+          label: "Last 5",
+          value: lastFiveCount > 0 ? `${lastFiveCount}/5` : "",
+          action: "last5",
+          tone: "sage-1",
+        },
+        {
+          label: "Kana Chart",
+          value: "",
+          action: "kana-chart",
+          tone: "sage-2",
+        },
+        { label: "Forms", value: selectedForms > 0 ? String(selectedForms) : "None", tone: "sage-3" },
+      ],
+      screen: target,
+    });
+    renderHeaderToolPanel();
     return;
   }
 
   if (target === "weakness") {
-    setHeader("Weakness", "");
+    const weaknessAvailable = Core.buildWeaknessQueue(filterCardStore(state.cards), 250).length;
+    const activeWeakness =
+      Boolean(weaknessSession && weaknessSession.totalCount > 0 && weaknessSession.queue.length > 0);
+    const lastFiveCount =
+      weaknessSession && Array.isArray(weaknessSession.lastFive) ? weaknessSession.lastFive.length : 0;
+    const subtitle = activeWeakness
+      ? "Target your weakest cards first and stabilize recurring misses."
+      : weaknessAvailable > 0
+        ? "Create a targeted quiz to review your most common mistakes"
+        : "No weakness data yet. Complete more reviews to populate this mode.";
+    setHeader(activeWeakness ? "Weakness Session" : "Weakness Trainer", subtitle, {
+      eyebrow: "弱点対策",
+      meta: [
+        {
+          label: "Last 5",
+          value: lastFiveCount > 0 ? `${lastFiveCount}/5` : "",
+          action: "last5",
+          tone: "sage-1",
+        },
+        {
+          label: "Kana Chart",
+          value: "",
+          action: "kana-chart",
+          tone: "sage-2",
+        },
+        { label: "Available", value: weaknessAvailable > 0 ? String(weaknessAvailable) : "None", tone: "sage-3" },
+      ],
+      screen: target,
+    });
+    renderHeaderToolPanel();
     return;
   }
 
   if (target === "stats") {
-    setHeader("Stats", "");
+    const statsSessionEl = document.getElementById("stats-session");
+    const mistakePracticeActive =
+      Boolean(statsSessionEl && !statsSessionEl.classList.contains("is-hidden") && mistakeSession);
+    if (mistakePracticeActive) {
+      const progress = mistakeSession
+        ? formatSessionProgress(
+            Math.min(mistakeSession.completed || 0, mistakeSession.totalCount || 0),
+            mistakeSession.totalCount || 0,
+          )
+        : "Not started";
+      setHeader("Mistake Practice Session", "Revisit recent errors while they are still fresh.", {
+        eyebrow: "学習記録",
+        meta: [
+          { label: "Source", value: "Last 24h errors", tone: "sage-1" },
+          { label: "Progress", value: progress, tone: "sage-2" },
+          { label: "Mode", value: "Review-like drill", tone: "sage-3" },
+        ],
+        screen: target,
+      });
+      return;
+    }
+
+    const streaks = computeStreaks((state.stats && state.stats.dailyActivity) || {});
+    const recentMistakes = getRecentMistakes(24).length;
+    setHeader("Learning Insights", "Track your schedule, streaks, and most common mistakes.", {
+      eyebrow: "学習記録",
+      meta: [
+        { label: "Current streak", value: `${streaks.current}d`, tone: "sage-1" },
+        { label: "Longest", value: `${streaks.longest}d`, tone: "sage-2" },
+        { label: "Recent mistakes", value: recentMistakes > 0 ? String(recentMistakes) : "None", tone: "sage-3" },
+      ],
+      screen: target,
+    });
+    return;
+  }
+
+  if (target === "settings") {
+    setHeader("Study Settings", "Edit your lesson pacing, conjugation content, reminders, and more.", {
+      eyebrow: "設定",
+      screen: target,
+    });
     return;
   }
 
   if (target === "verb-browser") {
-    setHeader("Verb Browser", "");
+    const search = document.getElementById("verb-search");
+    const hasQuery = Boolean(search && search.value && search.value.trim());
+    const subtitle = hasQuery
+      ? `Browsing matches for "${search.value.trim()}".`
+      : "Search verbs and inspect available conjugation cards.";
+    setHeader("Verb Browser", subtitle, {
+      eyebrow: "Lessons Tool",
+      meta: [
+        { label: "Page", value: String(verbBrowserPage), tone: "accent" },
+        { label: "Level", value: getStudyLevelLabel() },
+        { label: "Filter", value: hasQuery ? "Search active" : "All verbs" },
+      ],
+      screen: target,
+    });
     return;
   }
+
+  setHeader("Japanese SRS", "", { screen: target });
 }
 
 function buildQueueStatus() {
@@ -1947,12 +2550,12 @@ function renderStatsScreen() {
     });
     const total = Object.values(counts).reduce((sum, value) => sum + value, 0) || 1;
     const colors = [
-      "rgba(214, 162, 26, 0.35)",
-      "rgba(214, 162, 26, 0.45)",
-      "rgba(214, 162, 26, 0.55)",
-      "rgba(47, 58, 74, 0.3)",
-      "rgba(47, 58, 74, 0.45)",
-      "rgba(47, 58, 74, 0.6)",
+      "rgba(240, 141, 96, 0.3)",
+      "rgba(240, 141, 96, 0.44)",
+      "rgba(90, 135, 119, 0.38)",
+      "rgba(90, 135, 119, 0.5)",
+      "rgba(70, 111, 96, 0.58)",
+      "rgba(70, 111, 96, 0.72)",
     ];
     stageBar.innerHTML = "";
     stageList.innerHTML = "";
@@ -2000,6 +2603,10 @@ function renderStatsScreen() {
         practiceBtn.disabled = recent.length === 0;
       }
     }
+
+  if (currentScreen === "stats") {
+    updateHeaderForScreen("stats");
+  }
 
   }
 
@@ -2067,14 +2674,28 @@ function renderSessionCard(session) {
       updateHeaderForScreen("reviews");
     }
     if (session.mode === "drill") {
+      drillSession = null;
       setDrillSetupVisible(true);
+      if (currentScreen === "drill") {
+        updateHeaderForScreen("drill");
+      }
+    }
+    if (session.mode === "weakness") {
+      weaknessSession = null;
+      if (currentScreen === "weakness") {
+        updateHeaderForScreen("weakness");
+      }
     }
     if (session.mode === "mistake") {
+      mistakeSession = null;
       const statsContent = document.getElementById("stats-content");
       const statsSession = document.getElementById("stats-session");
       if (statsContent) statsContent.classList.remove("is-hidden");
       if (statsSession) statsSession.classList.add("is-hidden");
       renderStatsScreen();
+      if (currentScreen === "stats") {
+        updateHeaderForScreen("stats");
+      }
     }
     saveCards();
     return;
@@ -2083,6 +2704,12 @@ function renderSessionCard(session) {
   if (session.mode === "reviews") {
     updateReviewProgress(session);
     updateHeaderForScreen("reviews");
+  } else if (session.mode === "drill" && currentScreen === "drill") {
+    updateHeaderForScreen("drill");
+  } else if (session.mode === "weakness" && currentScreen === "weakness") {
+    updateHeaderForScreen("weakness");
+  } else if (session.mode === "mistake" && currentScreen === "stats") {
+    updateHeaderForScreen("stats");
   }
 
   const item = session.queue[0];
@@ -2150,6 +2777,28 @@ function renderSessionCard(session) {
     flashInputFeedback(answerInput, correct);
     showAnswerFlash(answerFlash, correct);
     recordReviewAttempt({ verbId: verb.id, templateId: template.id, correct });
+    if (correct && (session.mode === "reviews" || session.mode === "drill" || session.mode === "weakness")) {
+      const baseLabel = verb.kanji ? `${verb.kanji} (${verb.kana})` : verb.kana;
+      const templateLabel = simplifyTemplateLabel(template.label);
+      const entry = {
+        base: baseLabel,
+        template: templateLabel,
+        answer: normalized,
+      };
+      if (!Array.isArray(session.lastFive)) {
+        session.lastFive = [];
+      }
+      session.lastFive.unshift(entry);
+      if (session.lastFive.length > 5) {
+        session.lastFive.length = 5;
+      }
+      if (currentScreen === "reviews" || currentScreen === "drill" || currentScreen === "weakness") {
+        if (activeHeaderTool === "last5") {
+          renderHeaderToolPanel();
+        }
+        updateHeaderForScreen(currentScreen);
+      }
+    }
     session.answered = true;
     feedback.style.display = "block";
     session.lastResult = { item, cardId, correct };
@@ -2217,6 +2866,9 @@ function renderSessionCard(session) {
         if (!progress.completed) {
           progress.completed = true;
           session.completed += 1;
+          if (session.mode === "reviews") {
+            recordCompletedReview();
+          }
         }
         session.queue.shift();
       } else {
@@ -2367,6 +3019,7 @@ function updateStudyContentModeUI() {
 }
 
 function populateSettingsForm() {
+  const displayNameInput = document.getElementById("settings-display-name");
   const dailyInput = document.getElementById("settings-daily-lessons");
   const unlockTimeInput = document.getElementById("settings-unlock-time");
   const maxInput = document.getElementById("settings-max-reviews");
@@ -2377,6 +3030,9 @@ function populateSettingsForm() {
   const reminderTimeInput = document.getElementById("settings-reminder-time");
   const reminderLessonsInput = document.getElementById("settings-reminder-lessons");
   if (!dailyInput || !unlockTimeInput || !maxInput) return;
+  if (displayNameInput) {
+    displayNameInput.value = normalizeDisplayName(state.settings.display_name);
+  }
   dailyInput.value = state.settings.dailyLessons;
   unlockTimeInput.value = state.settings.unlockTime || "";
   maxInput.value = state.settings.maxDailyReviews || "";
@@ -2432,7 +3088,7 @@ function renderLessonCard(session) {
         <div class="tag">${template.label}</div>
       </div>
       <div class="lesson-main">
-        <div class="lesson-answer">${verbDisplay} <span class="lesson-arrow">→</span> <span class="lesson-conjugated">${expected}</span></div>
+        <div class="lesson-answer">${verbDisplay} <span class="lesson-arrow">&rarr;</span> <span class="lesson-conjugated">${expected}</span></div>
         <div class="prompt-gloss">${verb.gloss_en.join(", ")}</div>
       </div>
       <div class="lesson-divider"></div>
@@ -2617,6 +3273,7 @@ function renderLessonCard(session) {
     result.card.learning_step = null;
     result.card.due_at = addDays(now, 1).toISOString();
     state.cards[cardRecord.card_id] = result.card;
+    recordCompletedLesson();
     decrementLessonBank(1);
     session.practiceCompleted += 1;
     session.practiceQueue.shift();
@@ -2643,6 +3300,135 @@ function setupActions() {
   document.getElementById("start-reviews").addEventListener("click", () => {
     startReviewsSession();
   });
+  const homeSettingsShortcut = document.getElementById("home-settings-shortcut");
+  if (homeSettingsShortcut) {
+    homeSettingsShortcut.addEventListener("click", () => {
+      if (currentScreen === "settings") {
+        setActiveScreen("home");
+        return;
+      }
+      setActiveScreen("settings");
+    });
+  }
+
+  const onboardingNameInput = document.getElementById("onboarding-display-name");
+  const onboardingDailyInput = document.getElementById("onboarding-daily-lessons");
+  const onboardingStartButton = document.getElementById("onboarding-start");
+  const onboardingBackButton = document.getElementById("onboarding-back");
+  const onboardingCompleteCustomButton = document.getElementById("onboarding-complete-custom");
+  const onboardingSelectAllFormsButton = document.getElementById("onboarding-forms-select-all");
+  const onboardingSelectNoneFormsButton = document.getElementById("onboarding-forms-select-none");
+  const onboardingPathInputs = document.querySelectorAll('input[name="onboarding-learning-path"]');
+
+  function completeOnboarding(config, customFormIds) {
+    if (!config) return;
+    state.settings.display_name = config.displayName;
+    state.settings.dailyLessons = config.dailyLessons;
+    if (config.selectedPath === "custom") {
+      state.settings.lesson_content_mode = "custom";
+      state.settings.enabled_conjugation_forms = customFormIds.slice();
+    } else {
+      state.settings.lesson_content_mode = "level";
+      state.settings.study_level = config.selectedPath === "N5" ? "N5" : "N5_N4";
+    }
+    state.settings.onboarding_complete = true;
+    state.settings.lessonBank = 0;
+    state.settings.lastUnlockAt = null;
+    saveSettings();
+    applyLessonUnlocks(new Date());
+    renderEnabledFormsUI();
+    updateFormsWarnings();
+    populateSettingsForm();
+    updateReviewSummary();
+    updateLessonSummary();
+    updateHeaderForScreen(currentScreen);
+    closeOnboardingModal();
+    showToast(`Welcome, ${config.displayName}.`);
+  }
+
+  if (onboardingNameInput) {
+    onboardingNameInput.addEventListener("input", () => {
+      syncOnboardingStartState();
+    });
+  }
+
+  if (onboardingDailyInput) {
+    onboardingDailyInput.addEventListener("blur", () => {
+      onboardingDailyInput.value = String(clampDailyLessons(onboardingDailyInput.value));
+    });
+  }
+
+  if (onboardingPathInputs.length > 0) {
+    onboardingPathInputs.forEach((input) => {
+      input.addEventListener("change", () => {
+        syncOnboardingStartState();
+      });
+    });
+  }
+
+  if (onboardingSelectAllFormsButton) {
+    onboardingSelectAllFormsButton.addEventListener("click", () => {
+      onboardingCustomFormIds = selectableTemplates().map((tpl) => tpl.id);
+      renderOnboardingCustomFormsUI();
+    });
+  }
+
+  if (onboardingSelectNoneFormsButton) {
+    onboardingSelectNoneFormsButton.addEventListener("click", () => {
+      onboardingCustomFormIds = [];
+      renderOnboardingCustomFormsUI();
+    });
+  }
+
+  if (onboardingBackButton) {
+    onboardingBackButton.addEventListener("click", () => {
+      setOnboardingStep("basic");
+      if (onboardingNameInput) {
+        requestAnimationFrame(() => onboardingNameInput.focus());
+      }
+    });
+  }
+
+  if (onboardingCompleteCustomButton) {
+    onboardingCompleteCustomButton.addEventListener("click", () => {
+      if (!onboardingPendingConfig) return;
+      if (onboardingCustomFormIds.length === 0) {
+        updateOnboardingCustomFormsState();
+        return;
+      }
+      completeOnboarding(onboardingPendingConfig, onboardingCustomFormIds);
+    });
+  }
+
+  if (onboardingStartButton) {
+    onboardingStartButton.addEventListener("click", () => {
+      const displayName = normalizeDisplayName(onboardingNameInput ? onboardingNameInput.value : "");
+      if (!displayName) {
+        syncOnboardingStartState();
+        if (onboardingNameInput) onboardingNameInput.focus();
+        return;
+      }
+      const dailyLessons = clampDailyLessons(onboardingDailyInput ? onboardingDailyInput.value : 10);
+      const selectedPathInput = document.querySelector(
+        'input[name="onboarding-learning-path"]:checked',
+      );
+      const selectedPath = selectedPathInput ? selectedPathInput.value : "N5_N4";
+      const config = {
+        displayName,
+        dailyLessons,
+        selectedPath,
+      };
+
+      if (selectedPath === "custom") {
+        onboardingPendingConfig = config;
+        onboardingCustomFormIds = [];
+        setOnboardingStep("custom");
+        return;
+      }
+
+      completeOnboarding(config, []);
+    });
+  }
 
   document.getElementById("start-drill").addEventListener("click", () => {
     const count = Number(document.getElementById("drill-count").value) || 10;
@@ -2654,7 +3440,9 @@ function setupActions() {
     setDrillSetupVisible(false);
     const queue = buildDrillQueueFromPool(count, formIds);
     const container = document.getElementById("drill-session");
-    createSession(container, queue, { mode: "drill" });
+    drillSession = createSession(container, queue, { mode: "drill" });
+    weaknessSession = null;
+    mistakeSession = null;
     updateHeaderForScreen("drill");
   });
 
@@ -2684,13 +3472,30 @@ function setupActions() {
     const cards = Core.buildWeaknessQueue(filterCardStore(state.cards), count);
     const queue = buildQueueFromCards(cards);
     const container = document.getElementById("weakness-session");
-    createSession(container, queue, { mode: "weakness" });
+    weaknessSession = createSession(container, queue, { mode: "weakness" });
+    drillSession = null;
+    mistakeSession = null;
     updateHeaderForScreen("weakness");
   });
+
+  const drillCountInput = document.getElementById("drill-count");
+  if (drillCountInput) {
+    drillCountInput.addEventListener("input", () => {
+      if (currentScreen === "drill") updateHeaderForScreen("drill");
+    });
+  }
+
+  const weaknessCountInput = document.getElementById("weakness-count");
+  if (weaknessCountInput) {
+    weaknessCountInput.addEventListener("input", () => {
+      if (currentScreen === "weakness") updateHeaderForScreen("weakness");
+    });
+  }
 
   const saveSettingsButton = document.getElementById("save-settings");
     if (saveSettingsButton) {
       saveSettingsButton.addEventListener("click", async () => {
+        const displayNameInput = document.getElementById("settings-display-name");
         const dailyInput = document.getElementById("settings-daily-lessons");
         const unlockTimeInput = document.getElementById("settings-unlock-time");
         const maxInput = document.getElementById("settings-max-reviews");
@@ -2703,6 +3508,7 @@ function setupActions() {
         const feedback = document.getElementById("settings-feedback");
         if (!dailyInput || !unlockTimeInput || !maxInput) return;
 
+      const displayName = displayNameInput ? normalizeDisplayName(displayNameInput.value) : "";
       const daily = clampDailyLessons(dailyInput.value);
       const unlockTime = /^\d{2}:\d{2}$/.test((unlockTimeInput.value || "").trim())
         ? unlockTimeInput.value.trim()
@@ -2711,6 +3517,7 @@ function setupActions() {
       const maxReviews = maxRaw && !isNaN(maxRaw) ? Math.max(1, Math.floor(maxRaw)) : null;
       const unlockChanged = unlockTime !== state.settings.unlockTime;
 
+        state.settings.display_name = displayName;
         state.settings.dailyLessons = daily;
         state.settings.unlockTime = unlockTime;
         state.settings.maxDailyReviews = maxReviews;
@@ -2764,7 +3571,6 @@ function setupActions() {
   const formsSelectAll = document.getElementById("forms-select-all");
   const formsSelectNone = document.getElementById("forms-select-none");
   const advancedContent = document.getElementById("settings-advanced-content");
-  const openVerbBrowser = document.getElementById("open-verb-browser");
   const verbBrowserBack = document.getElementById("verb-browser-back");
   const verbSearch = document.getElementById("verb-search");
   const verbBrowserPrev = document.getElementById("verb-browser-prev");
@@ -2787,14 +3593,6 @@ function setupActions() {
       setEnabledFormIds([]);
     });
   }
-
-    if (openVerbBrowser) {
-      openVerbBrowser.addEventListener("click", () => {
-        verbBrowserReturnScreen = currentScreen || "lessons";
-        verbBrowserPage = 1;
-        setActiveScreen("verb-browser");
-      });
-    }
 
     if (verbBrowserBack) {
       verbBrowserBack.addEventListener("click", () => {
@@ -2869,15 +3667,34 @@ function setupActions() {
     saveCards();
     state.stats = defaultStats();
     saveStats();
+    reviewSession = null;
+    lessonSession = null;
+    drillSession = null;
+    weaknessSession = null;
+    mistakeSession = null;
     const statsContent = document.getElementById("stats-content");
     const statsSession = document.getElementById("stats-session");
+    const reviewsSession = document.getElementById("reviews-session");
+    const lessonsSession = document.getElementById("lessons-session");
+    const drillSessionEl = document.getElementById("drill-session");
+    const weaknessSessionEl = document.getElementById("weakness-session");
     if (statsContent) statsContent.classList.remove("is-hidden");
     if (statsSession) statsSession.classList.add("is-hidden");
+    if (reviewsSession) reviewsSession.innerHTML = "";
+    if (lessonsSession) lessonsSession.innerHTML = "";
+    if (drillSessionEl) drillSessionEl.innerHTML = "";
+    if (weaknessSessionEl) weaknessSessionEl.innerHTML = "";
     if (state.settings) {
+      state.settings.display_name = "";
+      state.settings.onboarding_complete = false;
+      state.settings.dailyLessons = 10;
+      state.settings.study_level = "N5_N4";
+      state.settings.lesson_content_mode = "level";
       state.settings.lessonBank = 0;
       state.settings.lastUnlockAt = null;
       saveSettings();
       applyLessonUnlocks(new Date());
+      populateSettingsForm();
     }
     lessonsActive = false;
     setLessonsView("setup");
@@ -2885,7 +3702,8 @@ function setupActions() {
     updateLessonSummary();
     setActiveScreen("home");
     closeResetModal();
-    showToast("Reset complete.");
+    openOnboardingModal();
+    showToast("App data deleted.");
   }
 
   if (resetOpen) {
@@ -3040,7 +3858,10 @@ function setupActions() {
       if (content) content.classList.add("is-hidden");
       if (sessionEl) {
         sessionEl.classList.remove("is-hidden");
-        createSession(sessionEl, queue, { mode: "mistake" });
+        mistakeSession = createSession(sessionEl, queue, { mode: "mistake" });
+        drillSession = null;
+        weaknessSession = null;
+        updateHeaderForScreen("stats");
         }
       });
     }
@@ -3110,10 +3931,13 @@ async function init() {
       updateLessonSummary();
       populateSettingsForm();
       setupNav();
-      setupActions();
+    setupActions();
     updateDemoControls();
     setLessonsView("setup");
     setActiveScreen("home");
+    if (isOnboardingRequired()) {
+      openOnboardingModal();
+    }
     await refreshReminderSchedule("init");
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState === "visible") {

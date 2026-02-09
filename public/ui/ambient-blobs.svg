@@ -6,12 +6,12 @@
   </filter>
 </defs>
 
-  <!-- Warm cream glow -->
-  <circle cx="220" cy="180" r="260" fill="#EFE6D8" opacity="0.48" filter="url(#blur)"/>
+  <!-- Warm paper glow -->
+  <circle cx="220" cy="180" r="260" fill="#F5EAD7" opacity="0.54" filter="url(#blur)"/>
 
-  <!-- Yuzu glow -->
-  <circle cx="980" cy="640" r="300" fill="#D6A21A" opacity="0.18" filter="url(#blur)"/>
+  <!-- Coral accent glow -->
+  <circle cx="980" cy="640" r="300" fill="#F0A278" opacity="0.2" filter="url(#blur)"/>
 
-  <!-- Ink tint -->
-  <circle cx="1020" cy="160" r="240" fill="#2F3A4A" opacity="0.13" filter="url(#blur)"/>
+  <!-- Sage tint -->
+  <circle cx="1020" cy="160" r="240" fill="#88AD9E" opacity="0.18" filter="url(#blur)"/>
 </svg>

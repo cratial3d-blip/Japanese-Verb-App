@@ -4,18 +4,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Japanese Verb Conjugation SRS</title>
-    <link rel="stylesheet" href="src/styles.css?v=20260206_9" />
+    <link rel="stylesheet" href="src/styles.css?v=20260209_5" />
   </head>
   <body>
     <div id="app">
       <header class="app-header">
         <div class="header-inner">
           <div class="header-text">
+            <div class="header-eyebrow" id="page-eyebrow"></div>
             <h1 id="page-title">Daily Practice</h1>
             <div class="header-subtitle" id="page-subtitle"></div>
           </div>
-          <div class="header-actions"></div>
+          <button class="header-settings-shortcut" id="home-settings-shortcut" type="button" aria-label="Open settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 5.5V8" />
+              <path d="M12 16V18.5" />
+              <path d="M5.5 12H8" />
+              <path d="M16 12H18.5" />
+              <path d="M7.4 7.4L9.2 9.2" />
+              <path d="M14.8 14.8L16.6 16.6" />
+              <path d="M16.6 7.4L14.8 9.2" />
+              <path d="M9.2 14.8L7.4 16.6" />
+              <path d="M12 9L13.2 11.4L15.8 12L13.2 12.6L12 15L10.8 12.6L8.2 12L10.8 11.4L12 9Z" />
+            </svg>
+          </button>
+          <div class="header-orb" aria-hidden="true"></div>
         </div>
+        <div class="header-meta" id="page-meta"></div>
+        <div class="header-tool-panel is-hidden" id="header-tool-panel"></div>
       </header>
 
       <main>
@@ -87,11 +103,6 @@
         </section>
 
         <section class="screen" id="screen-lessons">
-          <div class="lessons-tools" id="lessons-focus-tools">
-            <div class="lessons-tools-actions">
-              <button class="ghost small" type="button" id="open-verb-browser">Verb Browser</button>
-            </div>
-          </div>
           <div id="lessons-session" class="session"></div>
         </section>
 
@@ -186,6 +197,10 @@
         <section class="screen" id="screen-settings">
           <div class="panel settings-panel">
             <label>
+              Display name
+              <input id="settings-display-name" type="text" maxlength="32" placeholder="Your name" />
+            </label>
+            <label>
               Daily new lessons (1-20)
               <input id="settings-daily-lessons" type="number" min="1" max="20" value="10" />
             </label>
@@ -271,11 +286,11 @@
             </div>
             <div class="settings-divider"></div>
             <div class="settings-reset">
-              <h3>Reset App Data</h3>
+              <h3>Delete App Data</h3>
               <p class="muted">
-                Deletes all learning progress (reviews, lessons, streaks) but keeps your settings.
+                Deletes your local learning progress and reopens onboarding.
               </p>
-              <button class="danger" id="reset-open">Reset all progress</button>
+              <button class="danger" id="reset-open">Delete app data</button>
             </div>
             <div class="settings-divider"></div>
             <div class="settings-demo">
@@ -300,18 +315,58 @@
     <nav class="bottom-nav">
       <div class="bottom-nav-inner">
         <button class="nav-item active" data-screen="home">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M3.5 10.5L12 3.5L20.5 10.5" />
+              <path d="M5.5 9.5V20.5H18.5V9.5" />
+              <path d="M10 20.5V14H14V20.5" />
+            </svg>
+          </span>
           <span class="nav-label">Home</span>
         </button>
         <button class="nav-item" data-screen="lessons">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 8.5C10.8 7.3 8.8 6.5 6.7 6.5H4.5V18H6.7C8.8 18 10.8 18.8 12 20" />
+              <path d="M12 8.5C13.2 7.3 15.2 6.5 17.3 6.5H19.5V18H17.3C15.2 18 13.2 18.8 12 20" />
+              <path d="M12 8.5V20" />
+            </svg>
+          </span>
           <span class="nav-label">Lessons</span>
         </button>
         <button class="nav-item" data-screen="reviews">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="4.5" y="4.5" width="15" height="15" rx="2.5" />
+              <path d="M8 12.5L11 15.5L16 9.5" />
+            </svg>
+          </span>
           <span class="nav-label">Reviews</span>
         </button>
         <button class="nav-item" data-screen="stats">
-          <span class="nav-label">Stats</span>
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M6.5 18.5V13.5" />
+              <path d="M12 18.5V8.5" />
+              <path d="M17.5 18.5V10.5" />
+            </svg>
+          </span>
+          <span class="nav-label">Progress</span>
         </button>
-        <button class="nav-item" data-screen="settings">
+        <button class="nav-item nav-item-settings" data-screen="settings">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 5.5V8" />
+              <path d="M12 16V18.5" />
+              <path d="M5.5 12H8" />
+              <path d="M16 12H18.5" />
+              <path d="M7.4 7.4L9.2 9.2" />
+              <path d="M14.8 14.8L16.6 16.6" />
+              <path d="M16.6 7.4L14.8 9.2" />
+              <path d="M9.2 14.8L7.4 16.6" />
+              <path d="M12 9L13.2 11.4L15.8 12L13.2 12.6L12 15L10.8 12.6L8.2 12L10.8 11.4L12 9Z" />
+            </svg>
+          </span>
           <span class="nav-label">Settings</span>
         </button>
       </div>
@@ -319,7 +374,7 @@
     <div id="reset-modal" class="modal is-hidden" role="dialog" aria-modal="true">
       <div class="modal-backdrop"></div>
       <div class="modal-card">
-        <h3>Reset App Data</h3>
+        <h3>Delete App Data</h3>
         <div id="reset-step-1" class="reset-step">
           <p>
             This will delete all learning progress, including:
@@ -329,7 +384,7 @@
             <li>Lesson progress and review history</li>
             <li>Weakness stats and streaks</li>
           </ul>
-          <p class="muted">Your settings will be kept.</p>
+          <p class="muted">Onboarding will appear again so you can set your profile and lesson path.</p>
           <div class="modal-actions">
             <button class="ghost" id="reset-cancel-1">Cancel</button>
             <button class="primary" id="reset-next-1">Continue</button>
@@ -348,10 +403,68 @@
         </div>
 
         <div id="reset-step-3" class="reset-step is-hidden">
-          <p>Are you absolutely sure you want to reset all progress?</p>
+          <p>Are you absolutely sure you want to delete app data?</p>
           <div class="modal-actions">
             <button class="ghost" id="reset-cancel-3">Cancel</button>
-            <button class="danger" id="reset-confirm-final">Yes, reset everything</button>
+            <button class="danger" id="reset-confirm-final">Yes, delete app data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="onboarding-modal" class="modal is-hidden" role="dialog" aria-modal="true">
+      <div class="modal-backdrop"></div>
+      <div class="modal-card onboarding-card">
+        <div id="onboarding-step-basic">
+          <h3>Welcome to Japanese Verb SRS</h3>
+          <p class="muted">Set up your profile and daily learning path before you begin.</p>
+          <label>
+            Display name
+            <input id="onboarding-display-name" type="text" maxlength="32" placeholder="How should we call you?" />
+          </label>
+          <label>
+            Daily lessons
+            <input id="onboarding-daily-lessons" type="number" min="1" max="20" value="10" />
+          </label>
+          <div class="onboarding-paths">
+            <div class="onboarding-path-title">Learning path</div>
+            <label class="onboarding-path-option">
+              <input type="radio" name="onboarding-learning-path" value="N5" />
+              <span>
+                <strong>N5</strong>
+                <span class="muted">Your lessons will include a combination of all common N5 verbs and conjugation patterns.</span>
+              </span>
+            </label>
+            <label class="onboarding-path-option">
+              <input type="radio" name="onboarding-learning-path" value="N5_N4" checked />
+              <span>
+                <strong>N5 + N4</strong>
+                <span class="muted">Your lessons will include common N5 and N4 verbs with guided conjugation coverage.</span>
+              </span>
+            </label>
+            <label class="onboarding-path-option">
+              <input type="radio" name="onboarding-learning-path" value="custom" />
+              <span>
+                <strong>Custom</strong>
+                <span class="muted">Pick exactly which conjugation forms to enable in the next step.</span>
+              </span>
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button class="primary" id="onboarding-start">Continue</button>
+          </div>
+        </div>
+        <div id="onboarding-step-custom" class="is-hidden">
+          <h3>Choose Custom Forms</h3>
+          <p class="muted">Select the conjugation forms to include. Enable at least one.</p>
+          <div class="forms-actions">
+            <button class="ghost" type="button" id="onboarding-forms-select-all">Select all</button>
+            <button class="ghost" type="button" id="onboarding-forms-select-none">Select none</button>
+          </div>
+          <div class="forms-list" id="onboarding-forms-list"></div>
+          <div class="muted forms-warning" id="onboarding-forms-warning"></div>
+          <div class="modal-actions">
+            <button class="ghost" id="onboarding-back" type="button">Back</button>
+            <button class="primary" id="onboarding-complete-custom" type="button" disabled>Start Learning</button>
           </div>
         </div>
       </div>
@@ -359,6 +472,6 @@
     <div id="toast" class="toast is-hidden"></div>
     <script src="src/core/index.js?v=20260204_1"></script>
     <script src="src/notifications.js?v=20260206_1"></script>
-    <script src="src/app.js?v=20260206_10"></script>
+    <script src="src/app.js?v=20260209_4"></script>
   </body>
 </html>
