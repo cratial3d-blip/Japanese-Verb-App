@@ -1,4 +1,5 @@
 ﻿const Core = window.JapaneseSrsCore;
+const LessonEngine = window.JapaneseSrsLessonEngine;
 const Notifications =
   window.JapaneseSrsNotifications ||
   {
@@ -12,6 +13,7 @@ const Notifications =
 function setupLiveKanaInput(inputEl) {
   let raw = "";
   let suppressInput = false;
+  let isComposing = false;
 
   function render() {
     suppressInput = true;
@@ -72,9 +74,39 @@ function setupLiveKanaInput(inputEl) {
     }
   });
 
-  inputEl.addEventListener("input", () => {
+  inputEl.addEventListener("compositionstart", () => {
+    isComposing = true;
+  });
+
+  inputEl.addEventListener("compositionend", (event) => {
+    isComposing = false;
+    const committed = typeof event.data === "string" ? event.data : "";
+    if (committed) {
+      raw += committed;
+      render();
+      return;
+    }
+    render();
+  });
+
+  inputEl.addEventListener("input", (event) => {
     if (suppressInput) return;
-    raw = inputEl.value;
+    if (isComposing) return;
+    const inputType = typeof event.inputType === "string" ? event.inputType : "";
+    if (inputType.startsWith("delete")) {
+      raw = raw.slice(0, -1);
+      render();
+      return;
+    }
+    const inserted = typeof event.data === "string" ? event.data : "";
+    if (inserted) {
+      raw += inserted;
+      render();
+      return;
+    }
+    if (!inputEl.value) {
+      raw = "";
+    }
     render();
   });
 
@@ -104,10 +136,12 @@ function attachEnterHandler(inputEl, primaryBtn, secondaryBtn) {
 const DATA_PATHS = {
   verbs: "data/verbs/verbs.v2.jsonl?v=20260204_1",
   exceptions: "data/exceptions/verb_exceptions.v1.json?v=20260204_1",
-  templates: "data/conjugations/conjugation_templates.v2.json?v=20260204_2",
-  ruleHints: "data/ui_text/rule_hints.v2.json?v=20260204_2",
-  exampleSentences: "data/ui_text/example_sentences.v3.json?v=20260204_1",
+  templates: "data/conjugations/conjugation_templates.v3.json?v=20260210_1",
+  ruleHints: "data/ui_text/rule_hints.v3.json?v=20260210_1",
+  exampleSentences: "data/ui_text/example_sentences.v4.json?v=20260210_1",
   furigana: "data/ui_text/furigana.verbs.v2.v1.json?v=20260204_1",
+  learningPathGuided: "data/learning_paths/learning_path.guided.v1.json?v=20260210_1",
+  learningPathGenki: "data/learning_paths/learning_path.genki_aligned.v1.json?v=20260210_1",
 };
 
 const STORAGE_KEY = "japanese_srs_cards_v1";
@@ -131,6 +165,7 @@ const state = {
   verbsById: {},
   templatesById: {},
   drillForms: [],
+  learningPaths: {},
 };
 
 let lessonsActive = false;
@@ -147,11 +182,13 @@ let verbBrowserPage = 1;
 let onboardingStep = "basic";
 let onboardingCustomFormIds = [];
 let onboardingPendingConfig = null;
+let pendingQuitConfirmAction = null;
 const VERB_BROWSER_PAGE_SIZE = 12;
 const TAB_UI_MEMORY_SCREENS = new Set(["stats", "verb-browser"]);
 const tabUiMemory = {
   scrollTopByScreen: {},
   verbBrowserQuery: "",
+  statsRoadmapExpanded: false,
 };
 
 function isDictionaryTemplateId(templateId) {
@@ -276,14 +313,32 @@ function selectableTemplates() {
 }
 
 function getFormGroups() {
-  return FORM_GROUPS.map((group) => {
-    const ids = group.templates.filter((id) => {
-      const tpl = state.templatesById[id];
-      return tpl && tpl.active && !isDictionaryTemplateId(id);
-    });
-    if (ids.length === 0) return null;
-    return { id: group.id, label: group.label, templateIds: ids };
-  }).filter(Boolean);
+  const templates = selectableTemplates();
+  const groupMap = new Map();
+
+  templates.forEach((tpl) => {
+    const groupId = tpl.family_id || tpl.id;
+    const label = tpl.family_label || tpl.label;
+    const order = Number.isFinite(Number(tpl.family_sort_order)) ? Number(tpl.family_sort_order) : 999;
+    if (!groupMap.has(groupId)) {
+      groupMap.set(groupId, {
+        id: groupId,
+        label,
+        order,
+        templateIds: [],
+      });
+    }
+    const group = groupMap.get(groupId);
+    group.templateIds.push(tpl.id);
+  });
+
+  return Array.from(groupMap.values())
+    .sort((a, b) => a.order - b.order || a.label.localeCompare(b.label))
+    .map((group) => ({
+      id: group.id,
+      label: group.label,
+      templateIds: group.templateIds.slice(),
+    }));
 }
 
 function getEnabledFormIds() {
@@ -588,8 +643,84 @@ function getDailyLessonsTitle(now = new Date()) {
   return `Daily Lessons for ${dateLabel}`;
 }
 
-function getStudyLevelLabel() {
-  return state.settings && state.settings.study_level === "N5" ? "JLPT N5" : "JLPT N5-N4";
+function getLearningPath() {
+  const value = state.settings && state.settings.learning_path;
+  if (value === "custom" || value === "textbook_genki" || value === "guided") return value;
+  if (state.settings && state.settings.lesson_content_mode === "custom") return "custom";
+  return "guided";
+}
+
+function getLearningPathLabel(pathValue = getLearningPath()) {
+  if (pathValue === "custom") return "Custom";
+  if (pathValue === "textbook_genki") return "Genki";
+  return "Guided";
+}
+
+function getPathConfig(pathValue = getLearningPath()) {
+  if (!state.learningPaths) return null;
+  return state.learningPaths[pathValue] || null;
+}
+
+function getCurrentLearningPathState(nowIso) {
+  const pathValue = getLearningPath();
+  const allStates = state.settings.learning_path_state || {};
+  const current = allStates[pathValue] || null;
+  if (!LessonEngine || typeof LessonEngine.normalizePathState !== "function") {
+    return current || { stage_index: 0, stage_started_at: nowIso || new Date().toISOString(), failed_gate_count: 0, hold_until: null, completed: false };
+  }
+  return LessonEngine.normalizePathState(current, nowIso || new Date().toISOString());
+}
+
+function setCurrentLearningPathState(nextState, nowIso) {
+  const pathValue = getLearningPath();
+  if (!state.settings.learning_path_state || typeof state.settings.learning_path_state !== "object") {
+    state.settings.learning_path_state = {};
+  }
+  if (LessonEngine && typeof LessonEngine.normalizePathState === "function") {
+    state.settings.learning_path_state[pathValue] = LessonEngine.normalizePathState(nextState, nowIso || new Date().toISOString());
+  } else {
+    state.settings.learning_path_state[pathValue] = nextState;
+  }
+}
+
+function toTitleCaseWords(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/\b([a-z])/g, (m, ch) => ch.toUpperCase());
+}
+
+function getCurrentPathFocusLabel(pathValue = getLearningPath(), nowIso) {
+  const pathConfig = getPathConfig(pathValue);
+  if (!pathConfig || !Array.isArray(pathConfig.stages) || pathConfig.stages.length === 0) {
+    return "";
+  }
+  const pathState = getCurrentLearningPathState(nowIso || new Date().toISOString());
+  const stageIndex = Math.min(
+    Math.max(0, Number(pathState.stage_index) || 0),
+    pathConfig.stages.length - 1,
+  );
+  const stage = pathConfig.stages[stageIndex];
+  if (!stage) return "";
+
+  const label = String(stage.label || "").trim();
+  if (!label) return "";
+
+  if (pathValue === "guided" && /^polite/i.test(label)) {
+    return "Polite Basics";
+  }
+
+  if (pathValue === "textbook_genki") {
+    const withoutPrefix = label
+      .replace(/^Genki\s+[IVX]+\s+Ch[\d-]+\s*/i, "")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (/^polite/i.test(withoutPrefix)) {
+      return "Polite Basics";
+    }
+    return toTitleCaseWords(withoutPrefix);
+  }
+
+  return label;
 }
 
 function getLessonsModePillValue(templatesEnabled, customMode) {
@@ -597,12 +728,14 @@ function getLessonsModePillValue(templatesEnabled, customMode) {
     const count = Math.max(0, Number(templatesEnabled) || 0);
     return `Custom: ${count} ${count === 1 ? "Form" : "Forms"}`;
   }
-  return state.settings && state.settings.study_level === "N5" ? "N5" : "N5/N4";
+  const pathValue = getLearningPath();
+  const focus = getCurrentPathFocusLabel(pathValue, new Date().toISOString());
+  if (focus) return focus;
+  return getLearningPathLabel(pathValue);
 }
 
 function getOnboardingPathValue() {
-  if (state.settings && state.settings.lesson_content_mode === "custom") return "custom";
-  return state.settings && state.settings.study_level === "N5" ? "N5" : "N5_N4";
+  return getLearningPath();
 }
 
 function isOnboardingRequired() {
@@ -744,23 +877,30 @@ function flashInputFeedback(inputEl, correct) {
   const wrap = inputEl.closest(".input-wrap");
   if (!wrap) return;
   const icon = wrap.querySelector(".input-icon");
-  wrap.classList.remove("is-success", "is-error");
+  wrap.classList.remove("is-success", "is-error", "is-shake");
   wrap.classList.add(correct ? "is-success" : "is-error");
+  if (!correct) {
+    // Keep shake scoped to incorrect submissions to mirror the quiz mockup behavior.
+    wrap.classList.add("is-shake");
+  }
   if (icon) {
     icon.textContent = correct ? "\u2713" : "\u00d7";
     icon.classList.add("show");
   }
   setTimeout(() => {
-    wrap.classList.remove("is-success", "is-error");
+    wrap.classList.remove("is-success", "is-error", "is-shake");
     if (icon) icon.classList.remove("show");
   }, 450);
 }
 
 function flashButtonFeedback(checkButton, nextButton, correct, nextLabel = "Next") {
   if (!checkButton || !nextButton) return;
+  checkButton.classList.remove("is-correct-state", "is-error-state");
+  checkButton.classList.add(correct ? "is-correct-state" : "is-error-state");
   checkButton.textContent = correct ? "\u2713 Correct" : "\u2715 Not quite";
   checkButton.disabled = true;
   setTimeout(() => {
+    checkButton.classList.remove("is-correct-state", "is-error-state");
     checkButton.style.display = "none";
     nextButton.style.display = "inline-block";
     nextButton.textContent = nextLabel;
@@ -778,6 +918,19 @@ function setInfoToggle(infoToggle, feedback, open) {
 
 function showAnswerFlash(flashEl, correct) {
   if (!flashEl) return;
+  const card = flashEl.closest(".card");
+  if (card) {
+    card.classList.remove("feedback-pulse-success", "feedback-pulse-error");
+    void card.offsetWidth;
+    card.classList.add(correct ? "feedback-pulse-success" : "feedback-pulse-error");
+    if (card._pulseTimerId) {
+      clearTimeout(card._pulseTimerId);
+    }
+    card._pulseTimerId = setTimeout(() => {
+      card.classList.remove("feedback-pulse-success", "feedback-pulse-error");
+      card._pulseTimerId = null;
+    }, 240);
+  }
   flashEl.classList.remove("show", "success", "error");
   flashEl.classList.add(correct ? "success" : "error");
   flashEl.textContent = correct ? "Nice - correct" : "Not quite";
@@ -860,9 +1013,88 @@ function restoreTabUiState(screen) {
   });
 }
 
-function setActiveScreen(target) {
+function closeQuitConfirmModal() {
+  const modal = document.getElementById("quit-confirm-modal");
+  if (!modal) return;
+  modal.classList.add("is-hidden");
+}
+
+function requestQuitConfirm(onConfirm) {
+  if (typeof onConfirm !== "function") return;
+  const modal = document.getElementById("quit-confirm-modal");
+  if (!modal) {
+    onConfirm();
+    return;
+  }
+  pendingQuitConfirmAction = onConfirm;
+  modal.classList.remove("is-hidden");
+  const confirmButton = document.getElementById("quit-confirm-confirm");
+  if (confirmButton) {
+    requestAnimationFrame(() => confirmButton.focus());
+  }
+}
+
+function confirmQuitAndProceed() {
+  const action = pendingQuitConfirmAction;
+  pendingQuitConfirmAction = null;
+  closeQuitConfirmModal();
+  if (typeof action === "function") {
+    action();
+  }
+}
+
+function isSessionInProgress(session) {
+  return Boolean(session && Array.isArray(session.queue) && session.queue.length > 0);
+}
+
+function getNavigableActivePracticeMode(screen) {
+  if (screen === "drill" && isSessionInProgress(drillSession)) return "drill";
+  if (screen === "weakness" && isSessionInProgress(weaknessSession)) return "weakness";
+  if (screen === "stats" && isSessionInProgress(mistakeSession)) return "mistake";
+  return null;
+}
+
+function resetPracticeMode(mode) {
+  if (mode === "drill") {
+    drillSession = null;
+    const drillSessionEl = document.getElementById("drill-session");
+    if (drillSessionEl) drillSessionEl.innerHTML = "";
+    setDrillSetupVisible(true);
+    return;
+  }
+  if (mode === "weakness") {
+    weaknessSession = null;
+    const weaknessSessionEl = document.getElementById("weakness-session");
+    if (weaknessSessionEl) weaknessSessionEl.innerHTML = "";
+    return;
+  }
+  if (mode === "mistake") {
+    mistakeSession = null;
+    const statsContent = document.getElementById("stats-content");
+    const statsSession = document.getElementById("stats-session");
+    if (statsContent) statsContent.classList.remove("is-hidden");
+    if (statsSession) {
+      statsSession.classList.add("is-hidden");
+      statsSession.innerHTML = "";
+    }
+  }
+}
+
+function setActiveScreen(target, options = {}) {
+  const opts = options || {};
+  const skipQuitConfirm = Boolean(opts.skipQuitConfirm);
   const previousScreen = currentScreen;
   if (previousScreen && previousScreen !== target) {
+    if (!skipQuitConfirm) {
+      const activeMode = getNavigableActivePracticeMode(previousScreen);
+      if (activeMode) {
+        requestQuitConfirm(() => {
+          resetPracticeMode(activeMode);
+          setActiveScreen(target, { ...opts, skipQuitConfirm: true });
+        });
+        return false;
+      }
+    }
     rememberTabUiState(previousScreen);
   }
   const buttons = document.querySelectorAll(".nav-item");
@@ -893,6 +1125,10 @@ function setActiveScreen(target) {
   if (target === "stats") {
     restoreTabUiState("stats");
   }
+  if (typeof opts.onAfterNavigate === "function") {
+    opts.onAfterNavigate();
+  }
+  return true;
 }
 
 function loadCards() {
@@ -938,7 +1174,17 @@ function saveStats() {
   localStorage.setItem(STATS_KEY, JSON.stringify(state.stats));
 }
 
+function defaultLearningPathState(nowIso) {
+  const now = nowIso || new Date().toISOString();
+  return {
+    guided: { stage_index: 0, stage_started_at: now, failed_gate_count: 0, hold_until: null, completed: false },
+    textbook_genki: { stage_index: 0, stage_started_at: now, failed_gate_count: 0, hold_until: null, completed: false },
+    custom: { stage_index: 0, stage_started_at: now, failed_gate_count: 0, hold_until: null, completed: false },
+  };
+}
+
 function defaultSettings() {
+  const now = new Date().toISOString();
   return {
     display_name: "",
     onboarding_complete: false,
@@ -950,8 +1196,8 @@ function defaultSettings() {
     enabled_conjugation_forms: null,
     drill_conjugation_forms: null,
     vibration: true,
-    study_level: "N5_N4",
-    lesson_content_mode: "level",
+    learning_path: "guided",
+    learning_path_state: defaultLearningPathState(now),
     reminders_enabled: false,
     reminders_reviews_time: "19:00",
     reminders_lessons_unlocked: true,
@@ -971,6 +1217,27 @@ function loadSettings() {
     } else {
       merged.onboarding_complete = Boolean(parsed.onboarding_complete);
     }
+    if (
+      merged.learning_path !== "guided" &&
+      merged.learning_path !== "textbook_genki" &&
+      merged.learning_path !== "custom"
+    ) {
+      if (parsed.lesson_content_mode === "custom") {
+        merged.learning_path = "custom";
+      } else {
+        merged.learning_path = "guided";
+      }
+    }
+    const stateDefault = defaultLearningPathState();
+    merged.learning_path_state = {
+      ...stateDefault,
+      ...(parsed.learning_path_state || {}),
+    };
+    Object.keys(stateDefault).forEach((pathKey) => {
+      merged.learning_path_state[pathKey] = LessonEngine && typeof LessonEngine.normalizePathState === "function"
+        ? LessonEngine.normalizePathState(merged.learning_path_state[pathKey], new Date().toISOString())
+        : merged.learning_path_state[pathKey];
+    });
     merged.display_name = normalizeDisplayName(merged.display_name);
     return merged;
   } catch (err) {
@@ -1116,48 +1383,28 @@ function getMaxDailyReviews() {
   return Math.floor(max);
 }
 
-function getStudyLevelSetting() {
-  const level = state.settings.study_level;
-  return level === "N5" ? "N5" : "N5_N4";
-}
-
 function getLessonContentMode() {
-  return state.settings.lesson_content_mode === "custom" ? "custom" : "level";
+  return isCustomContentMode() ? "custom" : "path";
 }
 
 function isCustomContentMode() {
-  return getLessonContentMode() === "custom";
+  return getLearningPath() === "custom";
 }
 
-function getVerbLevelRank(level) {
-  if (level === "N5") return 1;
-  return 2;
-}
-
-function getTemplateLevelRank(level) {
-  if (level === "N5") return 1;
-  return 2;
-}
-
-function isVerbAllowedByLevel(verb) {
-  const study = getStudyLevelSetting();
-  if (study === "N5") return verb.level === "N5";
-  return true;
-}
-
-function isTemplateAllowedByLevel(template) {
-  const study = getStudyLevelSetting();
-  if (study === "N5") {
-    return (template.conjugation_level || "unknown") === "N5";
+function getUnlockedPathTemplateIds(pathValue = getLearningPath(), nowIso) {
+  const config = getPathConfig(pathValue);
+  if (!config || !LessonEngine || typeof LessonEngine.getUnlockedTemplateIds !== "function") {
+    return [];
   }
-  return true;
+  const pathState = LessonEngine.normalizePathState(
+    (state.settings.learning_path_state || {})[pathValue],
+    nowIso || new Date().toISOString(),
+  );
+  return LessonEngine.getUnlockedTemplateIds(config, pathState);
 }
 
 function getLessonVerbPool() {
-  const allowed = isCustomContentMode()
-    ? (state.verbs || []).slice()
-    : (state.verbs || []).filter(isVerbAllowedByLevel);
-  return allowed;
+  return (state.verbs || []).slice();
 }
 
 async function loadJson(url) {
@@ -1241,6 +1488,30 @@ function normalizeImportedSettings(settings) {
   } else {
     normalized.onboarding_complete = Boolean(imported.onboarding_complete);
   }
+  if (
+    normalized.learning_path !== "guided" &&
+    normalized.learning_path !== "textbook_genki" &&
+    normalized.learning_path !== "custom"
+  ) {
+    if (imported.lesson_content_mode === "custom") {
+      normalized.learning_path = "custom";
+    } else {
+      normalized.learning_path = "guided";
+    }
+  }
+  const now = new Date().toISOString();
+  normalized.learning_path_state = {
+    ...defaultLearningPathState(now),
+    ...(imported.learning_path_state || {}),
+  };
+  if (LessonEngine && typeof LessonEngine.normalizePathState === "function") {
+    Object.keys(normalized.learning_path_state).forEach((pathKey) => {
+      normalized.learning_path_state[pathKey] = LessonEngine.normalizePathState(
+        normalized.learning_path_state[pathKey],
+        now,
+      );
+    });
+  }
   normalized.display_name = normalizeDisplayName(normalized.display_name);
   return normalized;
 }
@@ -1312,9 +1583,12 @@ function restoreDemoBackup() {
   if (!raw) return false;
   try {
     const snapshot = JSON.parse(raw);
-    state.cards = snapshot.cards || {};
-    state.stats = snapshot.stats || defaultStats();
-    state.settings = snapshot.settings || defaultSettings();
+    state.cards = filterCardStore(snapshot.cards || {});
+    state.stats = normalizeImportedStats(snapshot.stats || defaultStats());
+    state.settings = normalizeImportedSettings(snapshot.settings || defaultSettings());
+    state.drillForms = Array.isArray(state.settings.drill_conjugation_forms)
+      ? state.settings.drill_conjugation_forms.slice()
+      : getEnabledFormIds();
     localStorage.removeItem(DEMO_BACKUP_KEY);
     localStorage.removeItem(DEMO_FLAG_KEY);
     saveCards();
@@ -1327,49 +1601,236 @@ function restoreDemoBackup() {
   }
 }
 
-function buildDemoCards() {
+function buildDemoPathState(pathValue, nowIso) {
+  const now = new Date(nowIso || new Date().toISOString());
+  const pathConfig = getPathConfig(pathValue);
+  const stageCount =
+    pathConfig && Array.isArray(pathConfig.stages) ? pathConfig.stages.length : 0;
+  if (stageCount <= 0) {
+    return {
+      stage_index: 0,
+      stage_started_at: addDays(now, -3).toISOString(),
+      failed_gate_count: 0,
+      hold_until: null,
+      completed: false,
+    };
+  }
+
+  const targetIndex =
+    pathValue === "textbook_genki"
+      ? Math.min(stageCount - 1, 4)
+      : Math.min(stageCount - 1, 7);
+  const baseState = {
+    stage_index: targetIndex,
+    stage_started_at: addDays(now, -3).toISOString(),
+    failed_gate_count: 0,
+    hold_until: null,
+    completed: false,
+  };
+  if (pathValue === "guided") {
+    baseState.failed_gate_count = 1;
+    baseState.hold_until = addDays(now, 1).toISOString();
+  }
+  if (LessonEngine && typeof LessonEngine.normalizePathState === "function") {
+    return LessonEngine.normalizePathState(baseState, now.toISOString());
+  }
+  return baseState;
+}
+
+function buildDemoLearningPathStates(nowIso) {
+  return {
+    guided: buildDemoPathState("guided", nowIso),
+    textbook_genki: buildDemoPathState("textbook_genki", nowIso),
+    custom: {
+      stage_index: 0,
+      stage_started_at: addDays(new Date(nowIso || new Date().toISOString()), -1).toISOString(),
+      failed_gate_count: 0,
+      hold_until: null,
+      completed: false,
+    },
+  };
+}
+
+function getUnlockedTemplateIdsForPath(pathValue, pathState) {
+  const pathConfig = getPathConfig(pathValue);
+  if (
+    !pathConfig ||
+    !LessonEngine ||
+    typeof LessonEngine.getUnlockedTemplateIds !== "function"
+  ) {
+    return [];
+  }
+  return LessonEngine.getUnlockedTemplateIds(pathConfig, pathState || {});
+}
+
+function getCurrentStageTemplateIds(pathValue, pathState) {
+  const pathConfig = getPathConfig(pathValue);
+  if (
+    !pathConfig ||
+    !LessonEngine ||
+    typeof LessonEngine.getCurrentStage !== "function"
+  ) {
+    return [];
+  }
+  const stage = LessonEngine.getCurrentStage(pathConfig, pathState || {});
+  return stage && Array.isArray(stage.template_ids) ? stage.template_ids.slice() : [];
+}
+
+function buildDemoCards(activePathValue, learningPathStateMap) {
   const cards = {};
-  const templates = (state.templates || []).filter(
-    (tpl) => tpl && tpl.active && tpl.id !== "plain_dictionary",
-  );
   const verbs = state.verbs || [];
-  if (templates.length === 0 || verbs.length === 0) return cards;
+  if (verbs.length === 0) return cards;
 
   const now = new Date();
-  const stages = ["S1", "S2", "S3", "S4", "S5", "S6"];
-  const maxCards = Math.min(140, verbs.length * 3);
-  let created = 0;
+  const pathStateMap = learningPathStateMap || buildDemoLearningPathStates(now.toISOString());
+  const activePath = activePathValue === "textbook_genki" ? "textbook_genki" : "guided";
 
-  for (let v = 0; v < verbs.length && created < maxCards; v += 1) {
-    const verb = verbs[v];
-    for (let t = 0; t < 3 && created < maxCards; t += 1) {
-      const tpl = templates[(v + t) % templates.length];
-      const card = Core.createCard(verb.id, tpl.id, now);
-      const stage = stages[created % stages.length];
-      card.stage = stage;
-      card.learning_step = null;
-      const offset = (created % 7) - 2;
-      card.due_at = addDays(now, offset).toISOString();
-      card.success_count_total = 3 + (created % 6);
-      card.failure_count_total =
-        created % 11 === 0 ? 4 : created % 5 === 0 ? 2 : 0;
-      if (card.failure_count_total >= 4) {
-        card.is_leech = true;
+  const guidedUnlocked = getUnlockedTemplateIdsForPath("guided", pathStateMap.guided);
+  const genkiUnlocked = getUnlockedTemplateIdsForPath("textbook_genki", pathStateMap.textbook_genki);
+  const activeUnlocked = getUnlockedTemplateIdsForPath(activePath, pathStateMap[activePath]);
+  const activeCurrent = getCurrentStageTemplateIds(activePath, pathStateMap[activePath]);
+  const activeCurrentSet = new Set(activeCurrent);
+  const activePrevious = activeUnlocked.filter((id) => !activeCurrentSet.has(id));
+
+  const templateOrder = [];
+  [...guidedUnlocked, ...genkiUnlocked].forEach((templateId) => {
+    if (templateId && !templateOrder.includes(templateId)) {
+      templateOrder.push(templateId);
+    }
+  });
+  if (templateOrder.length === 0) {
+    (state.templates || [])
+      .filter((tpl) => tpl && tpl.active && tpl.id !== "plain_dictionary")
+      .forEach((tpl) => {
+        if (!templateOrder.includes(tpl.id)) templateOrder.push(tpl.id);
+      });
+  }
+
+  const compatibleCache = {};
+  const cursors = {};
+
+  function getCompatibleVerbs(templateId) {
+    if (compatibleCache[templateId]) return compatibleCache[templateId];
+    const list = verbs.filter((verb) => {
+      try {
+        Core.conjugate(verb, templateId, state.exceptions);
+        return true;
+      } catch (err) {
+        return false;
       }
-      cards[card.card_id] = card;
-      created += 1;
+    });
+    compatibleCache[templateId] = list;
+    return list;
+  }
+
+  function takeVerb(templateId) {
+    const list = getCompatibleVerbs(templateId);
+    if (!list || list.length === 0) return null;
+    const start = Number(cursors[templateId] || 0);
+    for (let i = 0; i < list.length; i += 1) {
+      const idx = (start + i) % list.length;
+      const verb = list[idx];
+      const cardId = Core.makeCardId(verb.id, templateId);
+      if (!cards[cardId]) {
+        cursors[templateId] = idx + 1;
+        return verb;
+      }
+    }
+    return null;
+  }
+
+  function tuneDemoCard(card, profile, seed) {
+    const s = Number(seed || 0);
+    if (profile === "completed") {
+      card.stage = s % 4 === 0 ? "S5" : "S4";
+      card.learning_step = null;
+      card.due_at = addDays(now, 6 + (s % 12)).toISOString();
+      card.success_count_total = 14 + (s % 8);
+      card.failure_count_total = s % 6 === 0 ? 1 : 0;
+      if (s % 14 === 0) {
+        card.stage = "RETIRED";
+        card.due_at = null;
+      }
+    } else if (profile === "current_mastered") {
+      card.stage = "S3";
+      card.learning_step = null;
+      card.due_at = addDays(now, (s % 3) - 1).toISOString();
+      card.success_count_total = 8 + (s % 5);
+      card.failure_count_total = s % 5 === 0 ? 2 : 1;
+    } else if (profile === "current_learning") {
+      card.stage = s % 2 === 0 ? "S1" : "S2";
+      card.learning_step = null;
+      card.due_at = addDays(now, -(s % 2)).toISOString();
+      card.success_count_total = 2 + (s % 3);
+      card.failure_count_total = 2 + (s % 4);
+    } else if (profile === "weak") {
+      card.stage = "S1";
+      card.learning_step = null;
+      card.due_at = addDays(now, -1 - (s % 2)).toISOString();
+      card.success_count_total = 1 + (s % 2);
+      card.failure_count_total = 5 + (s % 3);
+      card.is_leech = true;
+    } else {
+      card.stage = s % 3 === 0 ? "S2" : "S3";
+      card.learning_step = null;
+      card.due_at = addDays(now, (s % 5) - 2).toISOString();
+      card.success_count_total = 5 + (s % 6);
+      card.failure_count_total = s % 4 === 0 ? 2 : 1;
+    }
+    if (card.failure_count_total >= 4) {
+      card.is_leech = true;
     }
   }
 
-  let retired = 0;
-  Object.values(cards).forEach((card) => {
-    if (retired >= 8) return;
-    if (card.stage === "S5" || card.stage === "S6") {
-      card.stage = "RETIRED";
-      card.due_at = null;
-      retired += 1;
-    }
+  let created = 0;
+
+  function addDemoCard(templateId, profile) {
+    const verb = takeVerb(templateId);
+    if (!verb) return false;
+    const card = Core.createCard(verb.id, templateId, now);
+    tuneDemoCard(card, profile, created);
+    cards[card.card_id] = card;
+    created += 1;
+    return true;
+  }
+
+  activePrevious.forEach((templateId) => {
+    addDemoCard(templateId, "completed");
+    addDemoCard(templateId, "completed");
   });
+
+  activeCurrent.forEach((templateId) => {
+    addDemoCard(templateId, "current_mastered");
+    addDemoCard(templateId, "current_mastered");
+    addDemoCard(templateId, "current_mastered");
+    addDemoCard(templateId, "current_learning");
+    addDemoCard(templateId, "current_learning");
+  });
+
+  const confusablePairs =
+    (getPathConfig(activePath) && getPathConfig(activePath).confusable_pairs) || [];
+  if (Array.isArray(confusablePairs) && confusablePairs.length > 0) {
+    const firstPair = confusablePairs[0];
+    if (Array.isArray(firstPair) && firstPair[0]) {
+      addDemoCard(firstPair[0], "weak");
+      addDemoCard(firstPair[0], "weak");
+    }
+  }
+
+  const targetCards = 96;
+  let loop = 0;
+  while (Object.keys(cards).length < targetCards && templateOrder.length > 0 && loop < 1200) {
+    const templateId = templateOrder[loop % templateOrder.length];
+    const profile = activeCurrentSet.has(templateId)
+      ? loop % 3 === 0
+        ? "current_learning"
+        : "current_mastered"
+      : loop % 6 === 0
+        ? "mixed"
+        : "completed";
+    addDemoCard(templateId, profile);
+    loop += 1;
+  }
 
   return cards;
 }
@@ -1377,10 +1838,13 @@ function buildDemoCards() {
 function buildDemoStats(cards) {
   const stats = defaultStats();
   const now = new Date();
-  const activityPattern = [12, 9, 14, 18, 7, 16, 11, 13, 10, 15, 8, 12, 17, 9];
+  const activityPattern = [14, 11, 16, 19, 9, 18, 13, 15, 12, 17, 10, 14, 18, 12];
   for (let i = 0; i < activityPattern.length; i += 1) {
     const day = addDays(now, -i);
-    stats.dailyActivity[toDateKey(day)] = activityPattern[i];
+    const key = toDateKey(day);
+    stats.dailyActivity[key] = activityPattern[i];
+    stats.completed_reviews_by_day[key] = Math.max(0, activityPattern[i] - 3);
+    stats.completed_lessons_by_day[key] = i % 3 === 0 ? 8 : i % 3 === 1 ? 6 : 4;
   }
 
   const mistakeCards = [];
@@ -1408,11 +1872,33 @@ function buildDemoStats(cards) {
 
 function applyDemoData() {
   saveDemoBackup();
-  const cards = buildDemoCards();
+  const nowIso = new Date().toISOString();
+  const pathStates = buildDemoLearningPathStates(nowIso);
+  const selectedPath =
+    state.settings && state.settings.learning_path === "textbook_genki"
+      ? "textbook_genki"
+      : state.settings && state.settings.learning_path === "guided"
+        ? "guided"
+        : "guided";
+  const cards = buildDemoCards(selectedPath, pathStates);
   const stats = buildDemoStats(cards);
   state.cards = cards;
   state.stats = stats;
   if (state.settings) {
+    state.settings.learning_path = selectedPath;
+    state.settings.learning_path_state = {
+      ...defaultLearningPathState(nowIso),
+      ...pathStates,
+    };
+    state.settings.enabled_conjugation_forms = Core.normalizeEnabledForms(
+      state.templates,
+      state.settings.enabled_conjugation_forms,
+    );
+    state.settings.drill_conjugation_forms = Core.normalizeEnabledForms(
+      state.templates,
+      state.settings.drill_conjugation_forms,
+    );
+    state.drillForms = state.settings.drill_conjugation_forms.slice();
     state.settings.lessonBank = Math.max(
       state.settings.dailyLessons || 10,
       (state.settings.dailyLessons || 10) * 4,
@@ -1629,7 +2115,9 @@ function getLessonTemplates() {
   if (isCustomContentMode()) {
     return getEnabledTemplates();
   }
-  return selectableTemplates().filter(isTemplateAllowedByLevel);
+  const unlockedIds = new Set(getUnlockedPathTemplateIds());
+  if (unlockedIds.size === 0) return [];
+  return selectableTemplates().filter((tpl) => unlockedIds.has(tpl.id));
 }
 
 function countAvailableNew() {
@@ -1745,13 +2233,12 @@ function renderVerbBrowser() {
   const nextButton = document.getElementById("verb-browser-next");
   if (!list) return;
 
-  const study = getStudyLevelSetting();
   if (levelNote) {
-    levelNote.textContent = study === "N5" ? "Study level: N5 only" : "Study level: N5 + N4";
+    levelNote.textContent = `Path: ${getLearningPathLabel()}`;
   }
 
   const query = (search && search.value ? search.value : "").trim().toLowerCase();
-  const verbs = (state.verbs || []).filter(isVerbAllowedByLevel);
+  const verbs = (state.verbs || []).slice();
   const filtered = query
     ? verbs.filter((verb) => {
         const gloss = (verb.gloss_en || []).join(" ").toLowerCase();
@@ -2018,19 +2505,22 @@ function getLessonsHeaderSubtitle(session) {
 }
 
 function startReviewsSession() {
-  setActiveScreen("reviews");
-  let due = Core.buildDailyReviewQueue(Object.values(filterCardStore(state.cards)), new Date());
-  const max = getMaxDailyReviews();
-  if (max) {
-    due = due.slice(0, max);
-  }
-  const queue = buildQueueFromCards(due);
-  const container = document.getElementById("reviews-session");
-  reviewSession = createSession(container, queue, { mode: "reviews" });
-  drillSession = null;
-  weaknessSession = null;
-  mistakeSession = null;
-  updateHeaderForScreen("reviews");
+  setActiveScreen("reviews", {
+    onAfterNavigate: () => {
+      let due = Core.buildDailyReviewQueue(Object.values(filterCardStore(state.cards)), new Date());
+      const max = getMaxDailyReviews();
+      if (max) {
+        due = due.slice(0, max);
+      }
+      const queue = buildQueueFromCards(due);
+      const container = document.getElementById("reviews-session");
+      reviewSession = createSession(container, queue, { mode: "reviews" });
+      drillSession = null;
+      weaknessSession = null;
+      mistakeSession = null;
+      updateHeaderForScreen("reviews");
+    },
+  });
 }
 
 function updateHeaderForScreen(screen) {
@@ -2065,6 +2555,7 @@ function updateHeaderForScreen(screen) {
     const availability = getLessonsAvailableCount();
     const templatesEnabled = getLessonTemplates().length;
     const customMode = isCustomContentMode();
+    const lessonsPillLabel = customMode ? "Mode" : "Focus";
     const lessonsTitle = getDailyLessonsTitle(new Date());
     const modePill = getLessonsModePillValue(templatesEnabled, customMode);
     if (lessonSession && lessonsActive) {
@@ -2084,7 +2575,7 @@ function updateHeaderForScreen(screen) {
         eyebrow: "レッスン",
         meta: [
           { value: getLessonsHeaderSubtitle(lessonSession), tone: "sage-1" },
-          { label: "Mode", value: modePill, tone: "sage-2" },
+          { label: lessonsPillLabel, value: modePill, tone: "sage-2" },
           { label: "Verb Browser", value: "", action: "verb-browser", tone: "sage-3" },
         ],
         screen: target,
@@ -2104,7 +2595,7 @@ function updateHeaderForScreen(screen) {
       eyebrow: "レッスン",
       meta: [
         { label: "Daily New", value: String(clampDailyLessons(state.settings.dailyLessons)), tone: "sage-1" },
-        { label: "Mode", value: modePill, tone: "sage-2" },
+        { label: lessonsPillLabel, value: modePill, tone: "sage-2" },
         { label: "Verb Browser", value: "", action: "verb-browser", tone: "sage-3" },
       ],
       screen: target,
@@ -2257,7 +2748,7 @@ function updateHeaderForScreen(screen) {
       eyebrow: "Lessons Tool",
       meta: [
         { label: "Page", value: String(verbBrowserPage), tone: "accent" },
-        { label: "Level", value: getStudyLevelLabel() },
+        { label: "Path", value: getLearningPathLabel() },
         { label: "Filter", value: hasQuery ? "Search active" : "All verbs" },
       ],
       screen: target,
@@ -2421,6 +2912,170 @@ function getRecentMistakes(hours = 24) {
     .sort((a, b) => b.latest - a.latest);
 }
 
+function isMasteredPathCard(card) {
+  if (!card || !card.stage) return false;
+  return (
+    card.stage === "S3" ||
+    card.stage === "S4" ||
+    card.stage === "S5" ||
+    card.stage === "S6" ||
+    card.stage === "RETIRED"
+  );
+}
+
+function getLearningPathDisplayName(pathValue) {
+  if (pathValue === "textbook_genki") return "Genki-Aligned";
+  if (pathValue === "custom") return "Custom";
+  return "Guided";
+}
+
+function getPathUnlockTargetText(pathConfig) {
+  const gates = (pathConfig && pathConfig.gates) || {};
+  const minAccuracyPct = Math.round((Number(gates.min_accuracy || 0) || 0) * 100);
+  const minAnswered = Math.max(0, Number(gates.min_answered || 0) || 0);
+  if (minAccuracyPct > 0 && minAnswered > 0) {
+    return `${minAccuracyPct}% stage accuracy over ${minAnswered} answers`;
+  }
+  if (minAccuracyPct > 0) {
+    return `${minAccuracyPct}% stage accuracy`;
+  }
+  if (minAnswered > 0) {
+    return `${minAnswered} stage answers`;
+  }
+  return "Complete current stage targets";
+}
+
+function formatShortDate(iso) {
+  if (!iso) return "";
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return "";
+  return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(date);
+}
+
+function getRoadmapStageLabel(pathValue, rawLabel) {
+  const label = String(rawLabel || "").trim();
+  if (!label) return "Untitled stage";
+  if (pathValue === "textbook_genki") {
+    return label
+      .replace(/^Genki\s+[IVX]+\s+Ch[\d-]+\s*/i, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+  return label;
+}
+
+function buildLearningPathStats(now = new Date()) {
+  const pathValue = getLearningPath();
+  const pathLabel = getLearningPathDisplayName(pathValue);
+  const pathConfig = getPathConfig(pathValue);
+  if (!pathConfig || !Array.isArray(pathConfig.stages) || pathConfig.stages.length === 0) {
+    return {
+      available: false,
+      pathValue,
+      pathLabel,
+      unlockTargetText: "",
+      stages: [],
+    };
+  }
+
+  const nowIso = now.toISOString();
+  const pathState = getCurrentLearningPathState(nowIso);
+  const stages = pathConfig.stages;
+  const totalStages = stages.length;
+  const currentStageIndex = Math.min(
+    Math.max(0, Number(pathState.stage_index) || 0),
+    totalStages - 1,
+  );
+  const cards = Object.values(filterCardStore(state.cards));
+
+  const stageStats = stages.map((stage, index) => {
+    const templateIds = new Set(Array.isArray(stage.template_ids) ? stage.template_ids : []);
+    const stageCards = cards.filter((card) => templateIds.has(card.conjugation_id));
+    let success = 0;
+    let failure = 0;
+    stageCards.forEach((card) => {
+      success += Number(card.success_count_total || 0);
+      failure += Number(card.failure_count_total || 0);
+    });
+    const answered = success + failure;
+    const masteredCount = stageCards.filter(isMasteredPathCard).length;
+    const totalCount = stageCards.length;
+    const stagePercent = totalCount > 0 ? Math.round((masteredCount / totalCount) * 100) : 0;
+
+    let status = "Locked";
+    let progressPercent = 0;
+    if (index < currentStageIndex || (pathState.completed && index <= currentStageIndex)) {
+      status = "Completed";
+      progressPercent = 100;
+    } else if (index === currentStageIndex) {
+      status = pathState.completed ? "Completed" : "In Progress";
+      progressPercent = pathState.completed ? 100 : stagePercent;
+    }
+
+    return {
+      index,
+      stage,
+      status,
+      progressPercent: Math.max(0, Math.min(100, progressPercent)),
+      masteredCount,
+      totalCount,
+      answered,
+      success,
+      failure,
+    };
+  });
+
+  const currentStage = stageStats[currentStageIndex];
+  const completedStageCount = pathState.completed ? totalStages : currentStageIndex;
+  const overallPercent =
+    totalStages > 0
+      ? Math.round(
+          Math.max(
+            0,
+            Math.min(
+              100,
+              ((completedStageCount + (currentStage.progressPercent || 0) / 100) / totalStages) * 100,
+            ),
+          ),
+        )
+      : 0;
+
+  return {
+    available: true,
+    pathValue,
+    pathLabel,
+    pathState,
+    pathConfig,
+    totalStages,
+    currentStageIndex,
+    completedStageCount,
+    overallPercent,
+    currentStage,
+    stageStats,
+    unlockTargetText: getPathUnlockTargetText(pathConfig),
+  };
+}
+
+function getRoadmapVisibleIndexes(stageStats, currentStageIndex, expanded, isMobile) {
+  if (!isMobile || expanded) {
+    return stageStats.map((item) => item.index);
+  }
+  const indexes = new Set([currentStageIndex]);
+  for (let i = currentStageIndex - 1; i >= 0; i -= 1) {
+    if (stageStats[i] && stageStats[i].status === "Completed") {
+      indexes.add(i);
+      break;
+    }
+  }
+  for (let i = currentStageIndex + 1; i < stageStats.length; i += 1) {
+    if (stageStats[i] && stageStats[i].status === "Locked") {
+      indexes.add(i);
+      break;
+    }
+  }
+  return Array.from(indexes).sort((a, b) => a - b);
+}
+
 function simplifyTemplateLabel(label) {
   if (!label) return "";
   return label.replace(/\s*\([^)]*\)\s*$/, "").trim();
@@ -2451,6 +3106,111 @@ function renderStatsScreen() {
   const longestEl = document.getElementById("stats-longest-streak");
   if (currentEl) currentEl.textContent = streaks.current;
   if (longestEl) longestEl.textContent = streaks.longest;
+
+  const pathStats = buildLearningPathStats(new Date());
+  const summaryTitleEl = document.getElementById("stats-path-summary-title");
+  const summarySubtitleEl = document.getElementById("stats-path-summary-subtitle");
+  const overallFillEl = document.getElementById("stats-path-overall-fill");
+  const overallTextEl = document.getElementById("stats-path-overall-text");
+  const stageFillEl = document.getElementById("stats-path-stage-fill");
+  const stageTextEl = document.getElementById("stats-path-stage-text");
+  const nextTargetEl = document.getElementById("stats-path-next-target");
+  const roadmapListEl = document.getElementById("stats-path-roadmap-list");
+  const roadmapToggleEl = document.getElementById("stats-roadmap-toggle");
+  const roadmapSubtitleEl = document.getElementById("stats-roadmap-subtitle");
+
+  if (summaryTitleEl && overallFillEl && overallTextEl && stageFillEl && stageTextEl && nextTargetEl) {
+    if (!pathStats.available) {
+      summaryTitleEl.textContent = `${pathStats.pathLabel} Path`;
+      if (summarySubtitleEl) summarySubtitleEl.textContent = "Current path snapshot";
+      overallFillEl.style.width = "0%";
+      overallTextEl.textContent = "Overall: No staged roadmap for this path.";
+      stageFillEl.style.width = "0%";
+      stageTextEl.textContent = "Stage: Custom form selection";
+      nextTargetEl.textContent = "Next unlock: Switch to Guided or Genki-Aligned for staged unlocks.";
+      if (roadmapSubtitleEl) roadmapSubtitleEl.textContent = "Roadmap unavailable for custom mode";
+    } else {
+      const currentStageLabel = pathStats.currentStage && pathStats.currentStage.stage
+        ? getRoadmapStageLabel(pathStats.pathValue, pathStats.currentStage.stage.label)
+        : "Current stage";
+      summaryTitleEl.textContent = `${pathStats.pathLabel} • Stage ${pathStats.currentStageIndex + 1}: ${currentStageLabel}`;
+      if (summarySubtitleEl) summarySubtitleEl.textContent = "Your current progress";
+      if (roadmapSubtitleEl) {
+        roadmapSubtitleEl.textContent = `${pathStats.totalStages} ${pathStats.totalStages === 1 ? "stage" : "stages"} to mastery`;
+      }
+      overallFillEl.style.width = `${pathStats.overallPercent}%`;
+      overallTextEl.innerHTML = `<span class="stats-path-progress-name">Overall Progress</span><span class="stats-path-progress-metrics"><strong>${pathStats.overallPercent}%</strong> ${pathStats.completedStageCount}/${pathStats.totalStages} stages</span>`;
+
+      const currentStagePercent = pathStats.currentStage ? pathStats.currentStage.progressPercent : 0;
+      const currentMastered = pathStats.currentStage ? pathStats.currentStage.masteredCount : 0;
+      const currentTotal = pathStats.currentStage ? pathStats.currentStage.totalCount : 0;
+      stageFillEl.style.width = `${currentStagePercent}%`;
+      stageTextEl.innerHTML =
+        currentTotal > 0
+          ? `<span class="stats-path-progress-name">Current Stage</span><span class="stats-path-progress-metrics"><strong>${currentStagePercent}%</strong> ${currentMastered}/${currentTotal} mastered</span>`
+          : `<span class="stats-path-progress-name">Current Stage</span><span class="stats-path-progress-metrics"><strong>0%</strong> 0 cards introduced</span>`;
+
+      const holdUntil = pathStats.pathState && pathStats.pathState.hold_until
+        ? new Date(pathStats.pathState.hold_until)
+        : null;
+      const holdActive = holdUntil && holdUntil.getTime() > Date.now();
+      if (holdActive) {
+        nextTargetEl.innerHTML = `Hold until <strong>${formatShortDate(pathStats.pathState.hold_until)}</strong> — Maintain <strong>${pathStats.unlockTargetText}</strong>`;
+      } else {
+        nextTargetEl.innerHTML = `Maintain <strong>${pathStats.unlockTargetText}</strong> to unlock the next stage.`;
+      }
+    }
+  }
+
+  if (roadmapListEl && roadmapToggleEl) {
+    if (!pathStats.available) {
+      roadmapListEl.innerHTML = `<div class="muted">Roadmap is available for Guided and Genki-Aligned paths.</div>`;
+      roadmapToggleEl.classList.add("is-hidden");
+    } else {
+      const isMobile = window.matchMedia("(max-width: 720px)").matches;
+      const visibleIndexes = getRoadmapVisibleIndexes(
+        pathStats.stageStats,
+        pathStats.currentStageIndex,
+        Boolean(tabUiMemory.statsRoadmapExpanded),
+        isMobile,
+      );
+      roadmapListEl.innerHTML = visibleIndexes
+        .map((index) => {
+          const item = pathStats.stageStats[index];
+          const statusClass =
+            item.status === "Completed" ? "completed" : item.status === "In Progress" ? "in-progress" : "locked";
+          const stageLabel = getRoadmapStageLabel(pathStats.pathValue, item.stage.label);
+          return `
+            <div class="stats-roadmap-row is-${statusClass}">
+              <div class="stats-roadmap-stage-pill">${index + 1}</div>
+              <div class="stats-roadmap-main">
+                <div class="stats-roadmap-head">
+                  <div>
+                    <div class="stats-roadmap-label">${stageLabel}</div>
+                    <div class="stats-roadmap-status">${item.status}</div>
+                  </div>
+                  <div class="stats-roadmap-percent">${item.progressPercent}%</div>
+                </div>
+                <div class="stats-roadmap-progress">
+                  <div class="stats-roadmap-track">
+                    <div class="stats-roadmap-fill" style="width:${item.progressPercent}%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+
+      if (isMobile) {
+        roadmapToggleEl.classList.remove("is-hidden");
+        roadmapToggleEl.textContent = tabUiMemory.statsRoadmapExpanded ? "Show fewer stages" : "View full roadmap";
+        roadmapToggleEl.setAttribute("aria-expanded", tabUiMemory.statsRoadmapExpanded ? "true" : "false");
+      } else {
+        roadmapToggleEl.classList.add("is-hidden");
+      }
+    }
+  }
 
   const queueList = document.getElementById("stats-queue-list");
   if (queueList) {
@@ -2716,6 +3476,9 @@ function renderSessionCard(session) {
   const verb = state.verbsById[item.verb_id];
   const template = state.templatesById[item.conjugation_id];
   const expected = Core.conjugate(verb, template.id, state.exceptions);
+  const acceptedAnswers = Core.conjugateAccepted
+    ? Core.conjugateAccepted(verb, template.id, state.exceptions)
+    : [expected];
   const verbDisplay = renderVerbDisplay(verb);
   const ruleDisplay = getRuleDisplay(verb, template.id);
   const showRulesInPrompt = false;
@@ -2772,7 +3535,7 @@ function renderSessionCard(session) {
       return;
     }
     const normalized = Core.normalizeAnswer(raw);
-    const correct = normalized === expected;
+    const correct = acceptedAnswers.includes(normalized);
     triggerHaptic(correct);
     flashInputFeedback(answerInput, correct);
     showAnswerFlash(answerFlash, correct);
@@ -2883,7 +3646,7 @@ function renderSessionCard(session) {
     } else {
       const cardRecord = ensureCard(verb.id, template.id);
       const normalized = Core.normalizeAnswer(answerInput.value);
-      const correct = normalized === expected;
+      const correct = acceptedAnswers.includes(normalized);
       const update = Core.applyReviewResult(cardRecord, {
         correct,
         hintUsed: session.hintUsed,
@@ -2959,8 +3722,8 @@ function startLessonsFlow() {
     lessonsActive = false;
     lessonSession = null;
     container.innerHTML =
-      `<div class="card"><strong>No lesson forms available for this study level.</strong><br />` +
-      `<span class="muted">Adjust your study level in Settings.</span>` +
+      `<div class="card"><strong>No lesson forms available for this learning path yet.</strong><br />` +
+      `<span class="muted">Adjust your learning path in Settings.</span>` +
       `<div class="actions"><button class="ghost" id="lessons-forms-cta">Open Settings</button></div>` +
       `</div>`;
     const cta = container.querySelector("#lessons-forms-cta");
@@ -2992,26 +3755,61 @@ function startLessonsFlow() {
       }
     }
   }
-  const selected = shuffle(candidates).slice(0, Math.min(count, candidates.length));
-  const queue = selected.map((item) => ({
-    verb_id: item.verb_id,
-    conjugation_id: item.conjugation_id,
-  }));
+
+  let queue = [];
+  if (!customMode && LessonEngine) {
+    const pathValue = getLearningPath();
+    const pathConfig = getPathConfig(pathValue);
+    const nowIso = new Date().toISOString();
+    if (pathConfig) {
+      const currentPathState = getCurrentLearningPathState(nowIso);
+      const gateEval = LessonEngine.evaluatePathAdvance({
+        pathConfig,
+        pathState: currentPathState,
+        cardsById: filterCardStore(state.cards),
+        verbsById: state.verbsById,
+        nowIso,
+      });
+      setCurrentLearningPathState(gateEval.pathState, nowIso);
+      saveSettings();
+      const built = LessonEngine.buildLessonQueue({
+        pathType: pathValue,
+        pathConfig,
+        pathState: gateEval.pathState,
+        unseenPairs: candidates,
+        cardsById: filterCardStore(state.cards),
+        verbsById: state.verbsById,
+        mistakeTemplateCounts: (state.stats && state.stats.mistakeCounts && state.stats.mistakeCounts.templates) || {},
+        dailyCount: Math.min(count, candidates.length),
+        nowIso,
+      });
+      queue = built.queue || [];
+    }
+  }
+
+  if (queue.length === 0) {
+    const selected = shuffle(candidates).slice(0, Math.min(count, candidates.length));
+    queue = selected.map((item) => ({
+      verb_id: item.verb_id,
+      conjugation_id: item.conjugation_id,
+    }));
+  }
+
   lessonsActive = true;
   createLessonSession(container, queue);
   updateHeaderForScreen("lessons");
 }
 
 function updateStudyContentModeUI() {
-  const levelWrap = document.getElementById("settings-study-level-wrap");
-  const studySelect = document.getElementById("settings-study-level");
+  const pathWrap = document.getElementById("settings-learning-path-wrap");
+  const pathSelect = document.getElementById("settings-learning-path");
   const formsSection = document.getElementById("settings-forms-section");
   const custom = isCustomContentMode();
-  if (levelWrap) {
-    levelWrap.classList.toggle("is-disabled", custom);
+  if (pathWrap) {
+    pathWrap.classList.remove("is-disabled");
   }
-  if (studySelect) {
-    studySelect.disabled = custom;
+  if (pathSelect) {
+    pathSelect.disabled = false;
   }
   if (formsSection) {
     formsSection.style.display = custom ? "grid" : "none";
@@ -3024,8 +3822,7 @@ function populateSettingsForm() {
   const unlockTimeInput = document.getElementById("settings-unlock-time");
   const maxInput = document.getElementById("settings-max-reviews");
   const vibrationInput = document.getElementById("settings-vibration");
-  const studySelect = document.getElementById("settings-study-level");
-  const advancedContent = document.getElementById("settings-advanced-content");
+  const learningPathSelect = document.getElementById("settings-learning-path");
   const remindersEnabledInput = document.getElementById("settings-reminders-enabled");
   const reminderTimeInput = document.getElementById("settings-reminder-time");
   const reminderLessonsInput = document.getElementById("settings-reminder-lessons");
@@ -3039,11 +3836,8 @@ function populateSettingsForm() {
   if (vibrationInput) {
     vibrationInput.checked = state.settings.vibration !== false;
   }
-  if (studySelect) {
-    studySelect.value = state.settings.study_level === "N5" ? "N5" : "N5_N4";
-  }
-  if (advancedContent) {
-    advancedContent.checked = isCustomContentMode();
+  if (learningPathSelect) {
+    learningPathSelect.value = getLearningPath();
   }
   updateStudyContentModeUI();
   if (remindersEnabledInput) {
@@ -3172,6 +3966,9 @@ function renderLessonCard(session) {
   const verb = state.verbsById[item.verb_id];
   const template = state.templatesById[item.conjugation_id];
   const expected = Core.conjugate(verb, template.id, state.exceptions);
+  const acceptedAnswers = Core.conjugateAccepted
+    ? Core.conjugateAccepted(verb, template.id, state.exceptions)
+    : [expected];
   const verbDisplay = renderVerbDisplay(verb);
 
   const card = document.createElement("div");
@@ -3224,7 +4021,7 @@ function renderLessonCard(session) {
       return;
     }
     const normalized = Core.normalizeAnswer(raw);
-    const correct = normalized === expected;
+    const correct = acceptedAnswers.includes(normalized);
     triggerHaptic(correct);
     flashInputFeedback(answerInput, correct);
     showAnswerFlash(answerFlash, correct);
@@ -3310,6 +4107,27 @@ function setupActions() {
       setActiveScreen("settings");
     });
   }
+  const quitConfirmModal = document.getElementById("quit-confirm-modal");
+  const quitConfirmCancel = document.getElementById("quit-confirm-cancel");
+  const quitConfirmConfirm = document.getElementById("quit-confirm-confirm");
+  const quitConfirmBackdrop = quitConfirmModal ? quitConfirmModal.querySelector(".modal-backdrop") : null;
+  if (quitConfirmCancel) {
+    quitConfirmCancel.addEventListener("click", () => {
+      pendingQuitConfirmAction = null;
+      closeQuitConfirmModal();
+    });
+  }
+  if (quitConfirmBackdrop) {
+    quitConfirmBackdrop.addEventListener("click", () => {
+      pendingQuitConfirmAction = null;
+      closeQuitConfirmModal();
+    });
+  }
+  if (quitConfirmConfirm) {
+    quitConfirmConfirm.addEventListener("click", () => {
+      confirmQuitAndProceed();
+    });
+  }
 
   const onboardingNameInput = document.getElementById("onboarding-display-name");
   const onboardingDailyInput = document.getElementById("onboarding-daily-lessons");
@@ -3322,14 +4140,18 @@ function setupActions() {
 
   function completeOnboarding(config, customFormIds) {
     if (!config) return;
+    const nowIso = new Date().toISOString();
     state.settings.display_name = config.displayName;
     state.settings.dailyLessons = config.dailyLessons;
+    state.settings.learning_path = config.selectedPath;
+    state.settings.learning_path_state = defaultLearningPathState(nowIso);
     if (config.selectedPath === "custom") {
-      state.settings.lesson_content_mode = "custom";
       state.settings.enabled_conjugation_forms = customFormIds.slice();
     } else {
-      state.settings.lesson_content_mode = "level";
-      state.settings.study_level = config.selectedPath === "N5" ? "N5" : "N5_N4";
+      state.settings.enabled_conjugation_forms = Core.normalizeEnabledForms(
+        state.templates,
+        state.settings.enabled_conjugation_forms,
+      );
     }
     state.settings.onboarding_complete = true;
     state.settings.lessonBank = 0;
@@ -3412,7 +4234,7 @@ function setupActions() {
       const selectedPathInput = document.querySelector(
         'input[name="onboarding-learning-path"]:checked',
       );
-      const selectedPath = selectedPathInput ? selectedPathInput.value : "N5_N4";
+      const selectedPath = selectedPathInput ? selectedPathInput.value : "guided";
       const config = {
         displayName,
         dailyLessons,
@@ -3500,8 +4322,7 @@ function setupActions() {
         const unlockTimeInput = document.getElementById("settings-unlock-time");
         const maxInput = document.getElementById("settings-max-reviews");
         const vibrationInput = document.getElementById("settings-vibration");
-        const studySelect = document.getElementById("settings-study-level");
-        const advancedContent = document.getElementById("settings-advanced-content");
+        const learningPathSelect = document.getElementById("settings-learning-path");
         const remindersEnabledInput = document.getElementById("settings-reminders-enabled");
         const reminderTimeInput = document.getElementById("settings-reminder-time");
         const reminderLessonsInput = document.getElementById("settings-reminder-lessons");
@@ -3524,11 +4345,19 @@ function setupActions() {
         if (vibrationInput) {
           state.settings.vibration = vibrationInput.checked;
         }
-        if (studySelect) {
-          state.settings.study_level = studySelect.value === "N5" ? "N5" : "N5_N4";
-        }
-        if (advancedContent) {
-          state.settings.lesson_content_mode = advancedContent.checked ? "custom" : "level";
+        if (learningPathSelect) {
+          const selectedPath = learningPathSelect.value;
+          state.settings.learning_path =
+            selectedPath === "custom" || selectedPath === "textbook_genki" || selectedPath === "guided"
+              ? selectedPath
+              : "guided";
+          if (!state.settings.learning_path_state || typeof state.settings.learning_path_state !== "object") {
+            state.settings.learning_path_state = defaultLearningPathState(new Date().toISOString());
+          }
+          const pathKey = state.settings.learning_path;
+          if (!state.settings.learning_path_state[pathKey]) {
+            state.settings.learning_path_state[pathKey] = defaultLearningPathState(new Date().toISOString())[pathKey];
+          }
         }
         if (remindersEnabledInput) {
           state.settings.reminders_enabled = remindersEnabledInput.checked;
@@ -3570,17 +4399,27 @@ function setupActions() {
 
   const formsSelectAll = document.getElementById("forms-select-all");
   const formsSelectNone = document.getElementById("forms-select-none");
-  const advancedContent = document.getElementById("settings-advanced-content");
+  const learningPathSelect = document.getElementById("settings-learning-path");
   const verbBrowserBack = document.getElementById("verb-browser-back");
   const verbSearch = document.getElementById("verb-search");
   const verbBrowserPrev = document.getElementById("verb-browser-prev");
   const verbBrowserNext = document.getElementById("verb-browser-next");
+  const statsRoadmapToggle = document.getElementById("stats-roadmap-toggle");
 
-  if (advancedContent) {
-    advancedContent.addEventListener("change", () => {
-      state.settings.lesson_content_mode = advancedContent.checked ? "custom" : "level";
+  if (learningPathSelect) {
+    learningPathSelect.addEventListener("change", () => {
+      const selectedPath = learningPathSelect.value;
+      state.settings.learning_path =
+        selectedPath === "custom" || selectedPath === "textbook_genki" || selectedPath === "guided"
+          ? selectedPath
+          : "guided";
+      if (!state.settings.learning_path_state || typeof state.settings.learning_path_state !== "object") {
+        state.settings.learning_path_state = defaultLearningPathState(new Date().toISOString());
+      }
       updateStudyContentModeUI();
       updateFormsWarnings();
+      updateLessonSummary();
+      updateHeaderForScreen(currentScreen);
     });
   }
   if (formsSelectAll) {
@@ -3620,6 +4459,13 @@ function setupActions() {
         renderVerbBrowser();
       });
     }
+
+  if (statsRoadmapToggle) {
+    statsRoadmapToggle.addEventListener("click", () => {
+      tabUiMemory.statsRoadmapExpanded = !tabUiMemory.statsRoadmapExpanded;
+      renderStatsScreen();
+    });
+  }
 
   const resetModal = document.getElementById("reset-modal");
   const resetOpen = document.getElementById("reset-open");
@@ -3685,11 +4531,12 @@ function setupActions() {
     if (drillSessionEl) drillSessionEl.innerHTML = "";
     if (weaknessSessionEl) weaknessSessionEl.innerHTML = "";
     if (state.settings) {
+      const nowIso = new Date().toISOString();
       state.settings.display_name = "";
       state.settings.onboarding_complete = false;
       state.settings.dailyLessons = 10;
-      state.settings.study_level = "N5_N4";
-      state.settings.lesson_content_mode = "level";
+      state.settings.learning_path = "guided";
+      state.settings.learning_path_state = defaultLearningPathState(nowIso);
       state.settings.lessonBank = 0;
       state.settings.lastUnlockAt = null;
       saveSettings();
@@ -3900,17 +4747,32 @@ async function init() {
       console.warn("Failed to load furigana helper", err);
       state.furigana = null;
     }
+    try {
+      const [guided, genki] = await Promise.all([
+        loadJson(DATA_PATHS.learningPathGuided),
+        loadJson(DATA_PATHS.learningPathGenki),
+      ]);
+      state.learningPaths = {
+        guided,
+        textbook_genki: genki,
+      };
+    } catch (err) {
+      console.warn("Failed to load learning path data", err);
+      state.learningPaths = {};
+    }
     state.verbsById = Object.fromEntries(state.verbs.map((v) => [v.id, v]));
     state.templatesById = Object.fromEntries(state.templates.map((t) => [t.id, t]));
     state.settings = loadSettings();
     state.stats = loadStats();
-    if (state.settings.lesson_content_mode !== "custom" && state.settings.lesson_content_mode !== "level") {
-      const eligibleCount = selectableTemplates().length;
-      const configured = Array.isArray(state.settings.enabled_conjugation_forms)
-        ? state.settings.enabled_conjugation_forms.length
-        : eligibleCount;
-      const hasCustomSelection = configured > 0 && configured < eligibleCount;
-      state.settings.lesson_content_mode = hasCustomSelection ? "custom" : "level";
+    if (!state.settings.learning_path_state || typeof state.settings.learning_path_state !== "object") {
+      state.settings.learning_path_state = defaultLearningPathState(new Date().toISOString());
+    }
+    if (
+      state.settings.learning_path !== "guided" &&
+      state.settings.learning_path !== "textbook_genki" &&
+      state.settings.learning_path !== "custom"
+    ) {
+      state.settings.learning_path = "guided";
     }
     const normalizedForms = getEnabledFormIds();
     state.settings.enabled_conjugation_forms = normalizedForms;
@@ -3957,4 +4819,5 @@ async function init() {
 }
 
 init();
+
 

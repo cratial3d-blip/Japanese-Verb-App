@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japanese Verb SRS - Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #e8dcc8;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Progress bar at top */
+        .top-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            color: #8b7355;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .progress-text {
+            font-size: 15px;
+        }
+
+        .progress-percent {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .progress-bar-top {
+            height: 3px;
+            background: rgba(139, 115, 85, 0.2);
+            position: relative;
+        }
+
+        .progress-fill-top {
+            height: 100%;
+            width: 0%;
+            background: #ff6b35;
+            transition: width 0.3s ease;
+        }
+
+        /* Main content */
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .quiz-card {
+            background: white;
+            border-radius: 20px;
+            padding: 48px 40px;
+            max-width: 640px;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Feedback flash overlay */
+        .feedback-flash {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease-out;
+        }
+
+        .feedback-flash.correct {
+            background: rgba(16, 185, 129, 0.12);
+        }
+
+        .feedback-flash.incorrect {
+            background: rgba(239, 68, 68, 0.08);
+        }
+
+        .feedback-flash.show {
+            opacity: 1;
+        }
+
+        /* Quiz content */
+        .quiz-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .conjugation-type {
+            display: inline-block;
+            background: #e8e8e8;
+            color: #5a5a5a;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 32px;
+        }
+
+        .verb-question {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .verb-hiragana {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        .verb-kanji {
+            font-size: 56px;
+            font-weight: 700;
+            color: #2a2a2a;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .verb-meaning {
+            font-size: 16px;
+            color: #888;
+        }
+
+        /* Input and button container */
+        .answer-container {
+            display: flex;
+            gap: 16px;
+            margin-top: 40px;
+            align-items: stretch;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .answer-input {
+            width: 100%;
+            height: 56px;
+            padding: 0 20px;
+            font-size: 17px;
+            border: 2px solid #d4d4d4;
+            border-radius: 14px;
+            outline: none;
+            transition: all 0.15s ease;
+            font-family: inherit;
+            background: #f8f8f8;
+            color: #2a2a2a;
+        }
+
+        .answer-input:focus {
+            border-color: #5a8b7f;
+            background: white;
+        }
+
+        .answer-input.correct {
+            border-color: #10b981;
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        .answer-input.incorrect {
+            border-color: #ef4444;
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        .answer-input:disabled {
+            opacity: 1;
+        }
+
+        /* Feedback icon in input */
+        .input-feedback-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%) scale(0);
+            font-size: 22px;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .input-feedback-icon.show {
+            transform: translateY(-50%) scale(1);
+        }
+
+        /* Shake animation */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        .input-wrapper.shake {
+            animation: shake 0.3s ease;
+        }
+
+        /* Check button - always same position */
+        .check-button {
+            min-width: 180px;
+            height: 56px;
+            padding: 0 32px;
+            font-size: 17px;
+            font-weight: 600;
+            color: white;
+            background: #5a8b7f;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .check-button:hover:not(:disabled) {
+            background: #4a7a6e;
+            transform: translateY(-1px);
+        }
+
+        .check-button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .check-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .check-button.correct-state {
+            background: #10b981;
+        }
+
+        .check-button.correct-state:hover {
+            background: #059669;
+        }
+
+        .check-button.incorrect-state {
+            background: #ef4444;
+        }
+
+        .check-button.incorrect-state:hover {
+            background: #dc2626;
+        }
+
+        /* Feedback message below */
+        .feedback-message {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 500;
+            min-height: 24px;
+            opacity: 0;
+            transform: translateY(-8px);
+            transition: all 0.2s ease;
+        }
+
+        .feedback-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feedback-message.correct {
+            color: #065f46;
+        }
+
+        .feedback-message.incorrect {
+            color: #991b1b;
+        }
+
+        .correct-answer-display {
+            margin-top: 6px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #2a2a2a;
+        }
+
+        /* Demo controls */
+        .demo-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+        }
+
+        .demo-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #888;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .demo-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .demo-button {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 2px solid;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            background: white;
+        }
+
+        .demo-button.correct-btn {
+            color: #10b981;
+            border-color: #10b981;
+        }
+
+        .demo-button.correct-btn:hover {
+            background: #ecfdf5;
+        }
+
+        .demo-button.incorrect-btn {
+            color: #ef4444;
+            border-color: #ef4444;
+        }
+
+        .demo-button.incorrect-btn:hover {
+            background: #fef2f2;
+        }
+
+        .demo-button.reset-btn {
+            color: #5a8b7f;
+            border-color: #5a8b7f;
+        }
+
+        .demo-button.reset-btn:hover {
+            background: #f0f7f6;
+        }
+
+        @media (max-width: 640px) {
+            .quiz-card {
+                padding: 32px 24px;
+            }
+
+            .verb-kanji {
+                font-size: 48px;
+            }
+
+            .answer-container {
+                flex-direction: column;
+            }
+
+            .check-button {
+                width: 100%;
+            }
+
+            .demo-controls {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+            }
+
+            .demo-buttons {
+                flex-direction: row;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-progress">
+        <div class="progress-text">0 / 21</div>
+        <div class="progress-percent">0%</div>
+    </div>
+    <div class="progress-bar-top">
+        <div class="progress-fill-top"></div>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="quiz-card">
+            <div class="feedback-flash" id="feedbackFlash"></div>
+            
+            <div class="quiz-content">
+                <div class="conjugation-type">Plain negative (ない-form)</div>
+
+                <div class="verb-question">
+                    <div class="verb-hiragana">あ</div>
+                    <div class="verb-kanji">空く</div>
+                    <div class="verb-meaning">to become empty, to be free (time/seat)</div>
+                </div>
+
+                <div class="answer-container">
+                    <div class="input-wrapper" id="inputWrapper">
+                        <input 
+                            type="text" 
+                            class="answer-input" 
+                            placeholder="Type your answer..."
+                            autocomplete="off"
+                            id="answerInput"
+                        >
+                        <div class="input-feedback-icon" id="inputFeedbackIcon"></div>
+                    </div>
+                    <button class="check-button" id="checkButton">Check</button>
+                </div>
+
+                <div class="feedback-message" id="feedbackMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-controls">
+        <div class="demo-title">Demo Controls</div>
+        <div class="demo-buttons">
+            <button class="demo-button correct-btn" id="testCorrect">✓ Correct</button>
+            <button class="demo-button incorrect-btn" id="testIncorrect">✕ Incorrect</button>
+            <button class="demo-button reset-btn" id="resetButton">↻ Reset</button>
+        </div>
+    </div>
+
+    <script>
+        const answerInput = document.getElementById('answerInput');
+        const checkButton = document.getElementById('checkButton');
+        const inputFeedbackIcon = document.getElementById('inputFeedbackIcon');
+        const feedbackMessage = document.getElementById('feedbackMessage');
+        const inputWrapper = document.getElementById('inputWrapper');
+        const feedbackFlash = document.getElementById('feedbackFlash');
+
+        const testCorrect = document.getElementById('testCorrect');
+        const testIncorrect = document.getElementById('testIncorrect');
+        const resetButton = document.getElementById('resetButton');
+
+        const correctAnswer = '空かない';
+        let currentState = 'input'; // 'input', 'answered'
+
+        function showCorrectFeedback() {
+            currentState = 'answered';
+
+            // Disable input
+            answerInput.disabled = true;
+            answerInput.classList.add('correct');
+
+            // Quick flash
+            feedbackFlash.classList.add('correct', 'show');
+            setTimeout(() => {
+                feedbackFlash.classList.remove('show');
+            }, 150);
+
+            // Input icon
+            inputFeedbackIcon.textContent = '✓';
+            inputFeedbackIcon.classList.add('show');
+
+            // Update button
+            checkButton.textContent = 'Continue';
+            checkButton.classList.add('correct-state');
+
+            // Show brief positive message
+            feedbackMessage.textContent = 'Correct!';
+            feedbackMessage.classList.add('correct', 'show');
+        }
+
+        function showIncorrectFeedback() {
+            currentState = 'answered';
+
+            // Quick shake
+            inputWrapper.classList.add('shake');
+            setTimeout(() => inputWrapper.classList.remove('shake'), 300);
+
+            // Disable input
+            answerInput.disabled = true;
+            answerInput.classList.add('incorrect');
+
+            // Quick flash
+            feedbackFlash.classList.add('incorrect', 'show');
+            setTimeout(() => {
+                feedbackFlash.classList.remove('show');
+            }, 150);
+
+            // Input icon
+            inputFeedbackIcon.textContent = '✕';
+            inputFeedbackIcon.classList.add('show');
+
+            // Update button
+            checkButton.textContent = 'Continue';
+            checkButton.classList.add('incorrect-state');
+
+            // Show correct answer
+            feedbackMessage.innerHTML = `
+                <div>The correct answer is:</div>
+                <div class="correct-answer-display">${correctAnswer}</div>
+            `;
+            feedbackMessage.classList.add('incorrect', 'show');
+        }
+
+        function continueToNext() {
+            // Simulate moving to next question
+            resetQuiz();
+            // In real app, this would load the next question
+        }
+
+        function resetQuiz() {
+            currentState = 'input';
+
+            // Reset input
+            answerInput.value = '';
+            answerInput.disabled = false;
+            answerInput.classList.remove('correct', 'incorrect');
+            answerInput.focus();
+
+            // Reset button
+            checkButton.textContent = 'Check';
+            checkButton.classList.remove('correct-state', 'incorrect-state');
+
+            // Clear feedback
+            inputFeedbackIcon.classList.remove('show');
+            inputFeedbackIcon.textContent = '';
+            
+            feedbackMessage.classList.remove('show', 'correct', 'incorrect');
+            feedbackMessage.innerHTML = '';
+            
+            feedbackFlash.classList.remove('correct', 'incorrect');
+        }
+
+        // Main button handler
+        checkButton.addEventListener('click', () => {
+            if (currentState === 'input') {
+                // Check answer
+                if (!answerInput.value.trim()) {
+                    return;
+                }
+                
+                const userAnswer = answerInput.value.trim();
+                if (userAnswer === correctAnswer) {
+                    showCorrectFeedback();
+                } else {
+                    showIncorrectFeedback();
+                }
+            } else {
+                // Continue to next
+                continueToNext();
+            }
+        });
+
+        // Enter key support
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkButton.click();
+            }
+        });
+
+        // Demo controls
+        testCorrect.addEventListener('click', () => {
+            resetQuiz();
+            answerInput.value = correctAnswer;
+            setTimeout(() => checkButton.click(), 100);
+        });
+
+        testIncorrect.addEventListener('click', () => {
+            resetQuiz();
+            answerInput.value = '空かなかった';
+            setTimeout(() => checkButton.click(), 100);
+        });
+
+        resetButton.addEventListener('click', resetQuiz);
+
+        // Auto-focus
+        answerInput.focus();
+    </script>
+</body>
+</html>
