@@ -1,0 +1,780 @@
+[
+  {
+    "id": "plain_negative",
+    "label": "Plain negative (ない-form)",
+    "politeness": "plain",
+    "category": "negative",
+    "active": true,
+    "notes": "Informal present negative. Usually ends in ない (e.g., たべない / のまない).",
+    "conjugation_level": "N5",
+    "family_id": "plain_negative",
+    "family_label": "Plain negative (ない)",
+    "family_sort_order": 10,
+    "sort_order": 10,
+    "guided_stage": 1,
+    "genki_stage": 5,
+    "tags": [
+      "core",
+      "n5"
+    ]
+  },
+  {
+    "id": "plain_past",
+    "label": "Plain past (た-form)",
+    "politeness": "plain",
+    "category": "past",
+    "active": true,
+    "notes": "Informal past. Often called た-form (e.g., たべた / のんだ).",
+    "conjugation_level": "N5",
+    "family_id": "plain_past",
+    "family_label": "Plain past (た)",
+    "family_sort_order": 20,
+    "sort_order": 20,
+    "guided_stage": 1,
+    "genki_stage": 6,
+    "tags": [
+      "core",
+      "n5"
+    ]
+  },
+  {
+    "id": "plain_past_negative",
+    "label": "Plain past negative (なかった-form)",
+    "politeness": "plain",
+    "category": "past_negative",
+    "active": true,
+    "notes": "Informal past negative. Typically ends in なかった (e.g., たべなかった / のまなかった).",
+    "conjugation_level": "N5",
+    "family_id": "plain_past_negative",
+    "family_label": "Plain past negative (なかった)",
+    "family_sort_order": 30,
+    "sort_order": 30,
+    "guided_stage": 1,
+    "genki_stage": 6,
+    "tags": [
+      "core",
+      "n5"
+    ]
+  },
+  {
+    "id": "plain_te_form",
+    "label": "Te-form (て-form)",
+    "politeness": "plain",
+    "category": "te_form",
+    "active": true,
+    "notes": "Te-form used for connections, requests, progressive, etc. Answer is the verb’s て/で form only.",
+    "conjugation_level": "N5",
+    "family_id": "plain_te_form",
+    "family_label": "Te-form (て/で)",
+    "family_sort_order": 40,
+    "sort_order": 40,
+    "guided_stage": 1,
+    "genki_stage": 2,
+    "tags": [
+      "core",
+      "n5"
+    ]
+  },
+  {
+    "id": "polite_dictionary",
+    "label": "Polite present (ます-form)",
+    "politeness": "polite",
+    "category": "dictionary",
+    "active": true,
+    "notes": "Polite present affirmative. Often called ます-form (e.g., たべます / のみます).",
+    "conjugation_level": "N5",
+    "family_id": "polite_basic",
+    "family_label": "Polite basic (ます family)",
+    "family_sort_order": 50,
+    "sort_order": 51,
+    "guided_stage": 1,
+    "genki_stage": 1,
+    "tags": [
+      "polite",
+      "n5"
+    ]
+  },
+  {
+    "id": "polite_negative",
+    "label": "Polite negative (ません-form)",
+    "politeness": "polite",
+    "category": "negative",
+    "active": true,
+    "notes": "Polite present negative. Typically ends in ません (e.g., たべません / のみません).",
+    "conjugation_level": "N5",
+    "family_id": "polite_basic",
+    "family_label": "Polite basic (ます family)",
+    "family_sort_order": 50,
+    "sort_order": 52,
+    "guided_stage": 1,
+    "genki_stage": 1,
+    "tags": [
+      "polite",
+      "n5"
+    ]
+  },
+  {
+    "id": "polite_past",
+    "label": "Polite past (ました-form)",
+    "politeness": "polite",
+    "category": "past",
+    "active": true,
+    "notes": "Polite past affirmative. Typically ends in ました (e.g., たべました / のみました).",
+    "conjugation_level": "N5",
+    "family_id": "polite_basic",
+    "family_label": "Polite basic (ます family)",
+    "family_sort_order": 50,
+    "sort_order": 53,
+    "guided_stage": 1,
+    "genki_stage": 1,
+    "tags": [
+      "polite",
+      "n5"
+    ]
+  },
+  {
+    "id": "polite_past_negative",
+    "label": "Polite past negative (ませんでした-form)",
+    "politeness": "polite",
+    "category": "past_negative",
+    "active": true,
+    "notes": "Polite past negative. Typically ends in ませんでした (e.g., たべませんでした / のみませんでした).",
+    "conjugation_level": "N5",
+    "family_id": "polite_basic",
+    "family_label": "Polite basic (ます family)",
+    "family_sort_order": 50,
+    "sort_order": 54,
+    "guided_stage": 1,
+    "genki_stage": 1,
+    "tags": [
+      "polite",
+      "n5"
+    ]
+  },
+  {
+    "id": "polite_te_form",
+    "label": "Te-form (polite request: てください)",
+    "politeness": "polite",
+    "category": "te_form",
+    "active": true,
+    "notes": "Polite request pattern. Expected answer is: te-form + ください (e.g., たべてください).",
+    "conjugation_level": "N5",
+    "family_id": "requests",
+    "family_label": "Requests",
+    "family_sort_order": 60,
+    "sort_order": 61,
+    "guided_stage": 2,
+    "genki_stage": 3,
+    "tags": [
+      "request",
+      "n5"
+    ]
+  },
+  {
+    "id": "plain_nai_de_kudasai",
+    "label": "Negative request (ないでください)",
+    "politeness": "polite",
+    "category": "request",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_nai_de_kudasai).",
+    "conjugation_level": "N5",
+    "family_id": "requests",
+    "family_label": "Requests",
+    "family_sort_order": 60,
+    "sort_order": 62,
+    "guided_stage": 2,
+    "genki_stage": 5,
+    "tags": [
+      "request",
+      "n5"
+    ]
+  },
+  {
+    "id": "plain_te_iru",
+    "label": "Progressive/state (ている)",
+    "politeness": "plain",
+    "category": "te_form",
+    "active": true,
+    "notes": "Expected answer is: plain te-form + いる (e.g., たべている / のんでいる). Used for progressive actions and ongoing states.",
+    "conjugation_level": "N5",
+    "family_id": "progressive_state",
+    "family_label": "Progressive / state",
+    "family_sort_order": 70,
+    "sort_order": 71,
+    "guided_stage": 2,
+    "genki_stage": 4,
+    "tags": [
+      "aspect",
+      "n5"
+    ]
+  },
+  {
+    "id": "polite_te_imasu",
+    "label": "Progressive/state polite (ています)",
+    "politeness": "polite",
+    "category": "te_form",
+    "active": true,
+    "notes": "Expected answer is: plain te-form + います (e.g., たべています / のんでいます).",
+    "conjugation_level": "N5",
+    "family_id": "progressive_state",
+    "family_label": "Progressive / state",
+    "family_sort_order": 70,
+    "sort_order": 72,
+    "guided_stage": 2,
+    "genki_stage": 4,
+    "tags": [
+      "aspect",
+      "n5"
+    ]
+  },
+  {
+    "id": "polite_te_imasen",
+    "label": "Progressive/state polite negative (ていません)",
+    "politeness": "polite",
+    "category": "te_form",
+    "active": true,
+    "notes": "Expected answer is: plain te-form + いません (e.g., たべていません / のんでいません).",
+    "conjugation_level": "N5",
+    "family_id": "progressive_state",
+    "family_label": "Progressive / state",
+    "family_sort_order": 70,
+    "sort_order": 73,
+    "guided_stage": 2,
+    "genki_stage": 4,
+    "tags": [
+      "aspect",
+      "n5"
+    ]
+  },
+  {
+    "id": "polite_te_imashita",
+    "label": "Progressive/state polite past (ていました)",
+    "politeness": "polite",
+    "category": "te_form",
+    "active": true,
+    "notes": "Expected answer is: plain te-form + いました (e.g., たべていました / のんでいました).",
+    "conjugation_level": "N5",
+    "family_id": "progressive_state",
+    "family_label": "Progressive / state",
+    "family_sort_order": 70,
+    "sort_order": 74,
+    "guided_stage": 2,
+    "genki_stage": 4,
+    "tags": [
+      "aspect",
+      "n5"
+    ]
+  },
+  {
+    "id": "polite_te_imasen_deshita",
+    "label": "Progressive/state polite past negative (ていませんでした)",
+    "politeness": "polite",
+    "category": "te_form",
+    "active": true,
+    "notes": "Expected answer is: plain te-form + いませんでした (e.g., たべていませんでした / のんでいませんでした).",
+    "conjugation_level": "N5",
+    "family_id": "progressive_state",
+    "family_label": "Progressive / state",
+    "family_sort_order": 70,
+    "sort_order": 75,
+    "guided_stage": 2,
+    "genki_stage": 4,
+    "tags": [
+      "aspect",
+      "n5"
+    ]
+  },
+  {
+    "id": "plain_te_mo_ii",
+    "label": "Permission (てもいい)",
+    "politeness": "plain",
+    "category": "permission",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_te_mo_ii).",
+    "conjugation_level": "N5",
+    "family_id": "permission_prohibition",
+    "family_label": "Permission / prohibition",
+    "family_sort_order": 80,
+    "sort_order": 81,
+    "guided_stage": 2,
+    "genki_stage": 3,
+    "tags": [
+      "permission",
+      "n5"
+    ]
+  },
+  {
+    "id": "plain_te_wa_ikenai",
+    "label": "Prohibition (てはいけない)",
+    "politeness": "plain",
+    "category": "prohibition",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_te_wa_ikenai).",
+    "conjugation_level": "N5",
+    "family_id": "permission_prohibition",
+    "family_label": "Permission / prohibition",
+    "family_sort_order": 80,
+    "sort_order": 82,
+    "guided_stage": 2,
+    "genki_stage": 3,
+    "tags": [
+      "prohibition",
+      "n5"
+    ]
+  },
+  {
+    "id": "plain_nakute_mo_ii",
+    "label": "Negative permission (～なくてもいい)",
+    "politeness": "plain",
+    "category": "permission",
+    "active": true,
+    "notes": "Rule-based from research submission v1",
+    "conjugation_level": "N4",
+    "family_id": "permission_prohibition",
+    "family_label": "Permission / prohibition",
+    "family_sort_order": 80,
+    "sort_order": 83,
+    "guided_stage": 3,
+    "genki_stage": 11,
+    "tags": [
+      "permission",
+      "n4"
+    ]
+  },
+  {
+    "id": "plain_tai",
+    "label": "Desire (たい)",
+    "politeness": "plain",
+    "category": "desire",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_tai).",
+    "conjugation_level": "N5",
+    "family_id": "desire",
+    "family_label": "Desire (たい family)",
+    "family_sort_order": 90,
+    "sort_order": 91,
+    "guided_stage": 2,
+    "genki_stage": 7,
+    "tags": [
+      "desire",
+      "n5"
+    ]
+  },
+  {
+    "id": "plain_tai_negative",
+    "label": "Desire negative (たくない)",
+    "politeness": "plain",
+    "category": "desire",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_tai_negative).",
+    "conjugation_level": "N5",
+    "family_id": "desire",
+    "family_label": "Desire (たい family)",
+    "family_sort_order": 90,
+    "sort_order": 92,
+    "guided_stage": 2,
+    "genki_stage": 7,
+    "tags": [
+      "desire",
+      "n5"
+    ]
+  },
+  {
+    "id": "plain_tai_past",
+    "label": "Desire past (たかった)",
+    "politeness": "plain",
+    "category": "desire",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_tai_past).",
+    "conjugation_level": "N5",
+    "family_id": "desire",
+    "family_label": "Desire (たい family)",
+    "family_sort_order": 90,
+    "sort_order": 93,
+    "guided_stage": 2,
+    "genki_stage": 7,
+    "tags": [
+      "desire",
+      "n5"
+    ]
+  },
+  {
+    "id": "plain_tai_past_negative",
+    "label": "Desire past negative (たくなかった)",
+    "politeness": "plain",
+    "category": "desire",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_tai_past_negative).",
+    "conjugation_level": "N5",
+    "family_id": "desire",
+    "family_label": "Desire (たい family)",
+    "family_sort_order": 90,
+    "sort_order": 94,
+    "guided_stage": 2,
+    "genki_stage": 7,
+    "tags": [
+      "desire",
+      "n5"
+    ]
+  },
+  {
+    "id": "plain_volitional",
+    "label": "Volitional (plain: よう／おう)",
+    "politeness": "plain",
+    "category": "volitional",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.plain_volitional).",
+    "conjugation_level": "N4",
+    "family_id": "volitional",
+    "family_label": "Volitional",
+    "family_sort_order": 100,
+    "sort_order": 101,
+    "guided_stage": 2,
+    "genki_stage": 10,
+    "tags": [
+      "volitional",
+      "n4"
+    ]
+  },
+  {
+    "id": "polite_volitional",
+    "label": "Volitional polite (ましょう)",
+    "politeness": "polite",
+    "category": "volitional",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.polite_volitional).",
+    "conjugation_level": "N5",
+    "family_id": "volitional",
+    "family_label": "Volitional",
+    "family_sort_order": 100,
+    "sort_order": 102,
+    "guided_stage": 2,
+    "genki_stage": 1,
+    "tags": [
+      "volitional",
+      "n5"
+    ]
+  },
+  {
+    "id": "potential_plain",
+    "label": "Potential (can do)",
+    "politeness": "plain",
+    "category": "potential",
+    "active": true,
+    "notes": "Expected answer is provided per-verb in verbs.v2.jsonl (new_conjugations.potential_plain).",
+    "conjugation_level": "N4",
+    "family_id": "potential",
+    "family_label": "Potential",
+    "family_sort_order": 110,
+    "sort_order": 110,
+    "guided_stage": 3,
+    "genki_stage": 9,
+    "tags": [
+      "potential",
+      "n4"
+    ]
+  },
+  {
+    "id": "plain_passive",
+    "label": "Passive (受身)",
+    "politeness": "plain",
+    "category": "potential",
+    "active": true,
+    "notes": "Rule-based from research submission v1",
+    "conjugation_level": "N4",
+    "family_id": "passive",
+    "family_label": "Passive",
+    "family_sort_order": 120,
+    "sort_order": 120,
+    "guided_stage": 4,
+    "genki_stage": 14,
+    "tags": [
+      "passive",
+      "n4"
+    ]
+  },
+  {
+    "id": "plain_causative",
+    "label": "Causative (使役)",
+    "politeness": "plain",
+    "category": "permission",
+    "active": true,
+    "notes": "Rule-based from research submission v1",
+    "conjugation_level": "N4",
+    "family_id": "causative",
+    "family_label": "Causative",
+    "family_sort_order": 130,
+    "sort_order": 130,
+    "guided_stage": 4,
+    "genki_stage": 15,
+    "tags": [
+      "causative",
+      "n4"
+    ]
+  },
+  {
+    "id": "plain_causative_passive",
+    "label": "Causative-passive (使役受身)",
+    "politeness": "plain",
+    "category": "request",
+    "active": true,
+    "notes": "Rule-based from research submission v1",
+    "conjugation_level": "N4",
+    "family_id": "causative_passive",
+    "family_label": "Causative-passive",
+    "family_sort_order": 140,
+    "sort_order": 140,
+    "guided_stage": 4,
+    "genki_stage": 16,
+    "tags": [
+      "causative-passive",
+      "n4"
+    ]
+  },
+  {
+    "id": "plain_ba_conditional",
+    "label": "Conditional ～ば",
+    "politeness": "plain",
+    "category": "volitional",
+    "active": true,
+    "notes": "Rule-based from research submission v1",
+    "conjugation_level": "N4",
+    "family_id": "conditional",
+    "family_label": "Conditionals",
+    "family_sort_order": 150,
+    "sort_order": 151,
+    "guided_stage": 4,
+    "genki_stage": 15,
+    "tags": [
+      "conditional",
+      "n4"
+    ]
+  },
+  {
+    "id": "plain_tara_conditional",
+    "label": "Conditional ～たら",
+    "politeness": "plain",
+    "category": "volitional",
+    "active": true,
+    "notes": "Rule-based from research submission v1",
+    "conjugation_level": "N4",
+    "family_id": "conditional",
+    "family_label": "Conditionals",
+    "family_sort_order": 150,
+    "sort_order": 152,
+    "guided_stage": 3,
+    "genki_stage": 11,
+    "tags": [
+      "conditional",
+      "n4"
+    ]
+  },
+  {
+    "id": "plain_imperative",
+    "label": "Imperative (命令形)",
+    "politeness": "plain",
+    "category": "request",
+    "active": true,
+    "notes": "Rule-based from research submission v1",
+    "conjugation_level": "N4",
+    "family_id": "imperative_prohibitive",
+    "family_label": "Imperative / prohibitive",
+    "family_sort_order": 160,
+    "sort_order": 161,
+    "guided_stage": 4,
+    "genki_stage": 16,
+    "tags": [
+      "imperative",
+      "n4"
+    ]
+  },
+  {
+    "id": "plain_prohibitive",
+    "label": "Prohibitive (〜な)",
+    "politeness": "plain",
+    "category": "prohibition",
+    "active": true,
+    "notes": "Rule-based from research submission v1",
+    "conjugation_level": "N4",
+    "family_id": "imperative_prohibitive",
+    "family_label": "Imperative / prohibitive",
+    "family_sort_order": 160,
+    "sort_order": 162,
+    "guided_stage": 4,
+    "genki_stage": 16,
+    "tags": [
+      "prohibitive",
+      "n4"
+    ]
+  },
+  {
+    "id": "polite_nasai",
+    "label": "～なさい (Polite command)",
+    "politeness": "polite",
+    "category": "request",
+    "active": true,
+    "notes": "Rule-based from research submission v1",
+    "conjugation_level": "N4",
+    "family_id": "imperative_prohibitive",
+    "family_label": "Imperative / prohibitive",
+    "family_sort_order": 160,
+    "sort_order": 163,
+    "guided_stage": 4,
+    "genki_stage": 15,
+    "tags": [
+      "nasai",
+      "n4"
+    ]
+  },
+  {
+    "id": "plain_tari_sequence",
+    "label": "～たり～たりする (Listing actions)",
+    "politeness": "plain",
+    "category": "te_form",
+    "active": true,
+    "notes": "Rule-based from research submission v1",
+    "conjugation_level": "N4",
+    "family_id": "tari_sequence",
+    "family_label": "たり〜たりする",
+    "family_sort_order": 170,
+    "sort_order": 170,
+    "guided_stage": 3,
+    "genki_stage": 7,
+    "tags": [
+      "tari",
+      "n4"
+    ]
+  },
+  {
+    "id": "plain_te_shimau",
+    "label": "～てしまう (Completion/Regret)",
+    "politeness": "plain",
+    "category": "te_form",
+    "active": true,
+    "notes": "Rule-based from research submission v1",
+    "conjugation_level": "N4",
+    "family_id": "te_aux",
+    "family_label": "て-form auxiliaries",
+    "family_sort_order": 180,
+    "sort_order": 181,
+    "guided_stage": 3,
+    "genki_stage": 12,
+    "tags": [
+      "te-aux",
+      "n4"
+    ]
+  },
+  {
+    "id": "plain_te_oku",
+    "label": "～ておく (Preparation)",
+    "politeness": "plain",
+    "category": "te_form",
+    "active": true,
+    "notes": "Rule-based from research submission v1",
+    "conjugation_level": "N4",
+    "family_id": "te_aux",
+    "family_label": "て-form auxiliaries",
+    "family_sort_order": 180,
+    "sort_order": 182,
+    "guided_stage": 3,
+    "genki_stage": 10,
+    "tags": [
+      "te-aux",
+      "n4"
+    ]
+  },
+  {
+    "id": "plain_nagara",
+    "label": "～ながら (Simultaneous actions)",
+    "politeness": "plain",
+    "category": "te_form",
+    "active": true,
+    "notes": "Rule-based from research submission v1",
+    "conjugation_level": "N4",
+    "family_id": "te_aux",
+    "family_label": "て-form auxiliaries",
+    "family_sort_order": 180,
+    "sort_order": 183,
+    "guided_stage": 3,
+    "genki_stage": 12,
+    "tags": [
+      "te-aux",
+      "n4"
+    ]
+  },
+  {
+    "id": "plain_yasui",
+    "label": "～やすい (Easy to do)",
+    "politeness": "plain",
+    "category": "potential",
+    "active": true,
+    "notes": "Rule-based from research submission v1",
+    "conjugation_level": "N4",
+    "family_id": "ease_difficulty",
+    "family_label": "Ease / difficulty",
+    "family_sort_order": 190,
+    "sort_order": 191,
+    "guided_stage": 4,
+    "genki_stage": 13,
+    "tags": [
+      "adjective-aux",
+      "n4"
+    ]
+  },
+  {
+    "id": "plain_nikui",
+    "label": "～にくい (Hard to do)",
+    "politeness": "plain",
+    "category": "potential",
+    "active": true,
+    "notes": "Rule-based from research submission v1",
+    "conjugation_level": "N4",
+    "family_id": "ease_difficulty",
+    "family_label": "Ease / difficulty",
+    "family_sort_order": 190,
+    "sort_order": 192,
+    "guided_stage": 4,
+    "genki_stage": 13,
+    "tags": [
+      "adjective-aux",
+      "n4"
+    ]
+  },
+  {
+    "id": "plain_nakereba_ikenai",
+    "label": "Obligation (～なければいけない)",
+    "politeness": "plain",
+    "category": "request",
+    "active": true,
+    "notes": "Rule-based from research submission v1",
+    "conjugation_level": "N4",
+    "family_id": "obligation",
+    "family_label": "Obligation",
+    "family_sort_order": 200,
+    "sort_order": 200,
+    "guided_stage": 3,
+    "genki_stage": 8,
+    "tags": [
+      "obligation",
+      "n4"
+    ]
+  },
+  {
+    "id": "plain_dictionary",
+    "label": "Dictionary form (plain)",
+    "politeness": "plain",
+    "category": "dictionary",
+    "active": true,
+    "notes": "Base form (辞書形). Answer is the verb in dictionary form (hiragana-only grading).",
+    "conjugation_level": "N5",
+    "family_id": "plain_dictionary",
+    "family_label": "Dictionary form (plain)",
+    "family_sort_order": 999,
+    "sort_order": 999,
+    "guided_stage": 4,
+    "genki_stage": 16,
+    "tags": [
+      "misc"
+    ]
+  }
+]

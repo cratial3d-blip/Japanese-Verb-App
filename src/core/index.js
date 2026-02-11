@@ -299,6 +299,18 @@
     "る": "り",
   };
 
+  const E_ROW = {
+    "う": "え",
+    "く": "け",
+    "ぐ": "げ",
+    "す": "せ",
+    "つ": "て",
+    "ぬ": "ね",
+    "ぶ": "べ",
+    "む": "め",
+    "る": "れ",
+  };
+
   const IRREGULAR_TABLE = {
     "する": {
       plain_dictionary: "する",
@@ -410,6 +422,38 @@
         return stem + "ませんでした";
       case "polite_te_form":
         return stem + "てください";
+      case "plain_passive":
+        return stem + "られる";
+      case "plain_causative":
+        return stem + "させる";
+      case "plain_causative_passive":
+        return stem + "させられる";
+      case "plain_ba_conditional":
+        return stem + "れば";
+      case "plain_tara_conditional":
+        return stem + "たら";
+      case "plain_tari_sequence":
+        return stem + "たりする";
+      case "plain_imperative":
+        return stem + "ろ";
+      case "plain_prohibitive":
+        return kana + "な";
+      case "plain_te_oku":
+        return stem + "ておく";
+      case "plain_te_shimau":
+        return stem + "てしまう";
+      case "plain_nagara":
+        return stem + "ながら";
+      case "plain_yasui":
+        return stem + "やすい";
+      case "plain_nikui":
+        return stem + "にくい";
+      case "polite_nasai":
+        return stem + "なさい";
+      case "plain_nakereba_ikenai":
+        return stem + "なければいけない";
+      case "plain_nakute_mo_ii":
+        return stem + "なくてもいい";
       default:
         throw new Error(`Unsupported template: ${templateId}`);
     }
@@ -448,6 +492,50 @@
         const te = applySpecialCase("plain_te_form", kana, exceptions, godanTe(base, last));
         return te + "ください";
       }
+      case "plain_passive":
+        return base + A_ROW[last] + "れる";
+      case "plain_causative":
+        return base + A_ROW[last] + "せる";
+      case "plain_causative_passive":
+        return base + A_ROW[last] + "せられる";
+      case "plain_ba_conditional":
+        return base + E_ROW[last] + "ば";
+      case "plain_tara_conditional": {
+        const past = applySpecialCase("plain_past", kana, exceptions, godanPast(base, last));
+        return past + "ら";
+      }
+      case "plain_tari_sequence": {
+        const past = applySpecialCase("plain_past", kana, exceptions, godanPast(base, last));
+        return past + "りする";
+      }
+      case "plain_imperative":
+        return base + E_ROW[last];
+      case "plain_prohibitive":
+        return kana + "な";
+      case "plain_te_oku": {
+        const te = applySpecialCase("plain_te_form", kana, exceptions, godanTe(base, last));
+        return te + "おく";
+      }
+      case "plain_te_shimau": {
+        const te = applySpecialCase("plain_te_form", kana, exceptions, godanTe(base, last));
+        return te + "しまう";
+      }
+      case "plain_nagara":
+        return base + I_ROW[last] + "ながら";
+      case "plain_yasui":
+        return base + I_ROW[last] + "やすい";
+      case "plain_nikui":
+        return base + I_ROW[last] + "にくい";
+      case "polite_nasai":
+        return base + I_ROW[last] + "なさい";
+      case "plain_nakereba_ikenai": {
+        const negative = base + A_ROW[last] + "ない";
+        return negative.replace(/ない$/, "なければいけない");
+      }
+      case "plain_nakute_mo_ii": {
+        const negative = base + A_ROW[last] + "ない";
+        return negative.replace(/ない$/, "なくてもいい");
+      }
       default:
         throw new Error(`Unsupported template: ${templateId}`);
     }
@@ -481,10 +569,71 @@
       if (!table) {
         throw new Error(`Irregular table missing for kana: ${kana}`);
       }
-      if (!table[templateId]) {
-        throw new Error(`Unsupported template for irregular: ${templateId}`);
+
+      if (table[templateId]) {
+        return table[templateId];
       }
-      return table[templateId];
+
+      const negative = conjugate(verb, "plain_negative", exceptions);
+      const past = conjugate(verb, "plain_past", exceptions);
+      const te = conjugate(verb, "plain_te_form", exceptions);
+      const stemMap = { "する": "し", "くる": "き", "ある": "あり" };
+      const politeDictionary = conjugate(verb, "polite_dictionary", exceptions);
+      const stem = stemMap[kana] || politeDictionary.replace(/ます$/, "");
+
+      switch (templateId) {
+        case "plain_passive":
+          if (kana === "する") return "される";
+          if (kana === "くる") return "こられる";
+          if (kana === "ある") return "あられる";
+          break;
+        case "plain_causative":
+          if (kana === "する") return "させる";
+          if (kana === "くる") return "こさせる";
+          if (kana === "ある") return "あらせる";
+          break;
+        case "plain_causative_passive":
+          if (kana === "する") return "させられる";
+          if (kana === "くる") return "こさせられる";
+          if (kana === "ある") return "あらせられる";
+          break;
+        case "plain_ba_conditional":
+          if (kana === "する") return "すれば";
+          if (kana === "くる") return "くれば";
+          if (kana === "ある") return "あれば";
+          break;
+        case "plain_tara_conditional":
+          return past + "ら";
+        case "plain_tari_sequence":
+          return past + "りする";
+        case "plain_imperative":
+          if (kana === "する") return "しろ";
+          if (kana === "くる") return "こい";
+          if (kana === "ある") return "あれ";
+          break;
+        case "plain_prohibitive":
+          return kana + "な";
+        case "plain_te_oku":
+          return te + "おく";
+        case "plain_te_shimau":
+          return te + "しまう";
+        case "plain_nagara":
+          return stem + "ながら";
+        case "plain_yasui":
+          return stem + "やすい";
+        case "plain_nikui":
+          return stem + "にくい";
+        case "polite_nasai":
+          return stem + "なさい";
+        case "plain_nakereba_ikenai":
+          return negative.replace(/ない$/, "なければいけない");
+        case "plain_nakute_mo_ii":
+          return negative.replace(/ない$/, "なくてもいい");
+        default:
+          break;
+      }
+
+      throw new Error(`Unsupported template for irregular: ${templateId}`);
     }
 
     if (verbClass === "ichidan") {
@@ -509,6 +658,35 @@
     }
 
     throw new Error(`Unsupported verb_class: ${verbClass}`);
+  }
+
+  function uniqueValues(values) {
+    const out = [];
+    values.forEach((value) => {
+      if (typeof value === "string" && value.length > 0 && !out.includes(value)) {
+        out.push(value);
+      }
+    });
+    return out;
+  }
+
+  function conjugateAccepted(verb, templateId, exceptions) {
+    const canonical = conjugate(verb, templateId, exceptions);
+    if (templateId !== "plain_nakereba_ikenai") {
+      return [canonical];
+    }
+
+    const negative = conjugate(verb, "plain_negative", exceptions);
+    if (!negative.endsWith("ない")) {
+      return [canonical];
+    }
+    const stem = negative.slice(0, -2);
+    return uniqueValues([
+      canonical,
+      `${stem}なければいけない`,
+      `${stem}なきゃいけない`,
+      `${stem}なくちゃいけない`,
+    ]);
   }
 
   const STAGE_ORDER = ["LEARNING", "S1", "S2", "S3", "S4", "S5", "S6", "RETIRED"];
@@ -720,6 +898,7 @@
     normalizeAnswer: normalizeAnswer,
     toHiragana: toHiragana,
     conjugate: conjugate,
+    conjugateAccepted: conjugateAccepted,
     makeCardId: makeCardId,
     createCard: createCard,
     isDue: isDue,

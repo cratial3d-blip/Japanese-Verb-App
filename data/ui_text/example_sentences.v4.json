@@ -1,0 +1,2131 @@
+{
+  "version": "v4",
+  "scope": {
+    "templates_file": "data/conjugations/conjugation_templates.v3.json",
+    "verb_file": "data/verbs/verbs.v2.jsonl",
+    "exceptions_file": "data/exceptions/verb_exceptions.v1.json",
+    "grading": "hiragana-only",
+    "placeholder": "{V}"
+  },
+  "characters": [
+    {
+      "id": "sakura_01",
+      "name_ja": "さくら",
+      "bio_en": "A barista in Tokyo who loves cat cafes and collecting cute mugs."
+    },
+    {
+      "id": "ken_01",
+      "name_ja": "けん",
+      "bio_en": "An office worker who runs on weekends and is always searching for the best curry."
+    },
+    {
+      "id": "mio_01",
+      "name_ja": "みお",
+      "bio_en": "A university student who plays guitar and works part-time at a small bookstore."
+    },
+    {
+      "id": "takumi_01",
+      "name_ja": "たくみ",
+      "bio_en": "A train conductor who carries a camera everywhere and loves taking photos."
+    },
+    {
+      "id": "yui_01",
+      "name_ja": "ゆい",
+      "bio_en": "A nurse who relaxes by baking cookies and watching comedy shows."
+    },
+    {
+      "id": "bob_01",
+      "name_ja": "ボブ",
+      "bio_en": "A Canadian student in Japan who likes mountain biking, ramen, and his pet husky."
+    },
+    {
+      "id": "emma_01",
+      "name_ja": "エマ",
+      "bio_en": "An Australian designer who enjoys pottery, hot springs, and trying new cafes."
+    },
+    {
+      "id": "rina_01",
+      "name_ja": "りな",
+      "bio_en": "A Chinese exchange student who loves anime and is learning to cook Japanese food."
+    },
+    {
+      "id": "maria_01",
+      "name_ja": "マリア",
+      "bio_en": "A Spanish chef apprentice who practices Japanese while making paella for friends."
+    },
+    {
+      "id": "amir_01",
+      "name_ja": "アミール",
+      "bio_en": "A software developer from Egypt who likes board games and strong coffee."
+    },
+    {
+      "id": "daniel_01",
+      "name_ja": "ダニエル",
+      "bio_en": "An American pilot who listens to jazz and goes hiking on long breaks."
+    },
+    {
+      "id": "sophie_01",
+      "name_ja": "ソフィー",
+      "bio_en": "A French florist who loves cute stationery and taking walks to find new flower shops."
+    },
+    {
+      "id": "hana_01",
+      "name_ja": "はな",
+      "bio_en": "A high school student who loves basketball and has a tiny pet hamster."
+    }
+  ],
+  "lexicon": {
+    "freq": [
+      "まいにち",
+      "よく",
+      "ときどき",
+      "たまに",
+      "しゅうまつは",
+      "ひまなときは",
+      "じかんがあると",
+      "さいきん"
+    ],
+    "freq_no_wa": [
+      "まいにち",
+      "よく",
+      "ときどき",
+      "たまに",
+      "あさ",
+      "よる",
+      "さいきん",
+      "とくに"
+    ],
+    "place_de": [
+      "ここで",
+      "うちで",
+      "えきで",
+      "このへやで",
+      "きっさてんで",
+      "がっこうで",
+      "へやで",
+      "そとで"
+    ],
+    "t_wa": [
+      "きょうは",
+      "いまは",
+      "きのうは",
+      "けさは",
+      "このまえは",
+      "さっきは",
+      "よるは",
+      "しゅうまつは"
+    ],
+    "t_past": [
+      "きのう",
+      "さっき",
+      "けさ",
+      "このまえ",
+      "よる",
+      "きょう",
+      "しゅうまつに",
+      "きのうのよる"
+    ],
+    "t_past_wa": [
+      "きのうは",
+      "きょうは",
+      "さっきは",
+      "けさは",
+      "このまえは",
+      "よるは",
+      "しゅうまつは",
+      "きのうのよるは"
+    ],
+    "neg_adv": [
+      "あんまり",
+      "ぜんぜん",
+      "あまり",
+      "ほとんど",
+      "まだ",
+      "もう",
+      "できれば",
+      "なるべく"
+    ],
+    "te_adv": [
+      "ちょっと",
+      "もう",
+      "ゆっくり",
+      "ちゃんと",
+      "すぐ",
+      "あとで",
+      "いっしょに",
+      "まず"
+    ],
+    "req_prefix": [
+      "すみません、",
+      "もういちど",
+      "こちらに",
+      "ちょっと",
+      "ゆっくり",
+      "あとで",
+      "まず",
+      "いっしょに"
+    ],
+    "teiru_adv": [
+      "いま",
+      "ちょうど",
+      "さいきん",
+      "まいにち",
+      "ずっと",
+      "よく",
+      "まだ",
+      "いまも"
+    ],
+    "teiru_past_adv": [
+      "さっきまで",
+      "きのうは",
+      "けさは",
+      "さっき",
+      "よるは",
+      "このまえは",
+      "きのうのよるは",
+      "さっきまでずっと"
+    ],
+    "tai_adv": [
+      "いま",
+      "きょうは",
+      "ほんとに",
+      "いつか",
+      "できれば",
+      "こんど",
+      "まず",
+      "あとで"
+    ],
+    "perm_prefix": [
+      "いま",
+      "ここで",
+      "ちょっと",
+      "それ、",
+      "じゃ、",
+      "これ、",
+      "もう",
+      "このへやで"
+    ],
+    "prohibit_prefix": [
+      "ここで",
+      "それ、",
+      "いま",
+      "ぜったい",
+      "ほんとに",
+      "このへやで",
+      "ここでは",
+      "いまは"
+    ],
+    "neg_req_prefix": [
+      "すみません、",
+      "ここで",
+      "いまは",
+      "できれば",
+      "あんまり",
+      "もう",
+      "ちょっと",
+      "このへやで"
+    ],
+    "voli_prefix": [
+      "じゃ、",
+      "そろそろ",
+      "いっしょに",
+      "まず",
+      "あとで",
+      "きょうは",
+      "こんど",
+      "よし、"
+    ],
+    "voli_polite_prefix": [
+      "いっしょに",
+      "じゃ、",
+      "そろそろ",
+      "まず",
+      "あとで",
+      "きょうは",
+      "みんなで",
+      "よし、"
+    ],
+    "pot_prefix": [
+      "やっと",
+      "これなら",
+      "きょうは",
+      "いまなら",
+      "たぶん",
+      "もう",
+      "ほんとに",
+      "これ、"
+    ],
+    "tail_plain": [
+      "。",
+      "よ。",
+      "ね。",
+      "な。"
+    ],
+    "tail_polite": [
+      "。",
+      "よ。",
+      "ね。"
+    ],
+    "tail_te": [
+      "。",
+      "ね。",
+      "よ。"
+    ]
+  },
+  "templates": {
+    "plain_dictionary": {
+      "label": "Dictionary form (plain)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "ボブは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "bob_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          }
+        ]
+      }
+    },
+    "plain_negative": {
+      "label": "Plain negative (ない-form)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{t_wa}{neg_adv}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "{neg_adv}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{neg_adv}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{t_wa}{neg_adv}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "{neg_adv}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{neg_adv}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{t_wa}{neg_adv}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "{neg_adv}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          }
+        ]
+      }
+    },
+    "plain_past": {
+      "label": "Plain past (た-form)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{t_past}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{t_past}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{t_past}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "ボブは{t_past}{V}{tail_plain}",
+            "character_ids": [
+              "bob_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{t_past}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "やっと{V}{tail_plain}",
+            "character_ids": []
+          }
+        ]
+      }
+    },
+    "plain_past_negative": {
+      "label": "Plain past negative (なかった-form)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{t_past_wa}ぜんぜん{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "はなは{t_past_wa}{V}。",
+            "character_ids": [
+              "hana_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{t_past_wa}あんまり{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{t_past_wa}{V}。",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{t_past_wa}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "ぜんぜん{V}。",
+            "character_ids": []
+          }
+        ]
+      }
+    },
+    "plain_te_form": {
+      "label": "Te-form (て／で-form)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{te_adv}{V}{tail_te}",
+            "character_ids": []
+          },
+          {
+            "text": "{place_de}{V}{tail_te}",
+            "character_ids": []
+          },
+          {
+            "text": "たくみ、{te_adv}{V}{tail_te}",
+            "character_ids": [
+              "takumi_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{te_adv}{V}{tail_te}",
+            "character_ids": []
+          },
+          {
+            "text": "{place_de}{V}{tail_te}",
+            "character_ids": []
+          },
+          {
+            "text": "エマ、{te_adv}{V}{tail_te}",
+            "character_ids": [
+              "emma_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{te_adv}{V}{tail_te}",
+            "character_ids": []
+          },
+          {
+            "text": "もういちど{V}{tail_te}",
+            "character_ids": []
+          }
+        ]
+      }
+    },
+    "polite_dictionary": {
+      "label": "Polite present (ます-form)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{freq}{V}{tail_polite}",
+            "character_ids": []
+          },
+          {
+            "text": "{place_de}{V}{tail_polite}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_polite}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{place_de}{V}{tail_polite}",
+            "character_ids": []
+          },
+          {
+            "text": "{freq}{V}{tail_polite}",
+            "character_ids": []
+          },
+          {
+            "text": "ボブは{freq_no_wa}{V}{tail_polite}",
+            "character_ids": [
+              "bob_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{freq}{V}{tail_polite}",
+            "character_ids": []
+          },
+          {
+            "text": "{place_de}{V}{tail_polite}",
+            "character_ids": []
+          },
+          {
+            "text": "ダニエルは{freq_no_wa}{V}{tail_polite}",
+            "character_ids": [
+              "daniel_01"
+            ]
+          }
+        ]
+      }
+    },
+    "polite_negative": {
+      "label": "Polite negative (ません-form)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{t_wa}あまり{V}{tail_polite}",
+            "character_ids": []
+          },
+          {
+            "text": "{t_wa}ぜんぜん{V}{tail_polite}",
+            "character_ids": []
+          },
+          {
+            "text": "ゆいは{t_wa}{V}{tail_polite}",
+            "character_ids": [
+              "yui_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{t_wa}ぜんぜん{V}{tail_polite}",
+            "character_ids": []
+          },
+          {
+            "text": "{t_wa}あまり{V}{tail_polite}",
+            "character_ids": []
+          },
+          {
+            "text": "はなは{t_wa}{V}{tail_polite}",
+            "character_ids": [
+              "hana_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{t_wa}{V}{tail_polite}",
+            "character_ids": []
+          },
+          {
+            "text": "{t_wa}ぜんぜん{V}{tail_polite}",
+            "character_ids": []
+          },
+          {
+            "text": "あまり{V}{tail_polite}",
+            "character_ids": []
+          }
+        ]
+      }
+    },
+    "polite_past": {
+      "label": "Polite past (ました-form)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{t_past}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "ゆいは{t_past}{V}。",
+            "character_ids": [
+              "yui_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{t_past}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "マリアは{t_past}{V}。",
+            "character_ids": [
+              "maria_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{t_past}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "やっと{V}。",
+            "character_ids": []
+          }
+        ]
+      }
+    },
+    "polite_past_negative": {
+      "label": "Polite past negative (ませんでした-form)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{t_past_wa}あまり{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "はなは{t_past_wa}{V}。",
+            "character_ids": [
+              "hana_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{t_past_wa}ぜんぜん{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "りなは{t_past_wa}{V}。",
+            "character_ids": [
+              "rina_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{t_past_wa}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "ぜんぜん{V}。",
+            "character_ids": []
+          }
+        ]
+      }
+    },
+    "polite_te_form": {
+      "label": "Request (てください)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{req_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "ソフィーさん、{V}。",
+            "character_ids": [
+              "sophie_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{req_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "ボブさん、{V}。",
+            "character_ids": [
+              "bob_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{req_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "もういちど{V}。",
+            "character_ids": []
+          }
+        ]
+      },
+      "overrides": [
+        {
+          "verb_ids": [
+            "ある_exist_have_01",
+            "ある_exist_have_02"
+          ],
+          "disabled": true
+        }
+      ]
+    },
+    "plain_te_iru": {
+      "label": "Progressive/state (ている)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{teiru_adv}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "さくらはいま{V}。",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{teiru_adv}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "アミールはいま{V}。",
+            "character_ids": [
+              "amir_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{teiru_adv}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "きょうはずっと{V}。",
+            "character_ids": []
+          }
+        ]
+      },
+      "overrides": [
+        {
+          "verb_ids": [
+            "ある_exist_have_01",
+            "ある_exist_have_02"
+          ],
+          "disabled": true
+        }
+      ]
+    },
+    "polite_te_imasu": {
+      "label": "Progressive/state polite (ています)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{teiru_adv}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "みおはいま{V}。",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{teiru_adv}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "けんはいま{V}。",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{teiru_adv}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "きょうはずっと{V}。",
+            "character_ids": []
+          }
+        ]
+      },
+      "overrides": [
+        {
+          "verb_ids": [
+            "ある_exist_have_01",
+            "ある_exist_have_02"
+          ],
+          "disabled": true
+        }
+      ]
+    },
+    "polite_te_imasen": {
+      "label": "Progressive/state polite negative (ていません)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{t_wa}まだ{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "さくらはいま{V}。",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{t_wa}あまり{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "けんはいま{V}。",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{t_wa}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "まだ{V}。",
+            "character_ids": []
+          }
+        ]
+      },
+      "overrides": [
+        {
+          "verb_ids": [
+            "ある_exist_have_01",
+            "ある_exist_have_02"
+          ],
+          "disabled": true
+        }
+      ]
+    },
+    "polite_te_imashita": {
+      "label": "Progressive/state polite past (ていました)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{teiru_past_adv}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "たくみは{teiru_past_adv}{V}。",
+            "character_ids": [
+              "takumi_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{teiru_past_adv}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{teiru_past_adv}{V}。",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{teiru_past_adv}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "さっきまで{V}。",
+            "character_ids": []
+          }
+        ]
+      },
+      "overrides": [
+        {
+          "verb_ids": [
+            "ある_exist_have_01",
+            "ある_exist_have_02"
+          ],
+          "disabled": true
+        }
+      ]
+    },
+    "polite_te_imasen_deshita": {
+      "label": "Progressive/state polite past negative (ていませんでした)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{t_past_wa}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{t_past_wa}{V}。",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{t_past_wa}あまり{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "りなは{t_past_wa}{V}。",
+            "character_ids": [
+              "rina_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{t_past_wa}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "さっきは{V}。",
+            "character_ids": []
+          }
+        ]
+      },
+      "overrides": [
+        {
+          "verb_ids": [
+            "ある_exist_have_01",
+            "ある_exist_have_02"
+          ],
+          "disabled": true
+        }
+      ]
+    },
+    "plain_tai": {
+      "label": "Desire (たい)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{tai_adv}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "エマはいま{V}。",
+            "character_ids": [
+              "emma_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{tai_adv}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "ボブはいま{V}。",
+            "character_ids": [
+              "bob_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{tai_adv}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "できれば{V}。",
+            "character_ids": []
+          }
+        ]
+      },
+      "overrides": [
+        {
+          "verb_ids": [
+            "ある_exist_have_01",
+            "ある_exist_have_02"
+          ],
+          "disabled": true
+        }
+      ]
+    },
+    "plain_tai_negative": {
+      "label": "Desire negative (たくない)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{tai_adv}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "できれば{V}。",
+            "character_ids": []
+          }
+        ],
+        "godan": [
+          {
+            "text": "{tai_adv}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "あんまり{V}。",
+            "character_ids": []
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{tai_adv}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "できれば{V}。",
+            "character_ids": []
+          }
+        ]
+      },
+      "overrides": [
+        {
+          "verb_ids": [
+            "ある_exist_have_01",
+            "ある_exist_have_02"
+          ],
+          "disabled": true
+        }
+      ]
+    },
+    "plain_tai_past": {
+      "label": "Desire past (たかった)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{t_past_wa}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "ずっと{V}。",
+            "character_ids": []
+          }
+        ],
+        "godan": [
+          {
+            "text": "{t_past_wa}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "ボブは{t_past_wa}{V}。",
+            "character_ids": [
+              "bob_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{t_past_wa}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "ずっと{V}。",
+            "character_ids": []
+          }
+        ]
+      },
+      "overrides": [
+        {
+          "verb_ids": [
+            "ある_exist_have_01",
+            "ある_exist_have_02"
+          ],
+          "disabled": true
+        }
+      ]
+    },
+    "plain_tai_past_negative": {
+      "label": "Desire past negative (たくなかった)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{t_past_wa}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "あんまり{V}。",
+            "character_ids": []
+          }
+        ],
+        "godan": [
+          {
+            "text": "{t_past_wa}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "エマは{t_past_wa}{V}。",
+            "character_ids": [
+              "emma_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{t_past_wa}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "あんまり{V}。",
+            "character_ids": []
+          }
+        ]
+      },
+      "overrides": [
+        {
+          "verb_ids": [
+            "ある_exist_have_01",
+            "ある_exist_have_02"
+          ],
+          "disabled": true
+        }
+      ]
+    },
+    "plain_te_mo_ii": {
+      "label": "Permission (てもいい)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{perm_prefix}{V}？",
+            "character_ids": []
+          },
+          {
+            "text": "りな、それ{V}？",
+            "character_ids": [
+              "rina_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{perm_prefix}{V}？",
+            "character_ids": []
+          },
+          {
+            "text": "ボブ、いま{V}？",
+            "character_ids": [
+              "bob_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{perm_prefix}{V}？",
+            "character_ids": []
+          },
+          {
+            "text": "それ、{V}？",
+            "character_ids": []
+          }
+        ]
+      }
+    },
+    "plain_te_wa_ikenai": {
+      "label": "Prohibition (てはいけない)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{prohibit_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "はな、ここで{V}。",
+            "character_ids": [
+              "hana_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{prohibit_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "ボブ、ここで{V}。",
+            "character_ids": [
+              "bob_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{prohibit_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "ぜったい{V}。",
+            "character_ids": []
+          }
+        ]
+      },
+      "overrides": [
+        {
+          "verb_ids": [
+            "ある_exist_have_01",
+            "ある_exist_have_02"
+          ],
+          "examples": [
+            {
+              "text": "ここに{V}。",
+              "character_ids": []
+            },
+            {
+              "text": "そこに{V}。",
+              "character_ids": []
+            }
+          ]
+        }
+      ]
+    },
+    "plain_nai_de_kudasai": {
+      "label": "Negative request (ないでください)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{neg_req_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "さくらさん、{V}。",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{neg_req_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "けんさん、{V}。",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{neg_req_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "できれば{V}。",
+            "character_ids": []
+          }
+        ]
+      },
+      "overrides": [
+        {
+          "verb_ids": [
+            "ある_exist_have_01",
+            "ある_exist_have_02"
+          ],
+          "disabled": true
+        }
+      ]
+    },
+    "plain_volitional": {
+      "label": "Volitional (plain)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{voli_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "さくら、{V}。",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{voli_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "ボブ、{V}。",
+            "character_ids": [
+              "bob_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{voli_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "じゃあ、{V}。",
+            "character_ids": []
+          }
+        ]
+      },
+      "overrides": [
+        {
+          "verb_ids": [
+            "ある_exist_have_01",
+            "ある_exist_have_02"
+          ],
+          "disabled": true
+        }
+      ]
+    },
+    "polite_volitional": {
+      "label": "Volitional polite (ましょう)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{voli_polite_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "さくらと{V}。",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{voli_polite_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "ボブと{V}。",
+            "character_ids": [
+              "bob_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{voli_polite_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "じゃあ、{V}。",
+            "character_ids": []
+          }
+        ]
+      },
+      "overrides": [
+        {
+          "verb_ids": [
+            "ある_exist_have_01",
+            "ある_exist_have_02"
+          ],
+          "disabled": true
+        }
+      ]
+    },
+    "potential_plain": {
+      "label": "Potential (can do)",
+      "by_verb_class": {
+        "ichidan": [
+          {
+            "text": "{pot_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "ゆいはもう{V}。",
+            "character_ids": [
+              "yui_01"
+            ]
+          }
+        ],
+        "godan": [
+          {
+            "text": "{pot_prefix}{V}？",
+            "character_ids": []
+          },
+          {
+            "text": "ダニエルはもう{V}。",
+            "character_ids": [
+              "daniel_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{pot_prefix}{V}。",
+            "character_ids": []
+          },
+          {
+            "text": "これなら{V}。",
+            "character_ids": []
+          }
+        ]
+      },
+      "overrides": [
+        {
+          "verb_ids": [
+            "ある_exist_have_01",
+            "ある_exist_have_02"
+          ],
+          "examples": [
+            {
+              "text": "そんなこと、{V}？",
+              "character_ids": []
+            },
+            {
+              "text": "それ、{V}？",
+              "character_ids": []
+            }
+          ]
+        }
+      ]
+    },
+    "plain_passive": {
+      "label": "Passive (受身)",
+      "by_verb_class": {
+        "godan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "ichidan": [
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ]
+      },
+      "overrides": []
+    },
+    "plain_causative": {
+      "label": "Causative (使役)",
+      "by_verb_class": {
+        "godan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "ichidan": [
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ]
+      },
+      "overrides": []
+    },
+    "plain_causative_passive": {
+      "label": "Causative-passive (使役受身)",
+      "by_verb_class": {
+        "godan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "ichidan": [
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ]
+      },
+      "overrides": []
+    },
+    "plain_ba_conditional": {
+      "label": "Conditional ～ば",
+      "by_verb_class": {
+        "godan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "ichidan": [
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ]
+      },
+      "overrides": []
+    },
+    "plain_tara_conditional": {
+      "label": "Conditional ～たら",
+      "by_verb_class": {
+        "godan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "ichidan": [
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ]
+      },
+      "overrides": []
+    },
+    "plain_tari_sequence": {
+      "label": "たり～たりする",
+      "by_verb_class": {
+        "godan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "ichidan": [
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ]
+      },
+      "overrides": []
+    },
+    "plain_imperative": {
+      "label": "Imperative (命令形)",
+      "by_verb_class": {
+        "godan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "ichidan": [
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ]
+      },
+      "overrides": []
+    },
+    "plain_prohibitive": {
+      "label": "Prohibitive (辞書形 + な)",
+      "by_verb_class": {
+        "godan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "ichidan": [
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ]
+      },
+      "overrides": []
+    },
+    "plain_te_oku": {
+      "label": "～ておく",
+      "by_verb_class": {
+        "godan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "ichidan": [
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ]
+      },
+      "overrides": []
+    },
+    "plain_nagara": {
+      "label": "～ながら",
+      "by_verb_class": {
+        "godan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "ichidan": [
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ]
+      },
+      "overrides": []
+    },
+    "plain_yasui": {
+      "label": "～やすい",
+      "by_verb_class": {
+        "godan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "ichidan": [
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ]
+      },
+      "overrides": []
+    },
+    "plain_nikui": {
+      "label": "～にくい",
+      "by_verb_class": {
+        "godan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "ichidan": [
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ]
+      },
+      "overrides": []
+    },
+    "polite_nasai": {
+      "label": "～なさい",
+      "by_verb_class": {
+        "godan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "ichidan": [
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ]
+      },
+      "overrides": []
+    },
+    "plain_nakereba_ikenai": {
+      "label": "Obligation (～なければいけない)",
+      "by_verb_class": {
+        "godan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "ichidan": [
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ]
+      },
+      "overrides": []
+    },
+    "plain_nakute_mo_ii": {
+      "label": "Negative permission (～なくてもいい)",
+      "by_verb_class": {
+        "godan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "ichidan": [
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ]
+      },
+      "overrides": []
+    },
+    "plain_te_shimau": {
+      "label": "～てしまう",
+      "by_verb_class": {
+        "godan": [
+          {
+            "text": "{freq}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "けんは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "ken_01"
+            ]
+          }
+        ],
+        "ichidan": [
+          {
+            "text": "{t_wa}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "みおは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "mio_01"
+            ]
+          }
+        ],
+        "irregular": [
+          {
+            "text": "{place_de}{V}{tail_plain}",
+            "character_ids": []
+          },
+          {
+            "text": "さくらは{freq_no_wa}{V}{tail_plain}",
+            "character_ids": [
+              "sakura_01"
+            ]
+          }
+        ]
+      },
+      "overrides": []
+    }
+  },
+  "display": {
+    "detail_label_en": "Example",
+    "usage": "Replace {V} with the expected conjugation (hiragana). v3 also supports lexicon placeholders like {t_past} or {place_de}."
+  }
+}

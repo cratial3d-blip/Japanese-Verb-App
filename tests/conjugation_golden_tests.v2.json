@@ -1,0 +1,83 @@
+{
+  "version": "v2",
+  "generated_on": "2026-02-10",
+  "inputs": {
+    "verbs_file": "data/verbs/verbs.v2.jsonl",
+    "exceptions_file": "data/exceptions/verb_exceptions.v1.json",
+    "templates_file": "data/conjugations/conjugation_templates.v3.json"
+  },
+  "notes": [
+    "Covers v3 expansion templates with godan, ichidan, irregular, and いく edge cases."
+  ],
+  "cases": [
+    { "case_id": "N201", "verb_id": "よむ_01", "template_id": "plain_passive", "expected_kana": "よまれる" },
+    { "case_id": "N202", "verb_id": "たべる_01", "template_id": "plain_passive", "expected_kana": "たべられる" },
+    { "case_id": "N203", "verb_id": "くる_01", "template_id": "plain_passive", "expected_kana": "こられる" },
+
+    { "case_id": "N204", "verb_id": "よむ_01", "template_id": "plain_causative", "expected_kana": "よませる" },
+    { "case_id": "N205", "verb_id": "たべる_01", "template_id": "plain_causative", "expected_kana": "たべさせる" },
+    { "case_id": "N206", "verb_id": "くる_01", "template_id": "plain_causative", "expected_kana": "こさせる" },
+
+    { "case_id": "N207", "verb_id": "よむ_01", "template_id": "plain_causative_passive", "expected_kana": "よませられる" },
+    { "case_id": "N208", "verb_id": "たべる_01", "template_id": "plain_causative_passive", "expected_kana": "たべさせられる" },
+    { "case_id": "N209", "verb_id": "する_01", "template_id": "plain_causative_passive", "expected_kana": "させられる" },
+
+    { "case_id": "N210", "verb_id": "よむ_01", "template_id": "plain_ba_conditional", "expected_kana": "よめば" },
+    { "case_id": "N211", "verb_id": "たべる_01", "template_id": "plain_ba_conditional", "expected_kana": "たべれば" },
+    { "case_id": "N212", "verb_id": "する_01", "template_id": "plain_ba_conditional", "expected_kana": "すれば" },
+
+    { "case_id": "N213", "verb_id": "よむ_01", "template_id": "plain_tara_conditional", "expected_kana": "よんだら" },
+    { "case_id": "N214", "verb_id": "たべる_01", "template_id": "plain_tara_conditional", "expected_kana": "たべたら" },
+    { "case_id": "N215", "verb_id": "する_01", "template_id": "plain_tara_conditional", "expected_kana": "したら" },
+    { "case_id": "N216", "verb_id": "いく_01", "template_id": "plain_tara_conditional", "expected_kana": "いったら" },
+
+    { "case_id": "N217", "verb_id": "よむ_01", "template_id": "plain_tari_sequence", "expected_kana": "よんだりする" },
+    { "case_id": "N218", "verb_id": "たべる_01", "template_id": "plain_tari_sequence", "expected_kana": "たべたりする" },
+    { "case_id": "N219", "verb_id": "する_01", "template_id": "plain_tari_sequence", "expected_kana": "したりする" },
+    { "case_id": "N220", "verb_id": "いく_01", "template_id": "plain_tari_sequence", "expected_kana": "いったりする" },
+
+    { "case_id": "N221", "verb_id": "よむ_01", "template_id": "plain_imperative", "expected_kana": "よめ" },
+    { "case_id": "N222", "verb_id": "たべる_01", "template_id": "plain_imperative", "expected_kana": "たべろ" },
+    { "case_id": "N223", "verb_id": "くる_01", "template_id": "plain_imperative", "expected_kana": "こい" },
+
+    { "case_id": "N224", "verb_id": "よむ_01", "template_id": "plain_prohibitive", "expected_kana": "よむな" },
+    { "case_id": "N225", "verb_id": "たべる_01", "template_id": "plain_prohibitive", "expected_kana": "たべるな" },
+    { "case_id": "N226", "verb_id": "する_01", "template_id": "plain_prohibitive", "expected_kana": "するな" },
+
+    { "case_id": "N227", "verb_id": "よむ_01", "template_id": "plain_te_oku", "expected_kana": "よんでおく" },
+    { "case_id": "N228", "verb_id": "たべる_01", "template_id": "plain_te_oku", "expected_kana": "たべておく" },
+    { "case_id": "N229", "verb_id": "する_01", "template_id": "plain_te_oku", "expected_kana": "しておく" },
+    { "case_id": "N230", "verb_id": "いく_01", "template_id": "plain_te_oku", "expected_kana": "いっておく" },
+
+    { "case_id": "N231", "verb_id": "よむ_01", "template_id": "plain_nagara", "expected_kana": "よみながら" },
+    { "case_id": "N232", "verb_id": "たべる_01", "template_id": "plain_nagara", "expected_kana": "たべながら" },
+    { "case_id": "N233", "verb_id": "する_01", "template_id": "plain_nagara", "expected_kana": "しながら" },
+
+    { "case_id": "N234", "verb_id": "よむ_01", "template_id": "plain_yasui", "expected_kana": "よみやすい" },
+    { "case_id": "N235", "verb_id": "たべる_01", "template_id": "plain_yasui", "expected_kana": "たべやすい" },
+    { "case_id": "N236", "verb_id": "する_01", "template_id": "plain_yasui", "expected_kana": "しやすい" },
+
+    { "case_id": "N237", "verb_id": "よむ_01", "template_id": "plain_nikui", "expected_kana": "よみにくい" },
+    { "case_id": "N238", "verb_id": "たべる_01", "template_id": "plain_nikui", "expected_kana": "たべにくい" },
+    { "case_id": "N239", "verb_id": "する_01", "template_id": "plain_nikui", "expected_kana": "しにくい" },
+
+    { "case_id": "N240", "verb_id": "よむ_01", "template_id": "polite_nasai", "expected_kana": "よみなさい" },
+    { "case_id": "N241", "verb_id": "たべる_01", "template_id": "polite_nasai", "expected_kana": "たべなさい" },
+    { "case_id": "N242", "verb_id": "する_01", "template_id": "polite_nasai", "expected_kana": "しなさい" },
+
+    { "case_id": "N243", "verb_id": "よむ_01", "template_id": "plain_nakereba_ikenai", "expected_kana": "よまなければいけない" },
+    { "case_id": "N244", "verb_id": "たべる_01", "template_id": "plain_nakereba_ikenai", "expected_kana": "たべなければいけない" },
+    { "case_id": "N245", "verb_id": "する_01", "template_id": "plain_nakereba_ikenai", "expected_kana": "しなければいけない" },
+    { "case_id": "N246", "verb_id": "ある_exist_have_01", "template_id": "plain_nakereba_ikenai", "expected_kana": "なければいけない" },
+
+    { "case_id": "N247", "verb_id": "よむ_01", "template_id": "plain_nakute_mo_ii", "expected_kana": "よまなくてもいい" },
+    { "case_id": "N248", "verb_id": "たべる_01", "template_id": "plain_nakute_mo_ii", "expected_kana": "たべなくてもいい" },
+    { "case_id": "N249", "verb_id": "する_01", "template_id": "plain_nakute_mo_ii", "expected_kana": "しなくてもいい" },
+    { "case_id": "N250", "verb_id": "ある_exist_have_01", "template_id": "plain_nakute_mo_ii", "expected_kana": "なくてもいい" },
+
+    { "case_id": "N251", "verb_id": "よむ_01", "template_id": "plain_te_shimau", "expected_kana": "よんでしまう" },
+    { "case_id": "N252", "verb_id": "たべる_01", "template_id": "plain_te_shimau", "expected_kana": "たべてしまう" },
+    { "case_id": "N253", "verb_id": "する_01", "template_id": "plain_te_shimau", "expected_kana": "してしまう" },
+    { "case_id": "N254", "verb_id": "いく_01", "template_id": "plain_te_shimau", "expected_kana": "いってしまう" }
+  ]
+}

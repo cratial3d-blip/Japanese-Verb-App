@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/learning_path.schema.json",
+  "title": "LearningPath",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "id",
+    "label",
+    "windows",
+    "gates",
+    "stages"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^v\\d+$"
+    },
+    "id": {
+      "type": "string",
+      "enum": ["guided", "textbook_genki"]
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "recommended": {
+      "type": "boolean"
+    },
+    "windows": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "confusable_pairs": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 200,
+      "items": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        }
+      }
+    },
+    "confusion_pair_trigger_errors": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20
+    },
+    "confusion_pair_window_hours": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 240
+    },
+    "confusion_boost_ratio": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "stages": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 80,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "template_ids"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[a-z0-9_]+$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 140
+          },
+          "template_ids": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 40,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9_]+$"
+            }
+          }
+        }
+      }
+    }
+  }
+}

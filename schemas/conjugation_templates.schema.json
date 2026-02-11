@@ -68,6 +68,47 @@
           "N4",
           "unknown"
         ]
+      },
+      "family_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80,
+        "pattern": "^[a-z0-9_]+$"
+      },
+      "family_label": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      },
+      "family_sort_order": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 10000
+      },
+      "sort_order": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 10000
+      },
+      "guided_stage": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "genki_stage": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "tags": {
+        "type": "array",
+        "minItems": 0,
+        "maxItems": 20,
+        "items": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        }
       }
     }
   }

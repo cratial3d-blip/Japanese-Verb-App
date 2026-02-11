@@ -1,0 +1,123 @@
+{
+  "version": "v1",
+  "id": "textbook_genki",
+  "label": "Textbook-Aligned Path (Genki)",
+  "recommended": false,
+  "windows": {
+    "intro_days": 2,
+    "consolidation_days": 6,
+    "counts_intro": { "current": 7, "previous": 2, "weakness": 1 },
+    "counts_consolidation": { "current": 5, "previous": 3, "weakness": 2 },
+    "counts_maintenance": { "current": 3, "previous": 5, "weakness": 2 }
+  },
+  "gates": {
+    "min_answered": 30,
+    "min_accuracy": 0.8,
+    "min_accuracy_by_class": {
+      "godan": 0.75,
+      "ichidan": 0.75,
+      "irregular": 0.75
+    },
+    "hold_days_on_fail": 1
+  },
+  "stages": [
+    {
+      "id": "g01_polite",
+      "label": "Genki I Ch3-5 polite basics",
+      "template_ids": [
+        "polite_dictionary",
+        "polite_negative",
+        "polite_past",
+        "polite_past_negative",
+        "polite_volitional"
+      ]
+    },
+    {
+      "id": "g02_te_form",
+      "label": "Genki I Ch6 te-form",
+      "template_ids": ["plain_te_form"]
+    },
+    {
+      "id": "g03_requests_permission",
+      "label": "Genki I Ch6 requests and permission/prohibition",
+      "template_ids": ["polite_te_form", "plain_te_mo_ii", "plain_te_wa_ikenai"]
+    },
+    {
+      "id": "g04_progressive",
+      "label": "Genki I Ch7 progressive/state",
+      "template_ids": [
+        "plain_te_iru",
+        "polite_te_imasu",
+        "polite_te_imasen",
+        "polite_te_imashita",
+        "polite_te_imasen_deshita"
+      ]
+    },
+    {
+      "id": "g05_plain_negative",
+      "label": "Genki I Ch8 plain negative and negative request",
+      "template_ids": ["plain_negative", "plain_nai_de_kudasai"]
+    },
+    {
+      "id": "g06_plain_past",
+      "label": "Genki I Ch9 plain past forms",
+      "template_ids": ["plain_past", "plain_past_negative"]
+    },
+    {
+      "id": "g07_desire_tari",
+      "label": "Genki I Ch11 desire and たり",
+      "template_ids": [
+        "plain_tai",
+        "plain_tai_negative",
+        "plain_tai_past",
+        "plain_tai_past_negative",
+        "plain_tari_sequence"
+      ]
+    },
+    {
+      "id": "g08_obligation",
+      "label": "Genki I Ch12 obligation",
+      "template_ids": ["plain_nakereba_ikenai"]
+    },
+    {
+      "id": "g09_potential",
+      "label": "Genki II Ch13 potential",
+      "template_ids": ["potential_plain"]
+    },
+    {
+      "id": "g10_volitional_teoku",
+      "label": "Genki II Ch15 volitional plain and ておく",
+      "template_ids": ["plain_volitional", "plain_te_oku"]
+    },
+    {
+      "id": "g11_tara_nakutemoii",
+      "label": "Genki II Ch17 たら and なくてもいい",
+      "template_ids": ["plain_tara_conditional", "plain_nakute_mo_ii"]
+    },
+    {
+      "id": "g12_teshimau_nagara",
+      "label": "Genki II Ch18 てしまう and ながら",
+      "template_ids": ["plain_te_shimau", "plain_nagara"]
+    },
+    {
+      "id": "g13_yasui_nikui",
+      "label": "Genki II Ch20 やすい/にくい",
+      "template_ids": ["plain_yasui", "plain_nikui"]
+    },
+    {
+      "id": "g14_passive",
+      "label": "Genki II Ch21 passive",
+      "template_ids": ["plain_passive"]
+    },
+    {
+      "id": "g15_ba_causative_nasai",
+      "label": "Genki II Ch22 ば / causative / なさい",
+      "template_ids": ["plain_ba_conditional", "plain_causative", "polite_nasai"]
+    },
+    {
+      "id": "g16_causative_passive_imperative",
+      "label": "Genki II Ch23 causative-passive and imperative/prohibitive",
+      "template_ids": ["plain_causative_passive", "plain_imperative", "plain_prohibitive"]
+    }
+  ]
+}

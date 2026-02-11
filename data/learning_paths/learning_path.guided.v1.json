@@ -1,0 +1,184 @@
+{
+  "version": "v1",
+  "id": "guided",
+  "label": "Guided Path",
+  "recommended": true,
+  "windows": {
+    "intro_days": 2,
+    "consolidation_days": 6,
+    "mid_course_unlocked_forms": 8,
+    "counts_intro": { "current": 6, "previous": 3, "weakness": 1 },
+    "counts_consolidation": { "current": 4, "previous": 4, "weakness": 2 },
+    "counts_maintenance": { "current": 3, "previous": 5, "weakness": 2 },
+    "counts_mid_course": { "current": 2, "recent": 5, "weakness": 3 }
+  },
+  "gates": {
+    "min_answered": 24,
+    "min_accuracy": 0.8,
+    "min_accuracy_by_class": {
+      "godan": 0.75,
+      "ichidan": 0.75,
+      "irregular": 0.7
+    },
+    "hold_days_on_fail": 2
+  },
+  "confusable_pairs": [
+    ["plain_negative", "plain_past"],
+    ["plain_past", "plain_past_negative"],
+    ["plain_te_iru", "plain_te_oku"],
+    ["plain_te_iru", "plain_te_shimau"],
+    ["plain_te_mo_ii", "plain_te_wa_ikenai"],
+    ["plain_te_mo_ii", "plain_nakute_mo_ii"],
+    ["potential_plain", "plain_passive"],
+    ["plain_causative", "plain_passive"],
+    ["plain_causative", "plain_causative_passive"],
+    ["plain_tara_conditional", "plain_ba_conditional"],
+    ["plain_volitional", "polite_volitional"]
+  ],
+  "confusion_pair_trigger_errors": 2,
+  "confusion_pair_window_hours": 48,
+  "confusion_boost_ratio": 0.2,
+  "stages": [
+    {
+      "id": "s01_polite",
+      "label": "Polite (ます family)",
+      "template_ids": [
+        "polite_dictionary",
+        "polite_negative",
+        "polite_past",
+        "polite_past_negative"
+      ]
+    },
+    {
+      "id": "s02_te",
+      "label": "Te-form",
+      "template_ids": ["plain_te_form"]
+    },
+    {
+      "id": "s03_plain_negative",
+      "label": "Plain negative",
+      "template_ids": ["plain_negative"]
+    },
+    {
+      "id": "s04_plain_past",
+      "label": "Plain past",
+      "template_ids": ["plain_past"]
+    },
+    {
+      "id": "s05_plain_past_negative",
+      "label": "Plain past negative",
+      "template_ids": ["plain_past_negative"]
+    },
+    {
+      "id": "s06_requests",
+      "label": "Requests",
+      "template_ids": ["polite_te_form", "plain_nai_de_kudasai"]
+    },
+    {
+      "id": "s07_progressive",
+      "label": "Progressive / state",
+      "template_ids": [
+        "plain_te_iru",
+        "polite_te_imasu",
+        "polite_te_imasen",
+        "polite_te_imashita",
+        "polite_te_imasen_deshita"
+      ]
+    },
+    {
+      "id": "s08_permission_prohibition",
+      "label": "Permission / prohibition",
+      "template_ids": ["plain_te_mo_ii", "plain_te_wa_ikenai"]
+    },
+    {
+      "id": "s09_desire",
+      "label": "Desire",
+      "template_ids": [
+        "plain_tai",
+        "plain_tai_negative",
+        "plain_tai_past",
+        "plain_tai_past_negative"
+      ]
+    },
+    {
+      "id": "s10_volitional",
+      "label": "Volitional",
+      "template_ids": ["plain_volitional", "polite_volitional"]
+    },
+    {
+      "id": "s11_potential",
+      "label": "Potential",
+      "template_ids": ["potential_plain"]
+    },
+    {
+      "id": "s12_tari",
+      "label": "たり〜たりする",
+      "template_ids": ["plain_tari_sequence"]
+    },
+    {
+      "id": "s13_te_shimau",
+      "label": "〜てしまう",
+      "template_ids": ["plain_te_shimau"]
+    },
+    {
+      "id": "s14_te_oku",
+      "label": "〜ておく",
+      "template_ids": ["plain_te_oku"]
+    },
+    {
+      "id": "s15_nagara",
+      "label": "〜ながら",
+      "template_ids": ["plain_nagara"]
+    },
+    {
+      "id": "s16_obligation",
+      "label": "Obligation",
+      "template_ids": ["plain_nakereba_ikenai"]
+    },
+    {
+      "id": "s17_negative_permission",
+      "label": "〜なくてもいい",
+      "template_ids": ["plain_nakute_mo_ii"]
+    },
+    {
+      "id": "s18_tara",
+      "label": "Conditional 〜たら",
+      "template_ids": ["plain_tara_conditional"]
+    },
+    {
+      "id": "s19_yasui_nikui",
+      "label": "〜やすい / 〜にくい",
+      "template_ids": ["plain_yasui", "plain_nikui"]
+    },
+    {
+      "id": "s20_passive",
+      "label": "Passive",
+      "template_ids": ["plain_passive"]
+    },
+    {
+      "id": "s21_ba",
+      "label": "Conditional 〜ば",
+      "template_ids": ["plain_ba_conditional"]
+    },
+    {
+      "id": "s22_causative",
+      "label": "Causative",
+      "template_ids": ["plain_causative"]
+    },
+    {
+      "id": "s23_nasai",
+      "label": "〜なさい",
+      "template_ids": ["polite_nasai"]
+    },
+    {
+      "id": "s24_imperative_prohibitive",
+      "label": "Imperative / prohibitive",
+      "template_ids": ["plain_imperative", "plain_prohibitive"]
+    },
+    {
+      "id": "s25_causative_passive",
+      "label": "Causative-passive",
+      "template_ids": ["plain_causative_passive"]
+    }
+  ]
+}

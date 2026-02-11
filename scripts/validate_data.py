@@ -6,9 +6,11 @@
 # What it validates:
 # - JSON Schema validation for:
 #   - data/verbs/verbs.v2.jsonl (line-by-line, each line is one verb record)
-#   - data/conjugations/conjugation_templates.v2.json
+#   - data/conjugations/conjugation_templates.v3.json
 #   - data/exceptions/verb_exceptions.v1.json
-#   - data/ui_text/example_sentences.v3.json
+#   - data/ui_text/example_sentences.v4.json
+#   - data/learning_paths/learning_path.guided.v1.json
+#   - data/learning_paths/learning_path.genki_aligned.v1.json
 # - Additional integrity checks:
 #   - duplicate verb IDs
 #   - kana is hiragana-only
@@ -311,6 +313,53 @@ def validate_example_sentences(
                             if cid not in character_ids:
                                 issues.append(Issue("ERROR", where, f"templates[{template_id!r}].overrides[{j}].examples[{k}] references unknown character_id: {cid!r}"))
 
+def validate_learning_path(
+    path_data: Dict[str, Any],
+    templates: List[Dict[str, Any]],
+    issues: List[Issue],
+    where: str,
+) -> None:
+    template_ids = set(
+        t.get("id")
+        for t in templates
+        if isinstance(t, dict) and isinstance(t.get("id"), str)
+    )
+    seen_stage_ids: set[str] = set()
+    used_template_ids: set[str] = set()
+
+    stages = path_data.get("stages", [])
+    if not isinstance(stages, list):
+        issues.append(Issue("ERROR", where, "stages must be an array."))
+        return
+
+    for idx, stage in enumerate(stages):
+        if not isinstance(stage, dict):
+            issues.append(Issue("ERROR", where, f"stages[{idx}] must be an object."))
+            continue
+        stage_id = stage.get("id")
+        if isinstance(stage_id, str):
+            if stage_id in seen_stage_ids:
+                issues.append(Issue("ERROR", where, f"Duplicate stage id: {stage_id!r}"))
+            seen_stage_ids.add(stage_id)
+        template_list = stage.get("template_ids", [])
+        if not isinstance(template_list, list):
+            issues.append(Issue("ERROR", where, f"stages[{idx}].template_ids must be an array."))
+            continue
+        for tid in template_list:
+            if tid not in template_ids:
+                issues.append(Issue("ERROR", where, f"Unknown template id in stages[{idx}]: {tid!r}"))
+                continue
+            used_template_ids.add(tid)
+
+    active_template_ids = set(
+        t.get("id")
+        for t in templates
+        if isinstance(t, dict) and t.get("active") is True and t.get("id") != "plain_dictionary"
+    )
+    missing = sorted(active_template_ids - used_template_ids)
+    for tid in missing:
+        issues.append(Issue("WARN", where, f"Active template not referenced by path stages: {tid!r}"))
+
 def print_report(issues: List[Issue], verbs_count: int | None = None) -> None:
     errors = [i for i in issues if i.severity == "ERROR"]
     warns = [i for i in issues if i.severity == "WARN"]
@@ -345,14 +394,17 @@ def main() -> int:
     templates_schema_path = schemas_dir / "conjugation_templates.schema.json"
     exceptions_schema_path = schemas_dir / "exceptions.schema.json"
     example_sentences_schema_path = schemas_dir / "example_sentences.schema.json"
+    learning_path_schema_path = schemas_dir / "learning_path.schema.json"
 
     verbs_jsonl_path = data_dir / "verbs" / "verbs.v2.jsonl"
-    templates_json_path = data_dir / "conjugations" / "conjugation_templates.v2.json"
+    templates_json_path = data_dir / "conjugations" / "conjugation_templates.v3.json"
     exceptions_json_path = data_dir / "exceptions" / "verb_exceptions.v1.json"
-    example_sentences_json_path = data_dir / "ui_text" / "example_sentences.v3.json"
+    example_sentences_json_path = data_dir / "ui_text" / "example_sentences.v4.json"
+    guided_path_json_path = data_dir / "learning_paths" / "learning_path.guided.v1.json"
+    genki_path_json_path = data_dir / "learning_paths" / "learning_path.genki_aligned.v1.json"
 
     # Ensure schemas exist
-    for p in [verbs_schema_path, templates_schema_path, exceptions_schema_path, example_sentences_schema_path]:
+    for p in [verbs_schema_path, templates_schema_path, exceptions_schema_path, example_sentences_schema_path, learning_path_schema_path]:
         if not p.exists():
             issues.append(Issue("ERROR", str(p), "Schema file not found."))
     if any(i.severity == "ERROR" for i in issues):
@@ -363,6 +415,7 @@ def main() -> int:
     templates_validator = build_validator(templates_schema_path)
     exceptions_validator = build_validator(exceptions_schema_path)
     example_sentences_validator = build_validator(example_sentences_schema_path)
+    learning_path_validator = build_validator(learning_path_schema_path)
 
     # Validate verbs JSONL (line-by-line)
     verbs_records, verbs_by_id = validate_jsonl_records(verbs_validator, verbs_jsonl_path, issues)
@@ -405,6 +458,20 @@ def main() -> int:
         validate_exceptions_against_verbs(exceptions_data, verbs_by_id, verbs_records, issues, str(exceptions_json_path))
     if isinstance(example_sentences, dict) and isinstance(templates, list):
         validate_example_sentences(example_sentences, verbs_by_id, templates, issues, str(example_sentences_json_path))
+
+    # Validate learning path JSON files
+    for learning_path_json_path in [guided_path_json_path, genki_path_json_path]:
+        learning_path_data = None
+        if learning_path_json_path.exists():
+            try:
+                learning_path_data = load_json(learning_path_json_path)
+                validate_json(learning_path_validator, learning_path_data, str(learning_path_json_path), issues)
+            except Exception as e:
+                issues.append(Issue("ERROR", str(learning_path_json_path), f"Invalid JSON: {e}"))
+        else:
+            issues.append(Issue("ERROR", str(learning_path_json_path), "File not found."))
+        if isinstance(learning_path_data, dict) and isinstance(templates, list):
+            validate_learning_path(learning_path_data, templates, issues, str(learning_path_json_path))
 
     print_report(issues, verbs_count=len(verbs_records))
     return 1 if any(i.severity == "ERROR" for i in issues) else 0
