@@ -13,16 +13,15 @@ Use this file at the start of every coding session.
 4. Confirm current priorities in `## Current Focus`.
 
 ## Current Focus
-- Validate learning-path pacing changes from expert feedback on real mobile/tablet usage.
-- Confirm telemetry export usefulness for external Japanese/SRS specialist review loops.
+- Verify the latest deployed GitHub Pages build after UI and learning-path updates.
+- Continue collecting expert-feedback data for pacing/unlock tuning.
 
 ## Current Repo State (Important)
-- Deployment fix is pushed on `main` as commit `ccfe491`:
-  - adds missing runtime assets referenced by `index.html`/`src/app.js` (`v3` templates, path JSONs, `lesson_engine.js`, related schema/test updates)
-- GitHub Pages 404 root cause was: deployed code referenced files that existed locally but were not committed.
-- Current local unstaged items are non-deployment:
-  - `AGENTS.md` (local edit)
-  - `temp/*` research/reference files (local working artifacts)
+- Latest pushed commit on `main`: `e869fc8` (`Implement learning-path updates and lesson/review UI refinements`).
+- Includes learning-path remediation, header lesson-jump improvements, home widget parity, and review-card label simplification.
+- Current local working tree:
+  - only untracked `temp/*` research/reference files remain
+  - no tracked-file changes pending after push
 
 ## Completed Work Snapshot
 - Lessons in-session navigation UI moved from lesson card body to header pill interaction:
@@ -122,7 +121,7 @@ Use this file at the start of every coding session.
 
 ## Current In-Progress Work
 - No active coding task in progress.
-- Remaining work is manual QA verification on target tablet/mobile flows for the new learning-path logic.
+- Remaining work is deployment verification + manual QA on target tablet/mobile flows.
 
 ## Most Recent UI Work (This Session)
 - Lessons header interaction update:
@@ -156,25 +155,29 @@ Use this file at the start of every coding session.
 - If visual changes look stale on device, force reload to bypass cached CSS/JS.
 
 ## Next-Step Priorities
-1. Run focused manual QA on cheap Android tablet for new learning-path logic:
+1. Verify GitHub Pages deployment from commit `e869fc8` on desktop + cheap Android tablet:
+   - confirm lesson header pill jump dropdown opens and shows verb/conjugation context rows
+   - confirm home `New Lessons` widget matches `Reviews` widget styling
+   - confirm review/drill/weakness/recent-mistake card tags hide parenthetical kana hints
+2. Run focused manual QA on cheap Android tablet for new learning-path logic:
    - stage-1 polite subphase behavior (Day 1-2 vs Day 3+ template mix)
-   - irregular quota (`する`/`くる`) and `いく` cadence behavior
+   - irregular quota (`suru`/`kuru`) and `iku` cadence behavior
    - narrow-stage prior-mix floor behavior after day 2
    - started/stable progress readability on small screens
-2. Export backup JSON after several sessions and verify telemetry completeness for specialist review:
+3. Export backup JSON after several sessions and verify telemetry completeness for specialist review:
    - `lessonDeliveryLog`
    - `template_performance_by_day`
    - `class_performance_by_day`
    - `stageHistory`
-3. Split/commit learning-path remediation changes in a focused batch after manual QA signoff.
+4. Route updated telemetry snapshot + behavior notes to learning expert for threshold recommendations.
 
 ## Validation Commands
 - `python scripts/validate_data.py`
 - `npm run test`
 
 ## Last Validation Status
-- `python scripts/validate_data.py`: pass (2026-02-22, post review-card tag simplification)
-- `npm run test`: pass (2026-02-22, post review-card tag simplification)
+- `python scripts/validate_data.py`: pass (2026-02-22, final pre-push run before `e869fc8`)
+- `npm run test`: pass (2026-02-22, final pre-push run before `e869fc8`)
 
 ## End-of-Session Update Checklist
 1. Update `## Completed Work Snapshot` and `## Most Recent UI Work`.
@@ -184,3 +187,5 @@ Use this file at the start of every coding session.
 
 ## Last Updated
 - 2026-02-22
+
+

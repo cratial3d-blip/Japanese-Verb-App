@@ -49,6 +49,11 @@ Do not skip either command when behavior or data changes.
 4. Keep diffs tight and reviewable.
 5. If learning-path config changes, keep schema + tests in sync.
 
+## Git/Deployment Hygiene
+- Before pushing, ensure all runtime-referenced files are committed (avoid broken GitHub Pages deploys from missing assets).
+- Keep `temp/*` research artifacts untracked unless explicitly requested for commit.
+- Prefer focused commits grouped by feature/fix area.
+
 ## Data Rules (Critical)
 - Do not invent Japanese content.
 - Use dataset-driven behavior where specified.
