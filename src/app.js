@@ -140,13 +140,16 @@ const DATA_PATHS = {
   ruleHints: "data/ui_text/rule_hints.v3.json?v=20260210_1",
   exampleSentences: "data/ui_text/example_sentences.v4.json?v=20260210_1",
   furigana: "data/ui_text/furigana.verbs.v2.v1.json?v=20260204_1",
-  learningPathGuided: "data/learning_paths/learning_path.guided.v1.json?v=20260210_1",
-  learningPathGenki: "data/learning_paths/learning_path.genki_aligned.v1.json?v=20260210_1",
+  learningPathGuided: "data/learning_paths/learning_path.guided.v1.json?v=20260222_1",
+  learningPathGenki: "data/learning_paths/learning_path.genki_aligned.v1.json?v=20260222_1",
 };
 
 const STORAGE_KEY = "japanese_srs_cards_v1";
 const SETTINGS_KEY = "japanese_srs_settings_v1";
 const STATS_KEY = "japanese_srs_stats_v1";
+const STORAGE_BACKUP_KEY = "japanese_srs_cards_backup_v1";
+const SETTINGS_BACKUP_KEY = "japanese_srs_settings_backup_v1";
+const STATS_BACKUP_KEY = "japanese_srs_stats_backup_v1";
 const DEMO_FLAG_KEY = "japanese_srs_demo_mode_v1";
 const DEMO_BACKUP_KEY = "japanese_srs_demo_backup_v1";
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -183,6 +186,7 @@ let onboardingStep = "basic";
 let onboardingCustomFormIds = [];
 let onboardingPendingConfig = null;
 let pendingQuitConfirmAction = null;
+let storageRecoveryNotice = "";
 const VERB_BROWSER_PAGE_SIZE = 12;
 const TAB_UI_MEMORY_SCREENS = new Set(["stats", "verb-browser"]);
 const tabUiMemory = {
@@ -395,7 +399,7 @@ function handleHeaderToolAction(action) {
     setActiveScreen("verb-browser");
     return;
   }
-  const toolScreens = new Set(["reviews", "drill", "weakness"]);
+  const toolScreens = new Set(["reviews", "drill", "weakness", "lessons"]);
   if (!toolScreens.has(currentScreen)) return;
   activeHeaderTool = activeHeaderTool === action ? null : action;
   renderHeaderToolPanel();
@@ -413,7 +417,7 @@ function renderHeaderToolPanel() {
   const panelEl = document.getElementById("header-tool-panel");
   if (!panelEl) return;
 
-  const toolScreens = new Set(["reviews", "drill", "weakness"]);
+  const toolScreens = new Set(["reviews", "drill", "weakness", "lessons"]);
   if (!toolScreens.has(currentScreen) || !activeHeaderTool) {
     panelEl.classList.add("is-hidden");
     panelEl.innerHTML = "";
@@ -483,6 +487,65 @@ function renderHeaderToolPanel() {
         </section>
       </div>
     `;
+  } else if (activeHeaderTool === "lesson-jump") {
+    const session = lessonSession;
+    const canOpenLessonJump = session && (session.phase === "lesson" || session.phase === "confirm");
+    if (!session || !lessonsActive || !canOpenLessonJump || !Array.isArray(session.lessons)) {
+      panelEl.classList.add("is-hidden");
+      panelEl.innerHTML = "";
+      return;
+    }
+    const maxViewed = Math.max(
+      0,
+      Math.min(
+        Math.max(session.maxViewedLessonIndex || 0, session.lessonIndex || 0),
+        session.lessons.length - 1,
+      ),
+    );
+    const lessonRows = [];
+    for (let index = 0; index <= maxViewed; index += 1) {
+      const selected = index === session.lessonIndex;
+      const item = session.lessons[index];
+      const rowText = getLessonJumpRowText(item, index);
+      lessonRows.push(`
+        <button
+          type="button"
+          class="header-lesson-jump-button${selected ? " is-current" : ""}"
+          data-index="${index}"
+          aria-label="${escapeHtml(`${rowText.title}: ${rowText.meta}`)}"
+          ${selected ? "disabled" : ""}
+        >
+          <span class="header-lesson-jump-title">${escapeHtml(rowText.title)}</span>
+          <span class="header-lesson-jump-meta">${escapeHtml(rowText.meta)}</span>
+        </button>
+      `);
+    }
+    const listHtml = lessonRows.length > 0
+      ? `<div class="header-lesson-jump-list">${lessonRows.join("")}</div>`
+      : `<div class="header-last5-empty">No previously viewed lessons yet.</div>`;
+    panelEl.innerHTML = `
+      <div class="header-tool-card">
+        <div class="header-tool-head">
+          <h3>Jump To Lesson</h3>
+          <button type="button" class="header-tool-close" id="header-tool-close">Close</button>
+        </div>
+        <div class="header-tool-caption">Select any lesson you've already viewed.</div>
+        ${listHtml}
+      </div>
+    `;
+    const jumpButtons = panelEl.querySelectorAll(".header-lesson-jump-button[data-index]");
+    jumpButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const nextIndex = Number(button.dataset.index);
+        if (Number.isNaN(nextIndex)) return;
+        session.phase = "lesson";
+        session.lessonIndex = Math.max(0, Math.min(nextIndex, maxViewed));
+        session.maxViewedLessonIndex = Math.max(session.maxViewedLessonIndex || 0, session.lessonIndex);
+        activeHeaderTool = null;
+        renderHeaderToolPanel();
+        renderLessonCard(session);
+      });
+    });
   } else {
     panelEl.classList.add("is-hidden");
     panelEl.innerHTML = "";
@@ -666,7 +729,17 @@ function getCurrentLearningPathState(nowIso) {
   const allStates = state.settings.learning_path_state || {};
   const current = allStates[pathValue] || null;
   if (!LessonEngine || typeof LessonEngine.normalizePathState !== "function") {
-    return current || { stage_index: 0, stage_started_at: nowIso || new Date().toISOString(), failed_gate_count: 0, hold_until: null, completed: false };
+    return current || {
+      stage_index: 0,
+      stage_started_at: nowIso || new Date().toISOString(),
+      failed_gate_count: 0,
+      hold_until: null,
+      completed: false,
+      lesson_session_count: 0,
+      last_iku_session: 0,
+      stabilization_until: null,
+      relaxed_accuracy_mode: false,
+    };
   }
   return LessonEngine.normalizePathState(current, nowIso || new Date().toISOString());
 }
@@ -857,6 +930,27 @@ function renderVerbDisplay(verb) {
     )}</rt></ruby>`;
   }
   return `<span class="ruby-verb">${escapeHtml(verb.kana || verb.kanji || "")}</span>`;
+}
+
+function getLessonJumpVerbLabel(verb) {
+  if (!verb) return "Unknown verb";
+  const kanji = String(verb.kanji || "").trim();
+  const kana = String(verb.kana || "").trim();
+  if (kanji && kana && kanji !== kana) {
+    return `${kanji} (${kana})`;
+  }
+  return kanji || kana || "Unknown verb";
+}
+
+function getLessonJumpRowText(item, index) {
+  const verb = item ? state.verbsById[item.verb_id] : null;
+  const template = item ? state.templatesById[item.conjugation_id] : null;
+  const verbLabel = getLessonJumpVerbLabel(verb);
+  const formLabel = template ? simplifyTemplateLabel(template.label) : String((item && item.conjugation_id) || "Unknown form");
+  return {
+    title: `Lesson ${index + 1}`,
+    meta: `${verbLabel} • ${formLabel}`,
+  };
 }
 
 function shouldVibrate() {
@@ -1131,19 +1225,74 @@ function setActiveScreen(target, options = {}) {
   return true;
 }
 
-function loadCards() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return {};
+function makeStorageBackupEnvelope(value) {
+  return {
+    saved_at: new Date().toISOString(),
+    data: value,
+  };
+}
+
+function saveStoredValue(primaryKey, backupKey, value) {
+  localStorage.setItem(primaryKey, JSON.stringify(value));
+  localStorage.setItem(backupKey, JSON.stringify(makeStorageBackupEnvelope(value)));
+}
+
+function recoverStoredValue(label, primaryKey, backupKey, fallbackFactory, isValid) {
+  const fallbackValue =
+    typeof fallbackFactory === "function" ? fallbackFactory() : fallbackFactory;
+  const result = Core.recoverStoredJson
+    ? Core.recoverStoredJson({
+        primaryRaw: localStorage.getItem(primaryKey),
+        backupRaw: localStorage.getItem(backupKey),
+        fallbackValue,
+        isValid,
+      })
+    : { value: fallbackValue, source: "default", restoredFromBackup: false, primaryParseError: false };
+
+  if (result.primaryParseError) {
+    console.warn(`Failed to parse stored ${label}. Attempting backup recovery.`);
+  }
+  if (result.restoredFromBackup) {
+    storageRecoveryNotice = storageRecoveryNotice
+      ? `${storageRecoveryNotice}, ${label}`
+      : label;
+    try {
+      saveStoredValue(primaryKey, backupKey, result.value);
+    } catch (err) {
+      console.warn(`Failed to persist recovered ${label}`, err);
+    }
+  }
+  return result.value;
+}
+
+function readBackupSavedAt(backupKey) {
+  const raw = localStorage.getItem(backupKey);
+  if (!raw) return "";
   try {
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" && parsed.saved_at ? parsed.saved_at : "";
   } catch (err) {
-    console.warn("Failed to parse stored cards", err);
-    return {};
+    return "";
   }
 }
 
+function clearStoredValue(primaryKey, backupKey) {
+  localStorage.removeItem(primaryKey);
+  localStorage.removeItem(backupKey);
+}
+
+function loadCards() {
+  return recoverStoredValue(
+    "cards",
+    STORAGE_KEY,
+    STORAGE_BACKUP_KEY,
+    () => ({}),
+    (value) => Boolean(value && typeof value === "object" && !Array.isArray(value)),
+  );
+}
+
 function saveCards() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.cards));
+  saveStoredValue(STORAGE_KEY, STORAGE_BACKUP_KEY, state.cards);
 }
 
 function defaultStats() {
@@ -1151,6 +1300,10 @@ function defaultStats() {
     dailyActivity: {},
     completed_reviews_by_day: {},
     completed_lessons_by_day: {},
+    template_performance_by_day: {},
+    class_performance_by_day: {},
+    lessonDeliveryLog: [],
+    stageHistory: [],
     mistakeLog: [],
     mistakeCounts: {
       cards: {},
@@ -1160,26 +1313,37 @@ function defaultStats() {
 }
 
 function loadStats() {
-  const raw = localStorage.getItem(STATS_KEY);
-  if (!raw) return defaultStats();
-  try {
-    return { ...defaultStats(), ...JSON.parse(raw) };
-  } catch (err) {
-    console.warn("Failed to parse stats", err);
-    return defaultStats();
-  }
+  const stored = recoverStoredValue(
+    "stats",
+    STATS_KEY,
+    STATS_BACKUP_KEY,
+    () => defaultStats(),
+    (value) => Boolean(value && typeof value === "object" && !Array.isArray(value)),
+  );
+  return { ...defaultStats(), ...(stored || {}) };
 }
 
 function saveStats() {
-  localStorage.setItem(STATS_KEY, JSON.stringify(state.stats));
+  saveStoredValue(STATS_KEY, STATS_BACKUP_KEY, state.stats);
 }
 
 function defaultLearningPathState(nowIso) {
   const now = nowIso || new Date().toISOString();
+  const base = {
+    stage_index: 0,
+    stage_started_at: now,
+    failed_gate_count: 0,
+    hold_until: null,
+    completed: false,
+    lesson_session_count: 0,
+    last_iku_session: 0,
+    stabilization_until: null,
+    relaxed_accuracy_mode: false,
+  };
   return {
-    guided: { stage_index: 0, stage_started_at: now, failed_gate_count: 0, hold_until: null, completed: false },
-    textbook_genki: { stage_index: 0, stage_started_at: now, failed_gate_count: 0, hold_until: null, completed: false },
-    custom: { stage_index: 0, stage_started_at: now, failed_gate_count: 0, hold_until: null, completed: false },
+    guided: { ...base },
+    textbook_genki: { ...base },
+    custom: { ...base },
   };
 }
 
@@ -1206,11 +1370,16 @@ function defaultSettings() {
 }
 
 function loadSettings() {
-  const raw = localStorage.getItem(SETTINGS_KEY);
   const base = defaultSettings();
-  if (!raw) return base;
+  const parsed = recoverStoredValue(
+    "settings",
+    SETTINGS_KEY,
+    SETTINGS_BACKUP_KEY,
+    () => base,
+    (value) => Boolean(value && typeof value === "object" && !Array.isArray(value)),
+  );
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return base;
   try {
-    const parsed = JSON.parse(raw);
     const merged = { ...base, ...parsed };
     if (!Object.prototype.hasOwnProperty.call(parsed, "onboarding_complete")) {
       merged.onboarding_complete = true;
@@ -1247,7 +1416,7 @@ function loadSettings() {
 }
 
 function saveSettings() {
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify(state.settings));
+  saveStoredValue(SETTINGS_KEY, SETTINGS_BACKUP_KEY, state.settings);
 }
 
 function normalizeDisplayName(value) {
@@ -1353,8 +1522,19 @@ function formatTime(date) {
   return `${hour12}:${minuteStr} ${isPm ? "PM" : "AM"}`;
 }
 
-function getNextUnlockTimeText(now = new Date()) {
-  const settings = state.settings;
+function formatWeekdayTime(date) {
+  return date.toLocaleString([], {
+    weekday: "short",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+function getUnlockContext(now = new Date()) {
+  if (Core.buildUnlockContext) {
+    return Core.buildUnlockContext(state.settings || {}, now);
+  }
+  const settings = state.settings || {};
   if (settings.unlockTime) {
     const [hourStr, minuteStr] = settings.unlockTime.split(":");
     const target = new Date(now.getTime());
@@ -1362,13 +1542,39 @@ function getNextUnlockTimeText(now = new Date()) {
     if (target.getTime() <= now.getTime()) {
       target.setDate(target.getDate() + 1);
     }
-    return formatTime(target);
+    return { mode: "fixed_time", nextUnlockAtIso: target.toISOString() };
   }
   if (settings.lastUnlockAt) {
     const next = new Date(new Date(settings.lastUnlockAt).getTime() + DAY_MS);
-    return formatTime(next);
+    return { mode: "rolling", nextUnlockAtIso: next.toISOString() };
   }
-  return "";
+  return { mode: "rolling", nextUnlockAtIso: "" };
+}
+
+function getNextUnlockTimeText(now = new Date()) {
+  const context = getUnlockContext(now);
+  if (!context || !context.nextUnlockAtIso) return "";
+  const next = new Date(context.nextUnlockAtIso);
+  return Number.isNaN(next.getTime()) ? "" : formatTime(next);
+}
+
+function getUnlockScheduleText(now = new Date()) {
+  const context = getUnlockContext(now);
+  if (!context || !context.nextUnlockAtIso) return "";
+  const next = new Date(context.nextUnlockAtIso);
+  if (Number.isNaN(next.getTime())) return "";
+  if (context.mode === "fixed_time") {
+    const unlockLabel = state.settings && state.settings.unlockTime
+      ? (() => {
+          const [hours, minutes] = state.settings.unlockTime.split(":").map((value) => Number(value));
+          const configured = new Date(now.getTime());
+          configured.setHours(hours || 0, minutes || 0, 0, 0);
+          return formatTime(configured);
+        })()
+      : formatTime(next);
+    return `Daily unlock time: ${unlockLabel} (next: ${formatWeekdayTime(next)})`;
+  }
+  return `Rolling unlock (24h): next at ${formatWeekdayTime(next)}`;
 }
 
 function decrementLessonBank(count) {
@@ -1525,6 +1731,10 @@ function normalizeImportedStats(stats) {
     dailyActivity: stats.dailyActivity || {},
     completed_reviews_by_day: stats.completed_reviews_by_day || {},
     completed_lessons_by_day: stats.completed_lessons_by_day || {},
+    template_performance_by_day: stats.template_performance_by_day || {},
+    class_performance_by_day: stats.class_performance_by_day || {},
+    lessonDeliveryLog: Array.isArray(stats.lessonDeliveryLog) ? stats.lessonDeliveryLog : [],
+    stageHistory: Array.isArray(stats.stageHistory) ? stats.stageHistory : [],
     mistakeLog: stats.mistakeLog || [],
     mistakeCounts: stats.mistakeCounts || base.mistakeCounts,
   };
@@ -1613,6 +1823,10 @@ function buildDemoPathState(pathValue, nowIso) {
       failed_gate_count: 0,
       hold_until: null,
       completed: false,
+      lesson_session_count: 0,
+      last_iku_session: 0,
+      stabilization_until: null,
+      relaxed_accuracy_mode: false,
     };
   }
 
@@ -1626,6 +1840,10 @@ function buildDemoPathState(pathValue, nowIso) {
     failed_gate_count: 0,
     hold_until: null,
     completed: false,
+    lesson_session_count: 0,
+    last_iku_session: 0,
+    stabilization_until: null,
+    relaxed_accuracy_mode: false,
   };
   if (pathValue === "guided") {
     baseState.failed_gate_count = 1;
@@ -1647,6 +1865,10 @@ function buildDemoLearningPathStates(nowIso) {
       failed_gate_count: 0,
       hold_until: null,
       completed: false,
+      lesson_session_count: 0,
+      last_iku_session: 0,
+      stabilization_until: null,
+      relaxed_accuracy_mode: false,
     },
   };
 }
@@ -1936,11 +2158,108 @@ function refreshAfterDemoChange() {
   setActiveScreen("home");
 }
 
+function bumpNestedCount(map, key, delta = 1) {
+  map[key] = (map[key] || 0) + delta;
+}
+
+function ensureTemplatePerformanceDay(dayKey) {
+  if (!state.stats.template_performance_by_day || typeof state.stats.template_performance_by_day !== "object") {
+    state.stats.template_performance_by_day = {};
+  }
+  if (!state.stats.template_performance_by_day[dayKey]) {
+    state.stats.template_performance_by_day[dayKey] = {
+      attempt_count: {},
+      correct_count: {},
+    };
+  }
+  return state.stats.template_performance_by_day[dayKey];
+}
+
+function ensureClassPerformanceDay(dayKey) {
+  if (!state.stats.class_performance_by_day || typeof state.stats.class_performance_by_day !== "object") {
+    state.stats.class_performance_by_day = {};
+  }
+  if (!state.stats.class_performance_by_day[dayKey]) {
+    state.stats.class_performance_by_day[dayKey] = {
+      attempt_count: {},
+      correct_count: {},
+    };
+  }
+  return state.stats.class_performance_by_day[dayKey];
+}
+
+function recordLessonDeliverySession(entry) {
+  if (!state.stats) return;
+  if (!Array.isArray(state.stats.lessonDeliveryLog)) {
+    state.stats.lessonDeliveryLog = [];
+  }
+  state.stats.lessonDeliveryLog.unshift({
+    ts: new Date().toISOString(),
+    ...entry,
+  });
+  if (state.stats.lessonDeliveryLog.length > 180) {
+    state.stats.lessonDeliveryLog.length = 180;
+  }
+  saveStats();
+}
+
+function recordStageHistoryEvent(event) {
+  if (!state.stats) return;
+  if (!Array.isArray(state.stats.stageHistory)) {
+    state.stats.stageHistory = [];
+  }
+  const next = {
+    ts: new Date().toISOString(),
+    ...event,
+  };
+  const latest = state.stats.stageHistory[0];
+  const duplicate =
+    latest &&
+    latest.type === next.type &&
+    latest.path === next.path &&
+    latest.stage_id === next.stage_id &&
+    Math.abs(new Date(latest.ts).getTime() - new Date(next.ts).getTime()) < 1500;
+  if (!duplicate) {
+    state.stats.stageHistory.unshift(next);
+    if (state.stats.stageHistory.length > 400) {
+      state.stats.stageHistory.length = 400;
+    }
+    saveStats();
+  }
+}
+
+function buildGateSnapshot(gate) {
+  if (!gate || typeof gate !== "object") return null;
+  return {
+    answered: Number(gate.answered || 0),
+    accuracy: Number(gate.accuracy || 0),
+    days_in_stage: Number(gate.days_in_stage || 0),
+    failed_reasons: Array.isArray(gate.failed_reasons) ? gate.failed_reasons.slice() : [],
+    class_accuracy: gate.class_accuracy || {},
+    thresholds: gate.profile || {},
+    failed_gate_count: Number(gate.failed_gate_count || 0),
+  };
+}
+
 function recordReviewAttempt({ verbId, templateId, correct }) {
   if (!state.stats) return;
   const now = new Date();
   const dayKey = toDateKey(now);
   state.stats.dailyActivity[dayKey] = (state.stats.dailyActivity[dayKey] || 0) + 1;
+  const verb = state.verbsById[verbId];
+  const verbClass = verb && verb.verb_class ? verb.verb_class : "unknown";
+
+  const templatePerf = ensureTemplatePerformanceDay(dayKey);
+  bumpNestedCount(templatePerf.attempt_count, templateId, 1);
+  if (correct) {
+    bumpNestedCount(templatePerf.correct_count, templateId, 1);
+  }
+
+  const classPerf = ensureClassPerformanceDay(dayKey);
+  bumpNestedCount(classPerf.attempt_count, verbClass, 1);
+  if (correct) {
+    bumpNestedCount(classPerf.correct_count, verbClass, 1);
+  }
 
   if (!correct) {
     const cardId = Core.makeCardId(verbId, templateId);
@@ -2089,7 +2408,7 @@ function updateReviewSummary() {
     }
   }
   if (homeSub) {
-    homeSub.textContent = due.length === 0 ? "You're caught up" : "reviews waiting";
+    homeSub.textContent = due.length === 0 ? "You're caught up" : "Reviews Waiting";
   }
   const start = document.getElementById("start-reviews");
   if (due.length === 0) {
@@ -2450,6 +2769,10 @@ function createSession(container, queueItems, options) {
     progressById: {},
     lastResult: null,
     lastFive: [],
+    attemptCount: 0,
+    correctFirstTryCount: 0,
+    correctCount: 0,
+    perCardAttempts: {},
   };
   renderSessionCard(session);
   return session;
@@ -2461,15 +2784,39 @@ function setDrillSetupVisible(visible) {
   panel.classList.toggle("is-hidden", !visible);
 }
 
-function createLessonSession(container, lessonItems) {
+function createLessonSession(container, lessonItems, options = {}) {
   const session = {
     container,
     lessons: [...lessonItems],
+    deliveryMeta: options.deliveryMeta || null,
     practiceQueue: [],
     phase: "lesson",
     lessonIndex: 0,
+    maxViewedLessonIndex: 0,
     practiceCompleted: 0,
+    lastPracticeResult: null,
   };
+  if (session.lessons.length > 0) {
+    const cards = session.lessons.map((item) => {
+      const verb = state.verbsById[item.verb_id];
+      return {
+        verb_id: item.verb_id,
+        template_id: item.conjugation_id,
+        verb_class: verb && verb.verb_class ? verb.verb_class : "unknown",
+        source_bucket: item.source_bucket || "fallback",
+      };
+    });
+    const meta = session.deliveryMeta || {};
+    recordLessonDeliverySession({
+      path: meta.path || getLearningPath(),
+      stage_id: meta.stage_id || "",
+      stage_index: meta.stage_index != null ? meta.stage_index : null,
+      composition: meta.composition || {},
+      bucket_counts: meta.bucket_counts || {},
+      gate: meta.gate || null,
+      served_cards: cards,
+    });
+  }
   lessonSession = session;
   renderLessonCard(session);
 }
@@ -2525,7 +2872,7 @@ function startReviewsSession() {
 
 function updateHeaderForScreen(screen) {
   const target = screen || currentScreen;
-  if (target !== "reviews" && target !== "drill" && target !== "weakness") {
+  if (target !== "reviews" && target !== "drill" && target !== "weakness" && target !== "lessons") {
     if (activeHeaderTool) activeHeaderTool = null;
     renderHeaderToolPanel();
   }
@@ -2571,35 +2918,52 @@ function updateHeaderForScreen(screen) {
         title = "Lesson Quiz";
         subtitle = "Type the answer from memory and stay consistent.";
       }
+      const canJumpLesson =
+        (lessonSession.phase === "lesson" || lessonSession.phase === "confirm") &&
+        Math.max(lessonSession.maxViewedLessonIndex || 0, lessonSession.lessonIndex || 0) > 0;
+      if (!canJumpLesson && activeHeaderTool === "lesson-jump") {
+        activeHeaderTool = null;
+      }
+      const lessonProgressMeta = {
+        value: getLessonsHeaderSubtitle(lessonSession),
+        tone: "sage-1",
+      };
+      if (canJumpLesson) {
+        lessonProgressMeta.action = "lesson-jump";
+      }
       setHeader(title, subtitle, {
         eyebrow: "レッスン",
         meta: [
-          { value: getLessonsHeaderSubtitle(lessonSession), tone: "sage-1" },
+          lessonProgressMeta,
           { label: lessonsPillLabel, value: modePill, tone: "sage-2" },
-          { label: "Verb Browser", value: "", action: "verb-browser", tone: "sage-3" },
+          { label: "Daily Cap", value: String(clampDailyLessons(state.settings.dailyLessons)), tone: "sage-3" },
+          { label: "Verb Browser", value: "", action: "verb-browser", tone: "accent" },
         ],
         screen: target,
       });
+      renderHeaderToolPanel();
       return;
     }
 
-    const nextUnlock = getNextUnlockTimeText(new Date());
+    const unlockText = getUnlockScheduleText(new Date());
     const title = lessonsTitle;
     const subtitle =
       availability.availableToday > 0
         ? "Start a fresh lesson batch and immediately reinforce with quiz cards."
-        : nextUnlock
-          ? `No lessons available right now. Next unlock at ${nextUnlock}.`
+        : unlockText
+          ? `No lessons available right now. ${unlockText}.`
           : "No lessons available right now. Check your daily lesson limit.";
     setHeader(title, subtitle, {
       eyebrow: "レッスン",
       meta: [
-        { label: "Daily New", value: String(clampDailyLessons(state.settings.dailyLessons)), tone: "sage-1" },
-        { label: lessonsPillLabel, value: modePill, tone: "sage-2" },
-        { label: "Verb Browser", value: "", action: "verb-browser", tone: "sage-3" },
+        { label: "New Left", value: String(availability.availableToday), tone: "sage-1" },
+        { label: "Daily Cap", value: String(clampDailyLessons(state.settings.dailyLessons)), tone: "sage-2" },
+        { label: lessonsPillLabel, value: modePill, tone: "sage-3" },
+        { label: "Verb Browser", value: "", action: "verb-browser", tone: "accent" },
       ],
       screen: target,
     });
+    renderHeaderToolPanel();
     return;
   }
 
@@ -2633,25 +2997,32 @@ function updateHeaderForScreen(screen) {
     const selectedForms = getDrillFormIds().length;
     const activeDrill = Boolean(drillSession && drillSession.totalCount > 0 && drillSession.queue.length > 0);
     const lastFiveCount = drillSession && Array.isArray(drillSession.lastFive) ? drillSession.lastFive.length : 0;
+    const drillProgress = drillSession
+      ? formatSessionProgress(
+          Math.min(drillSession.completed || 0, drillSession.totalCount || 0),
+          drillSession.totalCount || 0,
+        )
+      : "Not started";
     const subtitle = activeDrill
       ? "Repeat selected forms until response speed and accuracy feel automatic."
       : "Choose specific verb conjugations and create a focused practice quiz.";
     setHeader(activeDrill ? "Focused Drill Session" : "Focused Drill", subtitle, {
       eyebrow: "集中ドリル",
       meta: [
+        { label: "Progress", value: drillProgress, tone: "sage-1" },
         {
           label: "Last 5",
           value: lastFiveCount > 0 ? `${lastFiveCount}/5` : "",
           action: "last5",
-          tone: "sage-1",
+          tone: "sage-2",
         },
         {
           label: "Kana Chart",
           value: "",
           action: "kana-chart",
-          tone: "sage-2",
+          tone: "sage-3",
         },
-        { label: "Forms", value: selectedForms > 0 ? String(selectedForms) : "None", tone: "sage-3" },
+        { label: "Forms", value: selectedForms > 0 ? String(selectedForms) : "None", tone: "accent" },
       ],
       screen: target,
     });
@@ -2923,25 +3294,37 @@ function isMasteredPathCard(card) {
   );
 }
 
+function isStartedPathCard(card) {
+  if (!card) return false;
+  if (card.stage && card.stage !== "LEARNING") return true;
+  return Number(card.success_count_total || 0) > 0;
+}
+
 function getLearningPathDisplayName(pathValue) {
   if (pathValue === "textbook_genki") return "Genki-Aligned";
   if (pathValue === "custom") return "Custom";
   return "Guided";
 }
 
-function getPathUnlockTargetText(pathConfig) {
-  const gates = (pathConfig && pathConfig.gates) || {};
+function getPathUnlockTargetText(pathConfig, currentStageIndex = 0) {
+  const gates = LessonEngine && typeof LessonEngine.resolveGateProfile === "function"
+    ? LessonEngine.resolveGateProfile(pathConfig || {}, currentStageIndex)
+    : ((pathConfig && pathConfig.gates) || {});
   const minAccuracyPct = Math.round((Number(gates.min_accuracy || 0) || 0) * 100);
   const minAnswered = Math.max(0, Number(gates.min_answered || 0) || 0);
+  const minDays = Math.max(0, Number(gates.min_days_in_stage || 0) || 0);
+  const parts = [];
   if (minAccuracyPct > 0 && minAnswered > 0) {
-    return `${minAccuracyPct}% stage accuracy over ${minAnswered} answers`;
+    parts.push(`${minAccuracyPct}% stage accuracy over ${minAnswered} answers`);
+  } else if (minAccuracyPct > 0) {
+    parts.push(`${minAccuracyPct}% stage accuracy`);
+  } else if (minAnswered > 0) {
+    parts.push(`${minAnswered} stage answers`);
   }
-  if (minAccuracyPct > 0) {
-    return `${minAccuracyPct}% stage accuracy`;
+  if (minDays > 0) {
+    parts.push(`at least ${minDays} ${minDays === 1 ? "day" : "days"} in stage`);
   }
-  if (minAnswered > 0) {
-    return `${minAnswered} stage answers`;
-  }
+  if (parts.length > 0) return parts.join(" + ");
   return "Complete current stage targets";
 }
 
@@ -2998,9 +3381,11 @@ function buildLearningPathStats(now = new Date()) {
       failure += Number(card.failure_count_total || 0);
     });
     const answered = success + failure;
+    const startedCount = stageCards.filter(isStartedPathCard).length;
     const masteredCount = stageCards.filter(isMasteredPathCard).length;
     const totalCount = stageCards.length;
-    const stagePercent = totalCount > 0 ? Math.round((masteredCount / totalCount) * 100) : 0;
+    const startedPercent = totalCount > 0 ? Math.round((startedCount / totalCount) * 100) : 0;
+    const stablePercent = totalCount > 0 ? Math.round((masteredCount / totalCount) * 100) : 0;
 
     let status = "Locked";
     let progressPercent = 0;
@@ -3009,7 +3394,7 @@ function buildLearningPathStats(now = new Date()) {
       progressPercent = 100;
     } else if (index === currentStageIndex) {
       status = pathState.completed ? "Completed" : "In Progress";
-      progressPercent = pathState.completed ? 100 : stagePercent;
+      progressPercent = pathState.completed ? 100 : startedPercent;
     }
 
     return {
@@ -3017,8 +3402,11 @@ function buildLearningPathStats(now = new Date()) {
       stage,
       status,
       progressPercent: Math.max(0, Math.min(100, progressPercent)),
+      startedCount,
       masteredCount,
       totalCount,
+      startedPercent,
+      stablePercent,
       answered,
       success,
       failure,
@@ -3052,7 +3440,7 @@ function buildLearningPathStats(now = new Date()) {
     overallPercent,
     currentStage,
     stageStats,
-    unlockTargetText: getPathUnlockTargetText(pathConfig),
+    unlockTargetText: getPathUnlockTargetText(pathConfig, currentStageIndex),
   };
 }
 
@@ -3142,12 +3530,14 @@ function renderStatsScreen() {
       overallTextEl.innerHTML = `<span class="stats-path-progress-name">Overall Progress</span><span class="stats-path-progress-metrics"><strong>${pathStats.overallPercent}%</strong> ${pathStats.completedStageCount}/${pathStats.totalStages} stages</span>`;
 
       const currentStagePercent = pathStats.currentStage ? pathStats.currentStage.progressPercent : 0;
+      const currentStartedPercent = pathStats.currentStage ? pathStats.currentStage.startedPercent : 0;
+      const currentStarted = pathStats.currentStage ? pathStats.currentStage.startedCount : 0;
       const currentMastered = pathStats.currentStage ? pathStats.currentStage.masteredCount : 0;
       const currentTotal = pathStats.currentStage ? pathStats.currentStage.totalCount : 0;
       stageFillEl.style.width = `${currentStagePercent}%`;
       stageTextEl.innerHTML =
         currentTotal > 0
-          ? `<span class="stats-path-progress-name">Current Stage</span><span class="stats-path-progress-metrics"><strong>${currentStagePercent}%</strong> ${currentMastered}/${currentTotal} mastered</span>`
+          ? `<span class="stats-path-progress-name">Current Stage</span><span class="stats-path-progress-metrics"><strong>${currentStartedPercent}%</strong> Started ${currentStarted}/${currentTotal} • Stable ${currentMastered}/${currentTotal}</span>`
           : `<span class="stats-path-progress-name">Current Stage</span><span class="stats-path-progress-metrics"><strong>0%</strong> 0 cards introduced</span>`;
 
       const holdUntil = pathStats.pathState && pathStats.pathState.hold_until
@@ -3185,9 +3575,9 @@ function renderStatsScreen() {
               <div class="stats-roadmap-stage-pill">${index + 1}</div>
               <div class="stats-roadmap-main">
                 <div class="stats-roadmap-head">
-                  <div>
-                    <div class="stats-roadmap-label">${stageLabel}</div>
-                    <div class="stats-roadmap-status">${item.status}</div>
+                    <div>
+                      <div class="stats-roadmap-label">${stageLabel}</div>
+                    <div class="stats-roadmap-status">${item.status} • Started ${item.startedCount}/${item.totalCount} • Stable ${item.masteredCount}/${item.totalCount}</div>
                   </div>
                   <div class="stats-roadmap-percent">${item.progressPercent}%</div>
                 </div>
@@ -3409,9 +3799,24 @@ function renderSessionCard(session) {
       actionId = "session-back-to-stats";
       actionLabel = "Back to Stats";
     }
+    let summaryHtml = "";
+    if (session.mode === "drill" && session.totalCount > 0) {
+      const completed = Math.min(session.completed || 0, session.totalCount || 0);
+      const total = session.totalCount || 0;
+      const firstTry = Math.max(0, Number(session.correctFirstTryCount) || 0);
+      const attempts = Math.max(0, Number(session.attemptCount) || 0);
+      const firstTryPercent = total > 0 ? Math.round((firstTry / total) * 100) : 0;
+      summaryHtml = `
+        <div class="feedback-summary">
+          <div><strong>Completed:</strong> ${completed}/${total}</div>
+          <div><strong>First-try accuracy:</strong> ${firstTryPercent}% (${firstTry}/${total})</div>
+          <div><strong>Total attempts:</strong> ${attempts}</div>
+        </div>
+      `;
+    }
     const done = document.createElement("div");
     done.className = "card";
-    done.innerHTML = `<h3>${title}</h3><p>${body}</p>${
+    done.innerHTML = `<h3>${title}</h3><p>${body}</p>${summaryHtml}${
       actionId ? `<div class="actions"><button class="ghost" id="${actionId}">${actionLabel}</button></div>` : ""
     }`;
     container.appendChild(done);
@@ -3494,7 +3899,7 @@ function renderSessionCard(session) {
   card.className = "card";
   card.innerHTML = `
     <div class="prompt-grid">
-      <div class="tag">${template.label}</div>
+      <div class="tag">${simplifyTemplateLabel(template.label)}</div>
       ${classLabel}
       <div class="prompt-kana">${verbDisplay}</div>
       <div class="prompt-gloss">${verb.gloss_en.join(", ")}</div>
@@ -3536,6 +3941,14 @@ function renderSessionCard(session) {
     }
     const normalized = Core.normalizeAnswer(raw);
     const correct = acceptedAnswers.includes(normalized);
+    if (session.mode === "drill") {
+      const attemptsForCard = (session.perCardAttempts[cardId] || 0) + 1;
+      session.perCardAttempts[cardId] = attemptsForCard;
+      session.attemptCount = (session.attemptCount || 0) + 1;
+      if (correct && attemptsForCard === 1) {
+        session.correctFirstTryCount = (session.correctFirstTryCount || 0) + 1;
+      }
+    }
     triggerHaptic(correct);
     flashInputFeedback(answerInput, correct);
     showAnswerFlash(answerFlash, correct);
@@ -3603,13 +4016,18 @@ function renderSessionCard(session) {
     if (isDrill) {
       if (result.correct) {
         session.completed += 1;
+        if (session.mode === "drill") {
+          session.correctCount = (session.correctCount || 0) + 1;
+        }
         session.queue.shift();
       } else {
         session.queue.shift();
         if (session.queue.length === 0) {
           session.queue.push(item);
         } else {
-          const insertAt = Math.floor(Math.random() * session.queue.length) + 1;
+          const insertAt = Core.getRequeueInsertIndex
+            ? Core.getRequeueInsertIndex(session.queue.length)
+            : Math.floor(Math.random() * session.queue.length) + 1;
           session.queue.splice(insertAt, 0, item);
         }
       }
@@ -3639,7 +4057,9 @@ function renderSessionCard(session) {
         if (session.queue.length === 0) {
           session.queue.push(item);
         } else {
-          const insertAt = Math.floor(Math.random() * session.queue.length) + 1;
+          const insertAt = Core.getRequeueInsertIndex
+            ? Core.getRequeueInsertIndex(session.queue.length)
+            : Math.floor(Math.random() * session.queue.length) + 1;
           session.queue.splice(insertAt, 0, item);
         }
       }
@@ -3737,9 +4157,9 @@ function startLessonsFlow() {
   if (count === 0) {
     lessonsActive = false;
     lessonSession = null;
-    const nextTime = getNextUnlockTimeText(new Date());
-    const message = nextTime
-      ? `<strong>All lessons complete.</strong><br /><span class="muted">Next lessons unlock at ${nextTime}.</span>`
+    const unlockText = getUnlockScheduleText(new Date());
+    const message = unlockText
+      ? `<strong>All lessons complete.</strong><br /><span class="muted">${unlockText}.</span>`
       : "<strong>All lessons complete.</strong>";
     container.innerHTML = `<div class="card">${message}</div>`;
     updateHeaderForScreen("lessons");
@@ -3757,12 +4177,18 @@ function startLessonsFlow() {
   }
 
   let queue = [];
+  let queueMeta = null;
   if (!customMode && LessonEngine) {
     const pathValue = getLearningPath();
     const pathConfig = getPathConfig(pathValue);
     const nowIso = new Date().toISOString();
     if (pathConfig) {
       const currentPathState = getCurrentLearningPathState(nowIso);
+      const previousStageIndex = Math.min(
+        Math.max(0, Number(currentPathState.stage_index) || 0),
+        (pathConfig.stages || []).length - 1,
+      );
+      const previousStage = (pathConfig.stages || [])[previousStageIndex];
       const gateEval = LessonEngine.evaluatePathAdvance({
         pathConfig,
         pathState: currentPathState,
@@ -3770,6 +4196,39 @@ function startLessonsFlow() {
         verbsById: state.verbsById,
         nowIso,
       });
+      const gateSnapshot = buildGateSnapshot(gateEval.gate);
+      if (gateEval.gate && gateEval.gate.passed === false && gateEval.gate.reason !== "hold_active") {
+        recordStageHistoryEvent({
+          type: "stage_gate_failed",
+          path: pathValue,
+          stage_id: previousStage ? previousStage.id : "",
+          stage_index: previousStageIndex,
+          gate: gateSnapshot,
+        });
+      }
+      if (gateEval.advanced) {
+        const nextStageIndex = Math.min(
+          Math.max(0, Number(gateEval.pathState.stage_index) || 0),
+          (pathConfig.stages || []).length - 1,
+        );
+        const nextStage = (pathConfig.stages || [])[nextStageIndex];
+        recordStageHistoryEvent({
+          type: "stage_advanced",
+          path: pathValue,
+          stage_id: previousStage ? previousStage.id : "",
+          stage_index: previousStageIndex,
+          to_stage_id: nextStage ? nextStage.id : "",
+          to_stage_index: nextStageIndex,
+          gate: gateSnapshot,
+        });
+        recordStageHistoryEvent({
+          type: "stage_entered",
+          path: pathValue,
+          stage_id: nextStage ? nextStage.id : "",
+          stage_index: nextStageIndex,
+          gate: gateSnapshot,
+        });
+      }
       setCurrentLearningPathState(gateEval.pathState, nowIso);
       saveSettings();
       const built = LessonEngine.buildLessonQueue({
@@ -3781,9 +4240,22 @@ function startLessonsFlow() {
         verbsById: state.verbsById,
         mistakeTemplateCounts: (state.stats && state.stats.mistakeCounts && state.stats.mistakeCounts.templates) || {},
         dailyCount: Math.min(count, candidates.length),
+        gateDiagnostics: gateEval.gate || null,
         nowIso,
       });
       queue = built.queue || [];
+      if (built.pathStatePatch && typeof built.pathStatePatch === "object") {
+        setCurrentLearningPathState({ ...gateEval.pathState, ...built.pathStatePatch }, nowIso);
+        saveSettings();
+      }
+      queueMeta = {
+        path: pathValue,
+        stage_id: built.details && built.details.currentStageId ? built.details.currentStageId : (previousStage ? previousStage.id : ""),
+        stage_index: built.details && typeof built.details.currentStageIndex === "number" ? built.details.currentStageIndex : previousStageIndex,
+        composition: (built.details && built.details.composition && built.details.composition.counts) || {},
+        bucket_counts: (built.details && built.details.bucketCounts) || {},
+        gate: gateSnapshot,
+      };
     }
   }
 
@@ -3793,10 +4265,18 @@ function startLessonsFlow() {
       verb_id: item.verb_id,
       conjugation_id: item.conjugation_id,
     }));
+    queueMeta = {
+      path: customMode ? "custom" : getLearningPath(),
+      stage_id: "",
+      stage_index: null,
+      composition: {},
+      bucket_counts: { fallback: queue.length },
+      gate: null,
+    };
   }
 
   lessonsActive = true;
-  createLessonSession(container, queue);
+  createLessonSession(container, queue, { deliveryMeta: queueMeta });
   updateHeaderForScreen("lessons");
 }
 
@@ -3850,6 +4330,30 @@ function populateSettingsForm() {
     reminderLessonsInput.checked = state.settings.reminders_lessons_unlocked !== false;
   }
   renderReminderStatus(Notifications.getPlanSnapshot());
+  renderAutoSnapshotStatus();
+}
+
+function renderAutoSnapshotStatus() {
+  const statusEl = document.getElementById("settings-snapshot-status");
+  if (!statusEl) return;
+  const savedAtValues = [
+    readBackupSavedAt(STORAGE_BACKUP_KEY),
+    readBackupSavedAt(SETTINGS_BACKUP_KEY),
+    readBackupSavedAt(STATS_BACKUP_KEY),
+  ]
+    .filter(Boolean)
+    .map((iso) => new Date(iso))
+    .filter((date) => !Number.isNaN(date.getTime()))
+    .sort((a, b) => b.getTime() - a.getTime());
+  const latest = savedAtValues.length > 0 ? savedAtValues[0] : null;
+  const base = latest
+    ? `Auto local snapshot active. Last snapshot: ${latest.toLocaleString()}.`
+    : "Auto local snapshot active.";
+  if (storageRecoveryNotice) {
+    statusEl.textContent = `${base} Recovered this session: ${storageRecoveryNotice}.`;
+    return;
+  }
+  statusEl.textContent = base;
 }
 
 function renderLessonCard(session) {
@@ -3871,13 +4375,13 @@ function renderLessonCard(session) {
     const template = state.templatesById[item.conjugation_id];
     const expected = Core.conjugate(verb, template.id, state.exceptions);
     const verbDisplay = renderVerbDisplay(verb);
-  const ruleDisplay = getRuleDisplay(verb, template.id);
-  const classLabelText = ruleDisplay.classLabel || "";
-  const ruleHintText = ruleDisplay.ruleHint || "";
-  const exampleSentence = getExampleSentence(verb, template.id, expected);
-  const card = document.createElement("div");
-  card.className = "card lesson-card";
-  card.innerHTML = `
+    const ruleDisplay = getRuleDisplay(verb, template.id);
+    const classLabelText = ruleDisplay.classLabel || "";
+    const ruleHintText = ruleDisplay.ruleHint || "";
+    const exampleSentence = getExampleSentence(verb, template.id, expected);
+    const card = document.createElement("div");
+    card.className = "card lesson-card";
+    card.innerHTML = `
       <div class="card-meta">
         <div class="tag">${template.label}</div>
       </div>
@@ -3917,6 +4421,7 @@ function renderLessonCard(session) {
         session.phase = "confirm";
       } else {
         session.lessonIndex += 1;
+        session.maxViewedLessonIndex = Math.max(session.maxViewedLessonIndex || 0, session.lessonIndex);
       }
       renderLessonCard(session);
     });
@@ -3941,6 +4446,7 @@ function renderLessonCard(session) {
     startButton.addEventListener("click", () => {
       session.phase = "practice";
       session.practiceQueue = session.lessons.slice();
+      session.lastPracticeResult = null;
       renderLessonCard(session);
     });
     return;
@@ -3950,9 +4456,9 @@ function renderLessonCard(session) {
     lessonsActive = false;
     lessonSession = null;
     container.innerHTML = "";
-    const nextTime = getNextUnlockTimeText(new Date());
-    const message = nextTime
-      ? `<strong>Great job!</strong><br /><span class="muted">Your next lessons will be ready at ${nextTime}.</span>`
+    const unlockText = getUnlockScheduleText(new Date());
+    const message = unlockText
+      ? `<strong>Great job!</strong><br /><span class="muted">${unlockText}.</span>`
       : "<strong>Great job!</strong>";
     container.innerHTML = `<div class="card lesson-card">${message}</div>`;
     updateHeaderForScreen("lessons");
@@ -4007,9 +4513,8 @@ function renderLessonCard(session) {
     nextButton.textContent = "Next";
   }
 
-  const liveInput = setupLiveKanaInput(answerInput);
+  setupLiveKanaInput(answerInput);
   attachEnterHandler(answerInput, checkButton, nextButton);
-  let lastCorrect = false;
   if (answerInput) {
     requestAnimationFrame(() => answerInput.focus());
   }
@@ -4026,14 +4531,19 @@ function renderLessonCard(session) {
     flashInputFeedback(answerInput, correct);
     showAnswerFlash(answerFlash, correct);
     recordReviewAttempt({ verbId: verb.id, templateId: template.id, correct });
-    lastCorrect = correct;
+    session.lastPracticeResult = { correct, normalized, expected };
     feedback.style.display = "block";
     const ruleDisplay = getRuleDisplay(verb, template.id);
     const classLabelText = ruleDisplay.classLabel || "";
     const ruleHintText = ruleDisplay.ruleHint || "";
     const exampleSentence = getExampleSentence(verb, template.id, expected);
     const detailLines = [];
-    detailLines.push(`<div><strong>Answer:</strong> ${expected}</div>`);
+    if (!correct) {
+      detailLines.push(`<div><strong>Your answer:</strong> ${normalized || "(blank)"}</div>`);
+      detailLines.push(`<div><strong>Correct answer:</strong> ${expected}</div>`);
+    } else {
+      detailLines.push(`<div><strong>Answer:</strong> ${expected}</div>`);
+    }
     if (classLabelText) {
       detailLines.push(`<div><strong>Verb Type:</strong> ${formatVerbTypeLabel(classLabelText)}</div>`);
     }
@@ -4053,16 +4563,33 @@ function renderLessonCard(session) {
       };
     }
     flashButtonFeedback(checkButton, nextButton, correct, "Next");
-    if (!correct) {
-      liveInput.reset();
-    }
   });
 
   nextButton.addEventListener("click", () => {
+    if (!session.lastPracticeResult) return;
+    const practiceResult = session.lastPracticeResult;
+    const outcome = Core.getLessonPracticeOutcome
+      ? Core.getLessonPracticeOutcome(practiceResult.correct)
+      : {
+          advance: Boolean(practiceResult.correct),
+          requeue: !practiceResult.correct,
+          decrementLessonBank: Boolean(practiceResult.correct),
+          recordCompletedLesson: Boolean(practiceResult.correct),
+        };
+    if (outcome.requeue) {
+      session.practiceQueue.shift();
+      const insertAt = Core.getRequeueInsertIndex
+        ? Core.getRequeueInsertIndex(session.practiceQueue.length)
+        : Math.floor(Math.random() * Math.max(1, session.practiceQueue.length)) + 1;
+      session.practiceQueue.splice(insertAt, 0, item);
+      session.lastPracticeResult = null;
+      renderLessonCard(session);
+      return;
+    }
     const now = new Date();
     const cardRecord = ensureCard(verb.id, template.id);
     const result = Core.applyReviewResult(cardRecord, {
-      correct: lastCorrect,
+      correct: true,
       hintUsed: false,
       now,
     });
@@ -4070,10 +4597,15 @@ function renderLessonCard(session) {
     result.card.learning_step = null;
     result.card.due_at = addDays(now, 1).toISOString();
     state.cards[cardRecord.card_id] = result.card;
-    recordCompletedLesson();
-    decrementLessonBank(1);
+    if (outcome.recordCompletedLesson) {
+      recordCompletedLesson();
+    }
+    if (outcome.decrementLessonBank) {
+      decrementLessonBank(1);
+    }
     session.practiceCompleted += 1;
     session.practiceQueue.shift();
+    session.lastPracticeResult = null;
     renderLessonCard(session);
   });
 }
@@ -4509,6 +5041,9 @@ function setupActions() {
   }
 
   function performReset() {
+    clearStoredValue(STORAGE_KEY, STORAGE_BACKUP_KEY);
+    clearStoredValue(STATS_KEY, STATS_BACKUP_KEY);
+    clearStoredValue(SETTINGS_KEY, SETTINGS_BACKUP_KEY);
     state.cards = {};
     saveCards();
     state.stats = defaultStats();
@@ -4810,6 +5345,9 @@ async function init() {
       queueReminderRefresh(80);
     });
     setStatus("");
+    if (storageRecoveryNotice) {
+      showToast(`Recovered ${storageRecoveryNotice} from local backup.`);
+    }
     updateHeaderForScreen("home");
     renderStatsScreen();
   } catch (err) {

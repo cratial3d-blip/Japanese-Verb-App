@@ -154,6 +154,126 @@ function runEnabledFormsTests() {
   return failures;
 }
 
+function runLessonPracticeOutcomeTests() {
+  let failures = 0;
+  if (typeof core.getLessonPracticeOutcome !== "function") {
+    console.error("Lesson practice outcome tests: missing core.getLessonPracticeOutcome");
+    return 1;
+  }
+
+  const pass = core.getLessonPracticeOutcome(true);
+  if (!pass.advance || pass.requeue || !pass.decrementLessonBank || !pass.recordCompletedLesson) {
+    console.error("Lesson practice outcome mismatch for correct answers.");
+    failures += 1;
+  }
+
+  const fail = core.getLessonPracticeOutcome(false);
+  if (fail.advance || !fail.requeue || fail.decrementLessonBank || fail.recordCompletedLesson) {
+    console.error("Lesson practice outcome mismatch for incorrect answers.");
+    failures += 1;
+  }
+
+  if (failures === 0) {
+    console.log("Lesson practice outcome tests: PASS");
+  }
+  return failures;
+}
+
+function runUnlockContextTests() {
+  let failures = 0;
+  if (typeof core.buildUnlockContext !== "function") {
+    console.error("Unlock context tests: missing core.buildUnlockContext");
+    return 1;
+  }
+
+  const now = new Date("2026-02-22T10:00:00Z");
+  const fixed = core.buildUnlockContext(
+    { unlockTime: "09:30", lastUnlockAt: "2026-02-21T01:00:00Z" },
+    now,
+  );
+  if (!fixed || fixed.mode !== "fixed_time" || !fixed.nextUnlockAtIso) {
+    console.error("Unlock context mismatch: expected fixed_time context.");
+    failures += 1;
+  } else {
+    const next = new Date(fixed.nextUnlockAtIso);
+    if (Number.isNaN(next.getTime()) || next.getTime() <= now.getTime()) {
+      console.error("Unlock context mismatch: fixed next unlock should be in the future.");
+      failures += 1;
+    }
+  }
+
+  const rolling = core.buildUnlockContext(
+    { unlockTime: "", lastUnlockAt: "2026-02-21T10:00:00.000Z" },
+    now,
+  );
+  if (!rolling || rolling.mode !== "rolling") {
+    console.error("Unlock context mismatch: expected rolling mode.");
+    failures += 1;
+  } else {
+    const next = new Date(rolling.nextUnlockAtIso);
+    if (next.toISOString() !== "2026-02-22T10:00:00.000Z") {
+      console.error("Unlock context mismatch: rolling next unlock should be +24h from last unlock.");
+      failures += 1;
+    }
+  }
+
+  if (failures === 0) {
+    console.log("Unlock context tests: PASS");
+  }
+  return failures;
+}
+
+function runStorageRecoveryTests() {
+  let failures = 0;
+  if (typeof core.recoverStoredJson !== "function") {
+    console.error("Storage recovery tests: missing core.recoverStoredJson");
+    return 1;
+  }
+
+  const fromPrimary = core.recoverStoredJson({
+    primaryRaw: JSON.stringify({ value: 1 }),
+    backupRaw: JSON.stringify({ saved_at: "2026-02-22T00:00:00.000Z", data: { value: 2 } }),
+    fallbackValue: { value: 0 },
+    isValid: (value) => Boolean(value && typeof value === "object" && typeof value.value === "number"),
+  });
+  if (fromPrimary.source !== "primary" || fromPrimary.value.value !== 1) {
+    console.error("Storage recovery mismatch: expected primary source.");
+    failures += 1;
+  }
+
+  const fromBackup = core.recoverStoredJson({
+    primaryRaw: "{bad json",
+    backupRaw: JSON.stringify({ saved_at: "2026-02-22T00:00:00.000Z", data: { value: 7 } }),
+    fallbackValue: { value: 0 },
+    isValid: (value) => Boolean(value && typeof value === "object" && typeof value.value === "number"),
+  });
+  if (
+    fromBackup.source !== "backup" ||
+    fromBackup.value.value !== 7 ||
+    !fromBackup.restoredFromBackup ||
+    !fromBackup.primaryParseError
+  ) {
+    console.error("Storage recovery mismatch: expected backup recovery after primary parse failure.");
+    failures += 1;
+  }
+
+  const fallback = core.recoverStoredJson({
+    primaryRaw: "{bad json",
+    backupRaw: "{also bad",
+    fallbackValue: { value: 0 },
+    isValid: (value) => Boolean(value && typeof value === "object" && typeof value.value === "number"),
+  });
+  if (fallback.source !== "default" || fallback.value.value !== 0 || !fallback.primaryParseError) {
+    console.error("Storage recovery mismatch: expected default fallback when no valid data exists.");
+    failures += 1;
+  }
+
+  if (failures === 0) {
+    console.log("Storage recovery tests: PASS");
+  }
+  return failures;
+}
+
 function runSrsDemotionTests() {
   let failures = 0;
   const now = new Date("2020-01-01T00:00:00Z");
@@ -283,6 +403,7 @@ function runLessonEngineTests() {
     pathType: "guided",
     pathConfig: guided,
     pathState: { stage_index: 0, stage_started_at: "2026-02-01T00:00:00Z", failed_gate_count: 0 },
+    currentStage: { id: "s01_polite", template_ids: ["polite_dictionary", "polite_negative", "polite_past", "polite_past_negative"] },
     dailyCount: 10,
     nowIso: "2026-02-01T12:00:00Z",
   });
@@ -295,6 +416,7 @@ function runLessonEngineTests() {
     pathType: "guided",
     pathConfig: guided,
     pathState: { stage_index: 0, stage_started_at: "2026-02-01T00:00:00Z", failed_gate_count: 0 },
+    currentStage: { id: "s01_polite", template_ids: ["polite_dictionary", "polite_negative", "polite_past", "polite_past_negative"] },
     dailyCount: 10,
     nowIso: "2026-02-04T12:00:00Z",
   });
@@ -307,6 +429,7 @@ function runLessonEngineTests() {
     pathType: "guided",
     pathConfig: guided,
     pathState: { stage_index: 8, stage_started_at: "2026-02-01T00:00:00Z", failed_gate_count: 0 },
+    currentStage: { id: "s09_desire", template_ids: ["plain_tai"] },
     dailyCount: 10,
     nowIso: "2026-02-10T12:00:00Z",
   });
@@ -319,11 +442,26 @@ function runLessonEngineTests() {
     pathType: "textbook_genki",
     pathConfig: genki,
     pathState: { stage_index: 0, stage_started_at: "2026-02-01T00:00:00Z", failed_gate_count: 0 },
+    currentStage: { id: "g01_polite", template_ids: ["polite_dictionary"] },
     dailyCount: 10,
     nowIso: "2026-02-01T12:00:00Z",
   });
   if (genkiDay1.counts.current !== 7 || genkiDay1.counts.previous !== 2 || genkiDay1.counts.weakness !== 1) {
     console.error("Lesson engine genki day1 composition mismatch.");
+    failures += 1;
+  }
+
+  const narrowStage = lessonEngine.computeCompositionWindow({
+    pathType: "guided",
+    pathConfig: guided,
+    pathState: { stage_index: 12, stage_started_at: "2026-02-01T00:00:00Z", failed_gate_count: 0 },
+    currentStage: { id: "s13_te_shimau", template_ids: ["plain_te_shimau"] },
+    dailyCount: 10,
+    nowIso: "2026-02-06T12:00:00Z",
+  });
+  const narrowPrev = Math.max(0, Number(narrowStage.counts.previous || 0) + Number(narrowStage.counts.recent || 0));
+  if (narrowPrev < 5) {
+    console.error("Lesson engine narrow-stage previous mix floor mismatch.");
     failures += 1;
   }
 
@@ -419,7 +557,7 @@ function runLessonEngineTests() {
     pathState: failEval.pathState,
     cardsById,
     verbsById,
-    nowIso: "2026-02-11T00:00:00Z",
+    nowIso: "2026-02-10T12:00:00Z",
   });
   if (!holdEval.gate || holdEval.gate.reason !== "hold_active") {
     console.error("Lesson engine hold did not block advance.");
@@ -458,6 +596,118 @@ function runLessonEngineTests() {
   });
   if (!passEval.advanced || passEval.pathState.stage_index !== 1) {
     console.error("Lesson engine gate pass did not advance stage.");
+    failures += 1;
+  }
+
+  const minDaysEval = lessonEngine.evaluatePathAdvance({
+    pathConfig: guided,
+    pathState: { stage_index: 0, stage_started_at: "2026-02-10T00:00:00Z", failed_gate_count: 0 },
+    cardsById: passCards,
+    verbsById,
+    nowIso: "2026-02-10T12:00:00Z",
+  });
+  if (minDaysEval.advanced || !(minDaysEval.gate && minDaysEval.gate.failed_reasons || []).includes("min_days_in_stage")) {
+    console.error("Lesson engine min-days gate mismatch.");
+    failures += 1;
+  }
+
+  const stuckEval = lessonEngine.evaluatePathAdvance({
+    pathConfig: guided,
+    pathState: { stage_index: 0, stage_started_at: "2026-01-20T00:00:00Z", failed_gate_count: 1 },
+    cardsById,
+    verbsById,
+    nowIso: "2026-02-10T00:00:00Z",
+  });
+  if (!stuckEval.pathState.stabilization_until) {
+    console.error("Lesson engine stall stabilization mismatch.");
+    failures += 1;
+  }
+
+  const strictBandEval = lessonEngine.evaluatePathAdvance({
+    pathConfig: guided,
+    pathState: { stage_index: 19, stage_started_at: "2026-02-01T00:00:00Z", failed_gate_count: 0 },
+    cardsById: {
+      "a::plain_passive": { verb_id: "v1", conjugation_id: "plain_passive", success_count_total: 4, failure_count_total: 1 },
+      "b::plain_passive": { verb_id: "v2", conjugation_id: "plain_passive", success_count_total: 4, failure_count_total: 1 },
+      "c::plain_passive": { verb_id: "v3", conjugation_id: "plain_passive", success_count_total: 4, failure_count_total: 1 },
+    },
+    verbsById,
+    nowIso: "2026-02-10T00:00:00Z",
+  });
+  if (strictBandEval.advanced || !(strictBandEval.gate && strictBandEval.gate.failed_reasons || []).includes("min_answered")) {
+    console.error("Lesson engine stage-band strictness mismatch.");
+    failures += 1;
+  }
+
+  const stageOnePairs = [
+    { verb_id: "v1", conjugation_id: "polite_dictionary" },
+    { verb_id: "v2", conjugation_id: "polite_negative" },
+    { verb_id: "v3", conjugation_id: "polite_past" },
+    { verb_id: "v4", conjugation_id: "polite_past_negative" },
+    { verb_id: "v5", conjugation_id: "polite_dictionary" },
+    { verb_id: "v6", conjugation_id: "polite_negative" },
+    { verb_id: "v7", conjugation_id: "polite_past" },
+    { verb_id: "v8", conjugation_id: "polite_past_negative" },
+    { verb_id: "v9", conjugation_id: "plain_te_form" },
+  ];
+  const stageOneEarly = lessonEngine.buildLessonQueue({
+    pathType: "guided",
+    pathConfig: guided,
+    pathState: { stage_index: 0, stage_started_at: "2026-02-10T00:00:00Z", failed_gate_count: 0 },
+    unseenPairs: stageOnePairs,
+    cardsById: {},
+    verbsById,
+    mistakeTemplateCounts: {},
+    dailyCount: 6,
+    nowIso: "2026-02-10T12:00:00Z",
+    rng: () => 0.1,
+  });
+  const earlyUsesPast = (stageOneEarly.queue || []).some(
+    (item) => item.conjugation_id === "polite_past" || item.conjugation_id === "polite_past_negative"
+  );
+  if (earlyUsesPast) {
+    console.error("Lesson engine stage-1 subphase mismatch: early queue should focus on polite present/negative.");
+    failures += 1;
+  }
+
+  const irregularVerbsById = {
+    s1: { id: "s1", kana: "する", verb_class: "irregular" },
+    k1: { id: "k1", kana: "くる", verb_class: "irregular" },
+    i1: { id: "i1", kana: "いく", verb_class: "godan" },
+    g1: { id: "g1", kana: "よむ", verb_class: "godan" },
+    g2: { id: "g2", kana: "かく", verb_class: "godan" },
+    i2: { id: "i2", kana: "たべる", verb_class: "ichidan" },
+  };
+  const irregularPairs = [];
+  ["s1", "k1", "i1", "g1", "g2", "i2"].forEach((verbId) => {
+    irregularPairs.push({ verb_id: verbId, conjugation_id: "plain_past" });
+    irregularPairs.push({ verb_id: verbId, conjugation_id: "plain_negative" });
+  });
+  const irregularQueue = lessonEngine.buildLessonQueue({
+    pathType: "guided",
+    pathConfig: guided,
+    pathState: { stage_index: 3, stage_started_at: "2026-02-01T00:00:00Z", failed_gate_count: 0, lesson_session_count: 1, last_iku_session: 0 },
+    unseenPairs: irregularPairs,
+    cardsById: {},
+    verbsById: irregularVerbsById,
+    mistakeTemplateCounts: {},
+    dailyCount: 6,
+    nowIso: "2026-02-10T12:00:00Z",
+    rng: () => 0.2,
+  });
+  const irregularCount = (irregularQueue.queue || []).filter((item) => {
+    const verb = irregularVerbsById[item.verb_id];
+    return verb && verb.verb_class === "irregular";
+  }).length;
+  const hasSuru = (irregularQueue.queue || []).some((item) => item.verb_id === "s1");
+  const hasKuru = (irregularQueue.queue || []).some((item) => item.verb_id === "k1");
+  const hasIku = (irregularQueue.queue || []).some((item) => item.verb_id === "i1");
+  if (irregularCount < 2 || !hasSuru || !hasKuru || !hasIku) {
+    console.error("Lesson engine irregular quota mismatch.");
+    failures += 1;
+  }
+  if (!irregularQueue.pathStatePatch || irregularQueue.pathStatePatch.lesson_session_count !== 2 || irregularQueue.pathStatePatch.last_iku_session !== 2) {
+    console.error("Lesson engine irregular path state patch mismatch.");
     failures += 1;
   }
 
@@ -532,6 +782,9 @@ const failures =
   runConjugationV2Tests() +
   runRomajiTests() +
   runEnabledFormsTests() +
+  runLessonPracticeOutcomeTests() +
+  runUnlockContextTests() +
+  runStorageRecoveryTests() +
   runSrsDemotionTests() +
   runNewConjugationTests() +
   runObligationAliasTests() +

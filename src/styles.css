@@ -391,6 +391,50 @@ body::after {
   color: var(--ink-muted);
 }
 
+.header-lesson-jump-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+.header-lesson-jump-button {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  display: grid;
+  gap: 3px;
+}
+
+.header-lesson-jump-button:hover:not(:disabled) {
+  border-color: rgba(90, 135, 119, 0.55);
+  background: rgba(90, 135, 119, 0.12);
+}
+
+.header-lesson-jump-button.is-current,
+.header-lesson-jump-button:disabled {
+  opacity: 0.75;
+  cursor: default;
+}
+
+.header-lesson-jump-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.header-lesson-jump-meta {
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .kana-chart-wrap {
   display: grid;
   gap: 10px;
@@ -603,6 +647,10 @@ main {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+#settings-snapshot-status {
+  margin-top: -4px;
 }
 
 .settings-reminders {

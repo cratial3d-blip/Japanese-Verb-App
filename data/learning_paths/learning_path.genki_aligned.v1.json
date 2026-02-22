@@ -18,7 +18,24 @@
       "ichidan": 0.75,
       "irregular": 0.75
     },
-    "hold_days_on_fail": 1
+    "hold_days_on_fail": 1,
+    "min_days_in_stage": 2,
+    "max_days_in_stage": 10,
+    "stabilization_days_on_stall": 2,
+    "relaxed_accuracy_delta": 0.03
+  },
+  "irregular_policy": {
+    "enabled": true,
+    "min_per_session": 2,
+    "primary_kana": [
+      "する",
+      "くる"
+    ],
+    "iku_special_templates": [
+      "plain_te_form",
+      "plain_past"
+    ],
+    "iku_every_n_sessions": 2
   },
   "stages": [
     {

@@ -893,6 +893,131 @@
     return mode === "reviews" || mode === "focused";
   }
 
+  function parseTimeString(value) {
+    if (!value || typeof value !== "string") return null;
+    const match = value.trim().match(/^(\d{1,2}):(\d{2})$/);
+    if (!match) return null;
+    const hours = Number(match[1]);
+    const minutes = Number(match[2]);
+    if (
+      Number.isNaN(hours) ||
+      Number.isNaN(minutes) ||
+      hours < 0 ||
+      hours > 23 ||
+      minutes < 0 ||
+      minutes > 59
+    ) {
+      return null;
+    }
+    return { hours: hours, minutes: minutes };
+  }
+
+  function buildUnlockContext(settings, now) {
+    const ts = now || new Date();
+    const cfg = settings || {};
+    const fixed = parseTimeString(cfg.unlockTime);
+    if (fixed) {
+      const next = new Date(ts.getTime());
+      next.setHours(fixed.hours, fixed.minutes, 0, 0);
+      if (next.getTime() <= ts.getTime()) {
+        next.setDate(next.getDate() + 1);
+      }
+      return {
+        mode: "fixed_time",
+        nextUnlockAtIso: next.toISOString(),
+      };
+    }
+
+    if (cfg.lastUnlockAt) {
+      const last = new Date(cfg.lastUnlockAt);
+      if (!Number.isNaN(last.getTime())) {
+        const nextRolling = new Date(last.getTime() + 24 * 60 * 60 * 1000);
+        return {
+          mode: "rolling",
+          nextUnlockAtIso: nextRolling.toISOString(),
+        };
+      }
+    }
+
+    return {
+      mode: "rolling",
+      nextUnlockAtIso: "",
+    };
+  }
+
+  function getRequeueInsertIndex(queueLength, rng) {
+    const len = Math.max(0, Math.floor(Number(queueLength) || 0));
+    if (len <= 0) return 0;
+    const rand = typeof rng === "function" ? rng() : Math.random();
+    const clamped = Math.min(0.999999, Math.max(0, Number(rand) || 0));
+    return Math.floor(clamped * len) + 1;
+  }
+
+  function getLessonPracticeOutcome(correct) {
+    const pass = Boolean(correct);
+    return {
+      advance: pass,
+      requeue: !pass,
+      decrementLessonBank: pass,
+      recordCompletedLesson: pass,
+    };
+  }
+
+  function parseJsonCandidate(raw) {
+    if (typeof raw !== "string" || raw.trim() === "") {
+      return { hasValue: false, parseError: false, value: null };
+    }
+    try {
+      return { hasValue: true, parseError: false, value: JSON.parse(raw) };
+    } catch (err) {
+      return { hasValue: true, parseError: true, value: null };
+    }
+  }
+
+  function unwrapBackupRecord(value) {
+    if (
+      value &&
+      typeof value === "object" &&
+      Object.prototype.hasOwnProperty.call(value, "saved_at") &&
+      Object.prototype.hasOwnProperty.call(value, "data")
+    ) {
+      return value.data;
+    }
+    return value;
+  }
+
+  function recoverStoredJson(options) {
+    const opts = options || {};
+    const isValid = typeof opts.isValid === "function" ? opts.isValid : function (value) { return value != null; };
+    const primary = parseJsonCandidate(opts.primaryRaw);
+    if (primary.hasValue && !primary.parseError && isValid(primary.value)) {
+      return {
+        value: primary.value,
+        source: "primary",
+        restoredFromBackup: false,
+        primaryParseError: false,
+      };
+    }
+
+    const backup = parseJsonCandidate(opts.backupRaw);
+    const backupValue = backup.hasValue && !backup.parseError ? unwrapBackupRecord(backup.value) : null;
+    if (backup.hasValue && !backup.parseError && isValid(backupValue)) {
+      return {
+        value: backupValue,
+        source: "backup",
+        restoredFromBackup: true,
+        primaryParseError: primary.parseError,
+      };
+    }
+
+    return {
+      value: opts.fallbackValue,
+      source: "default",
+      restoredFromBackup: false,
+      primaryParseError: primary.parseError,
+    };
+  }
+
   return {
     romajiToKana: romajiToKana,
     normalizeAnswer: normalizeAnswer,
@@ -908,5 +1033,9 @@
     applyReviewResult: applyReviewResult,
     normalizeEnabledForms: normalizeEnabledForms,
     isReviewLikeMode: isReviewLikeMode,
+    buildUnlockContext: buildUnlockContext,
+    getRequeueInsertIndex: getRequeueInsertIndex,
+    getLessonPracticeOutcome: getLessonPracticeOutcome,
+    recoverStoredJson: recoverStoredJson,
   };
 });

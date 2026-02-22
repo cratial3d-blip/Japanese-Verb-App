@@ -20,7 +20,95 @@
       "ichidan": 0.75,
       "irregular": 0.7
     },
-    "hold_days_on_fail": 2
+    "hold_days_on_fail": 2,
+    "min_days_in_stage": 2,
+    "max_days_in_stage": 10,
+    "stabilization_days_on_stall": 2,
+    "relaxed_accuracy_delta": 0.03
+  },
+  "gate_bands": [
+    {
+      "id": "guided_band_1_core",
+      "label": "Core beginner forms",
+      "min_stage": 1,
+      "max_stage": 10,
+      "gates": {
+        "min_answered": 20,
+        "min_accuracy": 0.77,
+        "min_accuracy_by_class": {
+          "godan": 0.72,
+          "ichidan": 0.72,
+          "irregular": 0.65
+        },
+        "hold_days_on_fail": 1,
+        "min_days_in_stage": 2,
+        "max_days_in_stage": 7,
+        "stabilization_days_on_stall": 2,
+        "relaxed_accuracy_delta": 0.03
+      }
+    },
+    {
+      "id": "guided_band_2_transition",
+      "label": "Transition forms",
+      "min_stage": 11,
+      "max_stage": 19,
+      "gates": {
+        "min_answered": 24,
+        "min_accuracy": 0.8,
+        "min_accuracy_by_class": {
+          "godan": 0.75,
+          "ichidan": 0.75,
+          "irregular": 0.7
+        },
+        "hold_days_on_fail": 2,
+        "min_days_in_stage": 2,
+        "max_days_in_stage": 10,
+        "stabilization_days_on_stall": 2,
+        "relaxed_accuracy_delta": 0.03
+      }
+    },
+    {
+      "id": "guided_band_3_high_load",
+      "label": "High-load forms",
+      "min_stage": 20,
+      "max_stage": 25,
+      "gates": {
+        "min_answered": 30,
+        "min_accuracy": 0.83,
+        "min_accuracy_by_class": {
+          "godan": 0.78,
+          "ichidan": 0.78,
+          "irregular": 0.75
+        },
+        "hold_days_on_fail": 2,
+        "min_days_in_stage": 3,
+        "max_days_in_stage": 12,
+        "stabilization_days_on_stall": 2,
+        "relaxed_accuracy_delta": 0.03
+      }
+    }
+  ],
+  "stage_overrides": {
+    "s01_polite": {
+      "subphase_unlock_day": 3,
+      "intro_template_ids": [
+        "polite_dictionary",
+        "polite_negative"
+      ]
+    }
+  },
+  "irregular_policy": {
+    "enabled": true,
+    "min_per_session": 2,
+    "primary_kana": [
+      "する",
+      "くる"
+    ],
+    "iku_special_templates": [
+      "plain_te_form",
+      "plain_past"
+    ],
+    "iku_every_n_sessions": 2
   },
   "confusable_pairs": [
     ["plain_negative", "plain_past"],

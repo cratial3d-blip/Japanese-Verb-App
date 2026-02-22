@@ -13,31 +13,81 @@ Use this file at the start of every coding session.
 4. Confirm current priorities in `## Current Focus`.
 
 ## Current Focus
-- Stabilize and polish the new learning-path architecture (Guided / Genki / Custom).
-- Finalize UI consistency and mobile behavior after the recent Progress page redesign.
-- Prepare the next release commit(s) from the current large working-tree diff.
+- Validate learning-path pacing changes from expert feedback on real mobile/tablet usage.
+- Confirm telemetry export usefulness for external Japanese/SRS specialist review loops.
 
 ## Current Repo State (Important)
-- The working tree is intentionally dirty with a large cross-cutting refactor.
-- Core modified files include:
-  - `src/app.js`
-  - `src/core/index.js`
-  - `src/core/lesson_engine.js` (new)
-  - `index.html`
-  - `src/styles.css`
-  - `schemas/conjugation_templates.schema.json`
-  - `schemas/learning_path.schema.json` (new)
-  - `scripts/validate_data.py`
-  - `scripts/run_tests.js`
-- New data artifacts include:
-  - `data/conjugations/conjugation_templates.v3.json`
-  - `data/ui_text/rule_hints.v3.json`
-  - `data/ui_text/example_sentences.v4.json`
-  - `data/learning_paths/learning_path.guided.v1.json`
-  - `data/learning_paths/learning_path.genki_aligned.v1.json`
-- Do not discard local changes unless explicitly requested by the user.
+- Deployment fix is pushed on `main` as commit `ccfe491`:
+  - adds missing runtime assets referenced by `index.html`/`src/app.js` (`v3` templates, path JSONs, `lesson_engine.js`, related schema/test updates)
+- GitHub Pages 404 root cause was: deployed code referenced files that existed locally but were not committed.
+- Current local unstaged items are non-deployment:
+  - `AGENTS.md` (local edit)
+  - `temp/*` research/reference files (local working artifacts)
 
 ## Completed Work Snapshot
+- Lessons in-session navigation UI moved from lesson card body to header pill interaction:
+  - removed large in-card previous/jump controls in lesson phase
+  - made `Lesson X of Y` header pill interactive when prior lessons are available
+  - tapping/clicking the pill opens header dropdown with previously viewed lessons
+  - selecting an entry jumps back to that lesson card for reread
+  - files: `src/app.js`, `src/styles.css`
+- Implemented phased learning-path remediation checklist from expert feedback:
+  - checklist artifact: `temp/Learning_Path_Phased_Implementation_Checklist.md`
+  - **Phase 1 (logic):**
+    - guided stage-band gates (`gate_bands`) with per-band thresholds
+    - unlock min-days floor + stall stabilization/relaxation support
+    - reason-aware gate-fail boost inputs in lesson composition
+    - stage-1 polite internal subphase (`polite_dictionary`/`polite_negative` first, then full stage)
+    - narrow-stage prior-mix floor after day 2
+    - irregular policy support with guaranteed quota + `する`/`くる` priority + `いく` cadence
+    - class-aware current-stage sampling and class-biased reinforcement sampling
+  - **Phase 2 (telemetry):**
+    - wired lesson delivery session logging with served-card details (`verb_id`, `template_id`, `verb_class`, source bucket)
+    - kept per-day template/class attempt+correct aggregation
+    - kept stage history event persistence and gate snapshots
+  - **Phase 3 (UI):**
+    - progress card and roadmap now show `Started` and `Stable` counts
+    - current stage progress bar now reflects started-progress
+    - unlock target text now resolves against active stage gate profile (including min-days)
+- Updated learning-path configs and schema for new behavior fields:
+  - `data/learning_paths/learning_path.guided.v1.json`
+  - `data/learning_paths/learning_path.genki_aligned.v1.json`
+  - `schemas/learning_path.schema.json`
+- Updated lesson engine tests to cover new pacing/queue rules:
+  - min-days gate
+  - stall stabilization trigger
+  - stricter late-band gate checks
+  - stage-1 subphase behavior
+  - irregular quota + `いく` cadence path-state patching
+- Created expert-facing behavior report for pacing/unlock analysis request:
+  - `temp/Learning_Expert_App_Behavior_Report.md`
+  - covers unlock logic, lesson generator behavior, SRS intervals, stage definitions, mode differences, irregular handling, telemetry availability/gaps, and current defaults
+- Implemented all Group 1 engineering fixes from `temp/1_Week_Analysis.txt`:
+  - lesson quiz no longer passes incorrect responses
+  - incorrect lesson input remains visible for compare-against-correct feedback
+  - drill mode now tracks attempts/first-try accuracy and shows completion summary
+  - lessons header now shows `New Left` and separate `Daily Cap` (no misleading constant 10)
+  - lesson phase now supports `Previous` + jump selector for rereading viewed lesson cards
+  - lesson empty/completion/header messaging now explains rolling unlock vs fixed-time unlock
+  - persistence hardening added with auto local snapshots + restore-on-primary-failure behavior
+- Added storage and scheduling helpers in core:
+  - `buildUnlockContext`
+  - `getRequeueInsertIndex`
+  - `getLessonPracticeOutcome`
+  - `recoverStoredJson`
+- Added automated coverage for new logic in `scripts/run_tests.js`:
+  - lesson practice outcome tests
+  - unlock context tests
+  - storage recovery tests
+- Added settings snapshot status UI:
+  - `index.html` includes `#settings-snapshot-status`
+  - `src/app.js` renders latest snapshot timestamp and backup-recovery note
+- Processed 1-week real-device QA notes from `temp/1_Week_Analysis.txt` and mapped all 13 issues into:
+  - Group 1: engineering bugs/logic fixes (implementation-ready)
+  - Group 2: learning-design topics requiring external expert guidance
+- Created external-review brief for Group 2:
+  - `temp/Group2_Expert_Review_Brief.md`
+  - includes observed issues, current app behavior references, and explicit questions for Japanese/SRS experts
 - Implemented learning-path model and flow:
   - `learning_path`: `guided | textbook_genki | custom`
   - path-aware onboarding/settings wiring
@@ -71,14 +121,34 @@ Use this file at the start of every coding session.
   - preserved existing feedback text/details/info-toggle behavior and review-card content structure
 
 ## Current In-Progress Work
-- No active coding task in progress after the latest bug fixes.
-- Next likely pass: mobile UX QA for leave-confirm flow, answer animations, and progress/header interactions.
+- No active coding task in progress.
+- Remaining work is manual QA verification on target tablet/mobile flows for the new learning-path logic.
 
 ## Most Recent UI Work (This Session)
-- Fixed lesson header meta pill duplication so focus labels render once.
-- Replaced abandon button and browser/system confirm with an in-app styled confirmation modal for active Drill/Weakness sessions.
-- Added the same in-app confirmation modal behavior for active Last 24h mistake quiz sessions in Progress.
-- Updated correct/incorrect feedback animations to match mockup behavior while keeping existing app copy/details and interaction logic.
+- Lessons header interaction update:
+  - lesson-progress pill now acts as jump control (`Lesson X of Y` -> dropdown)
+  - lesson card body remains clean (no embedded previous/jump row)
+- Learning Path progress panel updates:
+  - split current-stage status into `Started` vs `Stable`
+  - roadmap rows now show status + started/stable counts per stage
+  - unlock target copy now reflects stage-specific gate profile values
+- Lessons screen/header polish:
+  - non-session lessons header now reports `New Left` + `Daily Cap`
+  - no-lessons and post-lesson messages now show explicit rolling/fixed unlock schedule context
+- Lesson phase UX:
+  - added `Previous` button and jump selector for revisiting prior lessons in-session
+- Settings screen:
+  - added local snapshot status line with latest snapshot timestamp and recovery notice
+- Lesson jump dropdown context labels:
+  - each jump row now includes lesson number plus verb + conjugation label (not lesson number only)
+  - example format: `Lesson 3` + `食べる (たべる) • Polite past`
+- Home screen widget parity polish:
+  - `New Lessons` card now uses the same count-first layout/styling pattern as `Reviews`
+  - `Reviews Waiting` text capitalization fixed on home card label/state
+- Review-card conjugation label simplification:
+  - review-mode card tag now strips parenthetical kana-form hints from template labels
+  - applies to daily Reviews, Drill, Weakness, and Recent Mistake quiz cards
+  - lesson cards remain unchanged
 
 ## Known Notes / Risks
 - Terminal output may show mojibake for some Japanese strings in some files; verify actual file encoding before changing text.
@@ -86,25 +156,25 @@ Use this file at the start of every coding session.
 - If visual changes look stale on device, force reload to bypass cached CSS/JS.
 
 ## Next-Step Priorities
-1. Do a focused QA pass on mobile/tablet for Progress page and header/footer interactions.
-2. Verify Drill/Weakness/Last24h mistake leave-confirm flow on mobile and desktop (including return-to-tab behavior).
-3. QA correct/incorrect animation behavior on mobile/tablet (input shake, card flash pulse, button state transition, info toggle behavior).
-4. Review and clean up any remaining inconsistent copy/labels tied to old terminology (for example legacy "study level" wording).
-5. Split and commit changes in logical batches:
-   - core/path/data
-   - UI polish
-   - tests/validation updates
-6. Continue roadmap feature work:
-   - richer conjugation reference page (planned after stabilization)
-   - deeper stage breakdown on Progress screen (future enhancement)
+1. Run focused manual QA on cheap Android tablet for new learning-path logic:
+   - stage-1 polite subphase behavior (Day 1-2 vs Day 3+ template mix)
+   - irregular quota (`する`/`くる`) and `いく` cadence behavior
+   - narrow-stage prior-mix floor behavior after day 2
+   - started/stable progress readability on small screens
+2. Export backup JSON after several sessions and verify telemetry completeness for specialist review:
+   - `lessonDeliveryLog`
+   - `template_performance_by_day`
+   - `class_performance_by_day`
+   - `stageHistory`
+3. Split/commit learning-path remediation changes in a focused batch after manual QA signoff.
 
 ## Validation Commands
 - `python scripts/validate_data.py`
 - `npm run test`
 
 ## Last Validation Status
-- `python scripts/validate_data.py`: pass (2026-02-10)
-- `npm run test`: pass (2026-02-10)
+- `python scripts/validate_data.py`: pass (2026-02-22, post review-card tag simplification)
+- `npm run test`: pass (2026-02-22, post review-card tag simplification)
 
 ## End-of-Session Update Checklist
 1. Update `## Completed Work Snapshot` and `## Most Recent UI Work`.
@@ -113,4 +183,4 @@ Use this file at the start of every coding session.
 4. Run validation commands and update `## Last Validation Status`.
 
 ## Last Updated
-- 2026-02-10
+- 2026-02-22

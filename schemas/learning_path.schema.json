@@ -37,6 +37,23 @@
       "type": "object",
       "additionalProperties": true
     },
+    "gate_bands": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "stage_overrides": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "irregular_policy": {
+      "type": "object",
+      "additionalProperties": true
+    },
     "confusable_pairs": {
       "type": "array",
       "minItems": 0,

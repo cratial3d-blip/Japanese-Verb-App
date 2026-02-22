@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Japanese Verb Conjugation SRS</title>
-    <link rel="stylesheet" href="src/styles.css?v=20260209_5" />
+    <link rel="stylesheet" href="src/styles.css?v=20260222_2" />
   </head>
   <body>
     <div id="app">
@@ -39,13 +39,13 @@
           <div class="home-stack">
             <div class="home-card review-card">
               <div class="home-card-count" id="home-reviews-count">0</div>
-              <div class="home-card-sub" id="home-reviews-sub">reviews waiting</div>
+              <div class="home-card-sub" id="home-reviews-sub">Reviews Waiting</div>
               <button class="primary full-width" id="start-reviews">Start Reviews</button>
             </div>
 
             <div class="home-card lesson-card">
-              <div class="home-card-title">New Lessons</div>
-              <div class="home-card-sub"><span id="home-lessons-count">0</span> available</div>
+              <div class="home-card-count" id="home-lessons-count">0</div>
+              <div class="home-card-sub">New Lessons</div>
               <button class="primary full-width" id="home-start-lessons">Begin Lessons</button>
             </div>
 
@@ -407,6 +407,7 @@
                 <input id="backup-file" type="file" accept=".json" class="is-hidden" />
               </div>
               <div class="muted" id="backup-status"></div>
+              <div class="muted" id="settings-snapshot-status"></div>
             </div>
             <div class="settings-divider"></div>
             <div class="settings-reset">
@@ -608,6 +609,6 @@
     <script src="src/core/index.js?v=20260210_1"></script>
     <script src="src/core/lesson_engine.js?v=20260210_1"></script>
     <script src="src/notifications.js?v=20260206_1"></script>
-    <script src="src/app.js?v=20260210_1"></script>
+    <script src="src/app.js?v=20260222_2"></script>
   </body>
 </html>
